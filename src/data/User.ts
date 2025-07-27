@@ -3,21 +3,7 @@ import { db } from './Firebase';
 import FirestoreResponse from './FirestoreResponse';
 import { FirebaseError } from 'firebase/app';
 import type { ProjectWrapper } from './Project';
-
-/** @description The user's role in the project */
-type UserRole = 'admin' | 'beta-tester' | 'stable-user';
-
-export type UserObject = {
-	/** @description The user's name */
-	name: string;
-	/** @description The user's theme preference */
-	theme: 'light' | 'dark' | 'oled' | 'system';
-	/** @description The user's preferred language */
-	language: string;
-	/** @description The user's role */
-	role: UserRole;
-};
-
+import type { UserRole, UserObject } from './Types';
 export class UserWrapper {
 	/** @description The user's name */
 	name: string;
@@ -83,12 +69,27 @@ export class UserWrapper {
 		};
 		return obj;
 	}
+	/**
+	 * @description Finds the project (if it exists) given an ID
+	 *
+	 * @param id The ID of the project to find
+	 * @returns Project Wrapper of the project if it exists
+	 */
+	findProject(id: string) {
+		return this.projects.find((proj) => proj.id === id);
+	}
 	/** @description Helper to wrap the raw user data to UserWrapper class */
 	static fromFirestore(rawObject: UserObject) {
 		return new UserWrapper(rawObject);
 	}
 }
 
+/**
+ * @description Fetches UserData from Users Collection
+ *
+ * @param uid The user's UID
+ * @returns Firestore Response depending on success status
+ */
 export async function fetchUser(
 	uid: string
 ): Promise<FirestoreResponse<UserWrapper | null>> {

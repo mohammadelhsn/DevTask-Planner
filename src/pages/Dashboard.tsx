@@ -14,33 +14,31 @@ import Paper from '@mui/material/Paper';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { useTheme, type SxProps } from '@mui/material';
-
-const cardStyles: SxProps = {
-    transition: '0.3s ease',
-    '&:hover': {
-        transform: 'scale(1.03)'
-    }
-};
-
+import { useTheme } from '@mui/material';
+import { containerStyles, dividerStyle } from '../data/Styles';
+import { cardStyles } from '../data/Styles';
 
 const Dashboard = () => {
+    /** ======= NAVIGATE HOOK ======= */
     const navigate = useNavigate();
+    /** ======= THEME HOOK ======= */
     const { palette } = useTheme();
+    /** ======= AUTH CONTEXT ======= */
     const { userData, user, loading } = useAuth();
+    /** ======= IF THERE IS NO USER, DIRECT THEM TO LOGIN ======= */
     useEffect(() => {
         if (!userData && !user) {
             navigate('/login');
         }
-    });
+    }, []);
+    /** ======= HANDLE LOADING ======= */
     if (loading) return (<Typography variant='inherit'>Loading...</Typography>);
     return (
-        <Container sx={{ flexGrow: 1 }}>
+        <Container maxWidth='lg' sx={containerStyles}>
             <Box sx={{ mt: 2 }}>
                 <Typography variant='h2'>Welcome, {userData?.name}!</Typography>
-                <Divider sx={{ my: 2 }} />
+                <Divider sx={dividerStyle} />
             </Box>
-
             <Paper sx={{ p: 2 }}>
                 <Grid container spacing={3}>
                     {user && userData && userData.projects.length > 0 && userData.projects.map((proj, index) => (
@@ -62,14 +60,16 @@ const Dashboard = () => {
                                     </Typography>
                                 </CardContent>
                                 <CardActions sx={{ paddingLeft: 1 }}>
-                                    <Button onClick={() => {
-                                        navigate(`/project/${proj.id}`);
-                                    }} variant='text' sx={{
-                                        transition: '0.3s ease', '&:hover': {
-                                            bgcolor: palette.primary.main,
-                                            color: palette.text.primary,
-                                        }
-                                    }}>
+                                    <Button
+                                        onClick={() => { navigate(`/project/${proj.id}`); }}
+                                        variant='text'
+                                        sx={{
+                                            transition: '0.3s ease',
+                                            '&:hover': {
+                                                bgcolor: palette.primary.main,
+                                                color: palette.text.primary,
+                                            }
+                                        }}>
                                         View Entry
                                     </Button>
                                 </CardActions>

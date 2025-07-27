@@ -14,11 +14,19 @@ const firebaseConfig = {
 	measurementId: 'G-0S83MMBJYE',
 };
 
+/** @description Firebase App */
 const app = initializeApp(firebaseConfig);
-
+/** @description Firebase Auth Instance */
 export const auth = getAuth(app);
+/** @description Firebase Firestore instance */
 export const db = getFirestore(app);
 
+/**
+ * @description Handles Provider Sign Up, including posting new data
+ *
+ * @param provider The provider to use for pop up
+ * @returns Firestore Response depending on success state
+ */
 export async function handleProviderSignUp(
 	provider: AuthProvider
 ): Promise<FirestoreResponse<null>> {
@@ -61,6 +69,12 @@ export async function handleProviderSignUp(
 	}
 }
 
+/**
+ * @description Handles provider sign in
+ *
+ * @param provider The provider for the pop up
+ * @returns Firestore response object depending on success state
+ */
 export async function handleProviderSignIn(
 	provider: AuthProvider
 ): Promise<FirestoreResponse<null>> {

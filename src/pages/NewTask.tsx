@@ -22,12 +22,13 @@ import Divider from '@mui/material/Divider';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
-import { createTask, type TaskObject } from '../data/Tasks';
+import { createTask, } from '../data/Tasks';
 import { useFeedback } from '../contexts/FeedbackContext';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import { type TaskObject } from '../data/Types';
 const steps = ['Project Title', 'Settings & Config'];
 
 const columns = ['Long Term', 'Short Term', 'Medium Term', 'Doing', 'Done'] as const;

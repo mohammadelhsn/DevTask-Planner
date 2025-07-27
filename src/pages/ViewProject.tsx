@@ -23,13 +23,8 @@ import { useEffect, useState } from 'react';
 import type { ProjectWrapper } from '../data/Project';
 import { useFeedback } from '../contexts/FeedbackContext';
 import InboxIcon from '@mui/icons-material/Inbox';
-
-function capitalize(str: string) {
-    if (typeof str !== 'string' || str.length === 0) {
-        return ''; // Handle empty or non-string inputs
-    }
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-}
+import { capitalize } from '../data/Functions';
+import { dividerStyle } from '../data/Styles';
 
 const columnCards = {
     height: { sm: '60vh', md: 'fit-content' },
@@ -94,7 +89,7 @@ const ViewProject = () => {
             <Box sx={{ my: 2 }}>
                 <Typography variant='h2'>Dev Board - {project?.projectName}</Typography>
                 <Typography variant='h5' sx={{ fontStyle: 'italic' }}>{project?.projectDesc}</Typography>
-                <Divider sx={{ my: 2 }} />
+                <Divider sx={dividerStyle} />
             </Box>
             <Paper sx={{ overflowX: 'auto', maxWidth: '100%' }}>
                 {project && project.tasks.length == 0 && (

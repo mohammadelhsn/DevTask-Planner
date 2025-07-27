@@ -4,10 +4,10 @@ import {
 import { onAuthStateChanged, type User } from 'firebase/auth';
 import { auth, db } from '../data/Firebase';
 import { doc, onSnapshot, collection, getDocs } from 'firebase/firestore';
-import { UserWrapper, type UserObject } from '../data/User';
-import { ProjectWrapper, type DevProjectObject } from '../data/Project';
-import { TaskWrapper, type TaskObject } from '../data/Tasks';
-
+import { UserWrapper } from '../data/User';
+import { ProjectWrapper } from '../data/Project';
+import { TaskWrapper } from '../data/Tasks';
+import type { UserObject, DevProjectObject, TaskObject } from '../data/Types';
 
 interface AuthContextType {
     user: User | null;
@@ -48,7 +48,6 @@ const AuthProvider = ({ children }: { children: ReactNode; }) => {
             const uid = user.uid;
             const userRef = doc(db, 'users', uid);
 
-            // assign, don't redeclare
             unsubUser = onSnapshot(userRef, async (userSnap) => {
                 if (!userSnap.exists()) {
                     setUserData(null);

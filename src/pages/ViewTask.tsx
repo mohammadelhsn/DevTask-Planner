@@ -16,13 +16,8 @@ import SaveIcon from '@mui/icons-material/Save';
 import EditIcon from '@mui/icons-material/Edit';
 import Chip from '@mui/material/Chip';
 //import Collapse from '@mui/material/Collapse';
-
-function capitalize(str: string) {
-    if (typeof str !== 'string' || str.length === 0) {
-        return ''; // Handle empty or non-string inputs
-    }
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-}
+import { capitalize, getChipColor, getLifecycleColor, getPriorityColor } from '../data/Functions';
+import { containerStyles, dividerStyle } from '../data/Styles';
 
 
 const ViewTask = () => {
@@ -57,42 +52,11 @@ const ViewTask = () => {
         setEditMode(false);
         setFeedback('Task updated!', 'success');
     };
-    const getChipColor = (type: 'feature' | 'bug') => {
-        if (type == 'feature') {
-            return 'primary';
-        } else {
-            return 'error';
-        }
-    };
-    const getLifecycleColor = (stage: 'alpha' | 'beta' | 'stable') => {
-        if (stage == 'alpha') {
-            return 'warning';
-        } else if (stage == 'beta') {
-            return 'info';
-        } else {
-            return 'success';
-        }
-    };
-    function getPriorityColor(priority: string): 'error' | 'warning' | 'success' {
-        switch (priority.toLowerCase()) {
-            case 'high':
-                return 'error';
-            case 'medium':
-                return 'warning';
-            case 'low':
-            default:
-                return 'success';
-        }
-    }
     return (
-        <Container maxWidth="lg" sx={{
-            flexGrow: 1,
-            px: { xs: 2, sm: 3 },
-            py: { xs: 4, sm: 6 },
-        }}>
+        <Container maxWidth="lg" sx={containerStyles}>
             <Box>
                 <Typography variant='h2'>View Task</Typography>
-                <Divider sx={{ my: 2 }} />
+                <Divider sx={dividerStyle} />
             </Box>
             {!editMode && (
                 <Card>

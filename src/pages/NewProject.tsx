@@ -62,9 +62,7 @@ const NewJournalPage = () => {
         const projectToCreate = {
             projectName: title,
             projectDesc: desc,
-            config: {
-                columnsConfig: defaultConfig,
-            },
+            config: defaultConfig,
         };
 
         try {

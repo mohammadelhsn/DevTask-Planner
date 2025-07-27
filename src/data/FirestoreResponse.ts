@@ -1,15 +1,5 @@
 import { FirebaseError } from 'firebase/app';
-
-type FirestoreRawData<T> = {
-	/** @description Success state of the operation */
-	success: boolean;
-	/** @description Data */
-	data: T | null;
-	/** @description The error itself (non readable version) */
-	error: string | null;
-	/** @description Response message for the user */
-	message: string;
-};
+import { type FirestoreRawData } from './Types';
 
 export const firebaseErrors: Record<string, string> = {
 	'auth/invalid-email': 'The email address is badly formatted.',

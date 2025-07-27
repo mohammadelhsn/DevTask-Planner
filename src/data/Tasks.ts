@@ -1,26 +1,24 @@
 import { addDoc, collection, updateDoc } from 'firebase/firestore';
 import { db } from './Firebase';
 import FirestoreResponse from './FirestoreResponse';
-
-export type TaskObject = {
-	id: string;
-	title: string;
-	description: string;
-	column: 'Long Term' | 'Short Term' | 'Medium Term' | 'Doing' | 'Done' | null;
-	lifecycle: 'alpha' | 'beta' | 'stable' | null;
-	type: 'feature' | 'bug' | null;
-	priority: 'high' | 'medium' | 'low' | null;
-	assignees: string[];
-};
+import { type TaskObject } from './Types';
 
 export class TaskWrapper {
+	/** @description The task's ID */
 	id: string;
+	/** @description The task's title */
 	title: string;
+	/** @description The task's description */
 	description: string;
+	/** @description The column the task belongs to */
 	column: 'Long Term' | 'Short Term' | 'Medium Term' | 'Doing' | 'Done' | null;
+	/** @description The lifecycle stage that the task is in */
 	lifecycle: 'alpha' | 'beta' | 'stable' | null;
+	/** @description The type of task it is  */
 	type: 'feature' | 'bug' | null;
+	/** @description The priority of the task */
 	priority: 'high' | 'medium' | 'low' | null;
+	/** @description The people assigned to the task */
 	assignees: string[];
 	constructor(props: TaskObject) {
 		this.id = props.id;
@@ -32,6 +30,7 @@ export class TaskWrapper {
 		this.priority = props.priority;
 		this.assignees = props.assignees;
 	}
+	/** @description Returns Firestore Compatible data for storage */
 	toFirestore(): TaskObject {
 		return {
 			id: this.id,
@@ -44,6 +43,7 @@ export class TaskWrapper {
 			assignees: this.assignees,
 		};
 	}
+	/** @description Deep equals to see if any changes occurred */
 	isEqual(other: TaskWrapper): boolean {
 		return (
 			this.id === other.id &&
@@ -57,14 +57,24 @@ export class TaskWrapper {
 			this.assignees.every((a, i) => a === other.assignees[i])
 		);
 	}
+	/** @description Get a task wrapper from raw data */
 	static fromFirestore(rawData: TaskObject) {
 		return new TaskWrapper(rawData);
 	}
+	/** @description Static variant of isEqual */
 	static equals(task1: TaskWrapper, task2: TaskWrapper) {
 		return task1.isEqual(task2);
 	}
 }
 
+/**
+ * @description Creates a blank task
+ *
+ * @param userId The user's UID
+ * @param projectId The project's ID
+ * @param task The Task Data
+ * @returns FirestoreResponse depending on the state of the write
+ */
 export async function createTask(
 	userId: string,
 	projectId: string,

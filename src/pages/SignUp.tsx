@@ -12,24 +12,35 @@ import Box from '@mui/material/Box';
 import { useFeedback } from '../contexts/FeedbackContext';
 import { useAuth } from '../contexts/AuthContext';
 import { FaGithub, FaFacebook, FaGoogle } from 'react-icons/fa';
+import { combinedStyles, providerButton } from '../data/Styles';
 
 const SignUpPage = () => {
+    /** ======= GLOBAL SNACKBAR ======= */
     const { setFeedback } = useFeedback();
+    /** ======= THEME ======= */
     const { palette } = useTheme();
+    /** ======= AUTH CONTEXT ======= */
     const { user, loading } = useAuth();
+    /** ======= LOADING STATE FOR EACH PROVIDER BUTTON ======= */
     const [loadingG, setLoadingG] = useState<boolean>(false);
     const [loadingGH, setLoadingGH] = useState<boolean>(false);
     const [loadingF, setLoadingF] = useState<boolean>(false);
     const navigate = useNavigate();
+    /** ======= PROVIDER INSTANCE =======*/
     const googleProvider = new GoogleAuthProvider();
     const githubProvider = new GithubAuthProvider();
     const facebookProvider = new FacebookAuthProvider();
+    /** ======= CHECK IF THERE IS A USER ======= */
     useEffect(() => {
         if (user) {
             navigate('/dashboard');
         }
     }, [user, navigate]);
+    /** ======= HANDLE LOADING STATE ======= */
     if (loading) return <Typography>Loading...</Typography>;
+    /** ======= CURRENT ACTION ======= */
+    const action = 'Sign Up';
+    /** ======= PROVIDER METHODS ======= */
     const handleGoogleSignUp = async () => {
         setLoadingG(true);
         const result = await handleProviderSignUp(googleProvider);
@@ -53,17 +64,12 @@ const SignUpPage = () => {
         setFeedback(result.message, result.success ? 'success' : 'error');
         if (result.success) navigate('/dashboard');
     };
+
+    /** ======= COMPONENT ======= */
     return (
         <Container
             maxWidth="lg"
-            sx={{
-                px: { xs: 2, sm: 3 },
-                py: { xs: 4, sm: 6 },
-                flexGrow: 1,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}
+            sx={combinedStyles}
         >
             <Card sx={{ width: '100%', maxWidth: 500, p: 4 }}>
                 <Box
@@ -74,7 +80,7 @@ const SignUpPage = () => {
                     }}
                 >
                     <Typography variant="h4">
-                        Sign Up
+                        {action}
                     </Typography>
                     <Divider sx={{ mb: 4 }} />
                     <Button
@@ -83,57 +89,27 @@ const SignUpPage = () => {
                         loading={loadingG}
                         onClick={handleGoogleSignUp}
                         startIcon={<FaGoogle color={palette.text.primary} />}
-                        sx={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            transition: '0.3s ease',
-                            '&:hover': {
-                                transform: 'scale(1.02)',
-                                bgcolor: palette.primary.light,
-                                color: palette.text.primary,
-                            }
-                        }}
+                        sx={providerButton}
                     >
-                        Sign Up with Google
+                        {action} with Google
                     </Button>
                     <Button
                         variant='outlined'
                         onClick={handleGitHubSignUp}
                         startIcon={<FaGithub color={palette.text.primary} />}
                         loading={loadingGH}
-                        sx={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            transition: '0.3s ease',
-                            '&:hover': {
-                                transform: 'scale(1.02)',
-                                bgcolor: palette.primary.light,
-                                color: palette.text.primary,
-                            }
-                        }}
+                        sx={providerButton}
                     >
-                        Sign Up with GitHub
+                        {action} with GitHub
                     </Button>
                     <Button
                         variant='outlined'
                         onClick={handleFacebookSignUp}
                         startIcon={<FaFacebook color={palette.text.primary} />}
                         loading={loadingF}
-                        sx={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            transition: '0.3s ease',
-                            '&:hover': {
-                                transform: 'scale(1.02)',
-                                bgcolor: palette.primary.light,
-                                color: palette.text.primary,
-                            }
-                        }}
+                        sx={providerButton}
                     >
-                        Sign Up with Facebook
+                        {action} with Facebook
                     </Button>
                 </Box>
             </Card>

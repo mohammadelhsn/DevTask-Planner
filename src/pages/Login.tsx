@@ -1,4 +1,4 @@
-/** MUI COMPONENTS */
+/** ======= MUI COMPONENTS ======= */
 
 import Typography from '@mui/material/Typography';
 import Container from "@mui/material/Container";
@@ -7,12 +7,12 @@ import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
 
-/** REACT */
+/** ======= REACT ======= */
 
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-/** FIREBASE */
+/** ======= FIREBASE ======= */
 
 import { GoogleAuthProvider, GithubAuthProvider, FacebookAuthProvider } from 'firebase/auth';
 import { useAuth } from '../contexts/AuthContext';
@@ -20,8 +20,9 @@ import { useFeedback } from '../contexts/FeedbackContext';
 import { handleProviderSignIn } from '../data/Firebase';
 import { useTheme } from '@mui/material';
 import { FaGithub, FaFacebook, FaGoogle } from 'react-icons/fa';
+import { combinedStyles, providerButton } from '../data/Styles';
 
-/** LOGIN */
+/** ======= LOGIN ======= */
 
 const LogIn = () => {
     /** AUTH CONTEXT */
@@ -30,27 +31,28 @@ const LogIn = () => {
     const { setFeedback } = useFeedback();
     /** THEME CONTEXT */
     const { palette } = useTheme();
-
     /** =========== LOADING STATE FOR EACH OF THE BUTTONS =========== */
     const [loadingG, setLoadingG] = useState<boolean>(false);
     const [loadingGH, setLoadingGH] = useState<boolean>(false);
     const [loadingF, setLoadingF] = useState<boolean>(false);
-
+    /** ======= NAVIGATE HOOK ======= */
     const navigate = useNavigate();
-
     /** =========== INITIATE THE PROVIDERS =========== */
     const googleProvider = new GoogleAuthProvider();
     const githubProvider = new GithubAuthProvider();
     const facebookProvider = new FacebookAuthProvider();
+    /** ======= CHECK IF THERE IS A USER ======= */
     useEffect(() => {
         if (user) {
             navigate('/dashboard');
         }
 
     }, [user, navigate]);
-
+    /** ======= HANDLE LOADING ======= */
     if (loading) return <Typography>Loading...</Typography>;
+    /** ======= DEFINE THE ACTION ======= */
     const action = 'Log In';
+    /** ======= PROVIDER HANDLERS ======= */
     const handleGoogleSignIn = async () => {
         setLoadingG(true);
         const result = await handleProviderSignIn(googleProvider);
@@ -77,14 +79,7 @@ const LogIn = () => {
     return (
         <Container
             maxWidth="lg"
-            sx={{
-                px: { xs: 2, sm: 3 },
-                py: { xs: 4, sm: 6 },
-                flexGrow: 1,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}
+            sx={combinedStyles}
         >
             <Paper sx={{ width: '100%', maxWidth: 500, p: 4 }}>
                 <Box
@@ -101,13 +96,7 @@ const LogIn = () => {
                         onClick={handleGoogleSignIn}
                         startIcon={<FaGoogle color={palette.text.primary} />}
                         loading={loadingG}
-                        sx={{
-                            display: 'flex', justifyContent: 'center', alignItems: 'center', transition: '0.3s ease', '&:hover': {
-                                transform: 'scale(1.02)',
-                                bgcolor: palette.primary.light,
-                                color: palette.text.primary,
-                            }
-                        }}
+                        sx={providerButton}
                     >
                         {action} with Google
                     </Button>
@@ -116,17 +105,7 @@ const LogIn = () => {
                         onClick={handleGitHubSignIn}
                         startIcon={<FaGithub color={palette.text.primary} />}
                         loading={loadingGH}
-                        sx={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            transition: '0.3s ease',
-                            '&:hover': {
-                                transform: 'scale(1.02)',
-                                bgcolor: palette.primary.light,
-                                color: palette.text.primary,
-                            }
-                        }}
+                        sx={providerButton}
                     >
                         {action} with GitHub
                     </Button>
@@ -135,17 +114,7 @@ const LogIn = () => {
                         onClick={handleFacebookSignIn}
                         startIcon={<FaFacebook color={palette.text.primary} />}
                         loading={loadingF}
-                        sx={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            transition: '0.3s ease',
-                            '&:hover': {
-                                transform: 'scale(1.02)',
-                                bgcolor: palette.primary.light,
-                                color: palette.text.primary,
-                            }
-                        }}
+                        sx={providerButton}
                     >
                         {action} with Facebook
                     </Button>
