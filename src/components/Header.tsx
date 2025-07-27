@@ -1,35 +1,44 @@
-// React
+/** ======= REACT ======= */
+import { useContext, useState, type MouseEvent } from 'react';
 
-import { useState, useContext, type MouseEvent } from 'react';
+/** ======= REACT ROUTER ======= */
+import { NavLink, useNavigate } from 'react-router-dom';
 
-// Material UI 
+/** ======= CONTEXT ======= */
+import { AuthContext } from '../contexts/AuthContext';
 
-import Button from '@mui/material/Button';
+/** ======= FIREBASE ======= */
+import { signOutUser } from '../data/Firebase';
+
+/** ======= MUI COMPONENTS ======= */
 import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
-import Stack from '@mui/material/Stack';
-import Tooltip from '@mui/material/Tooltip';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import Divider from '@mui/material/Divider';
-import ListItemIcon from '@mui/material/ListItemIcon';
-
-import Settings from '@mui/icons-material/Settings';
-import Logout from '@mui/icons-material/Logout';
-import PsychologyIcon from '@mui/icons-material/Psychology';
-import LoginIcon from '@mui/icons-material/Login';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-
-import Box from '@mui/material/Box';
-import { styled, useTheme } from '@mui/material/styles';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../contexts/AuthContext';
-import { signOut } from 'firebase/auth';
-import { auth } from '../data/Firebase';
+import Stack from '@mui/material/Stack';
+import Tooltip from '@mui/material/Tooltip';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
+
+/** ======= MUI ICONS ======= */
+import LoginIcon from '@mui/icons-material/Login';
+import Logout from '@mui/icons-material/Logout';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import PsychologyIcon from '@mui/icons-material/Psychology';
+import Settings from '@mui/icons-material/Settings';
+
+/** ======= MUI STYLES ======= */
+import { styled, useTheme } from '@mui/material/styles';
+
+/** ======= ROUTES ======= */
+import { DASHBOARD, LOGIN, SETTINGS, SIGNUP } from '../data/Routes';
+
 
 const StyledExternalLink = styled(NavLink)(({ theme }) => ({
     color: 'inherit',
@@ -56,6 +65,8 @@ const Header = () => {
         setAnchorEl(null);
     };
     const { user } = useContext(AuthContext);
+    /** HELPERS */
+    const navigateToSettings = () => navigate(SETTINGS);
     return (
         <AppBar
             position="static"
@@ -77,7 +88,7 @@ const Header = () => {
                     height: 20,    // set height explicitly
                     mr: 1,         // horizontal margin to add space left and right
                 }} />
-                <StyledExternalLink to="/dashboard">
+                <StyledExternalLink to={DASHBOARD}>
                     <Tooltip title="View Dashboard">
                         <Button color="inherit" variant="text">
                             Dashboard
@@ -89,7 +100,7 @@ const Header = () => {
                 }} />
                 {!user &&
                     <Box>
-                        <StyledExternalLink to="/login">
+                        <StyledExternalLink to={LOGIN}>
                             {isSmallScreen ?
                                 (<IconButton color='inherit'><LoginIcon /></IconButton>)
                                 :
@@ -97,7 +108,7 @@ const Header = () => {
                                     Log In
                                 </Button>)}
                         </StyledExternalLink>
-                        <StyledExternalLink to="/signup">
+                        <StyledExternalLink to={SIGNUP}>
                             {isSmallScreen ? <IconButton color='inherit'><PersonAddIcon /></IconButton> : <Button color='inherit' variant='contained' startIcon={<PersonAddIcon fontSize={'small'} />}>
                                 Sign Up
                             </Button>}
@@ -159,6 +170,9 @@ const Header = () => {
                             transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                             anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                         >
+                            {/** 
+                             * TODO: THIS DOEST EXIST
+                             */}
                             <MenuItem onClick={() => {
                                 navigate('/manageAccount');
                             }}>
@@ -166,17 +180,13 @@ const Header = () => {
                                 </Avatar> Manage my Account
                             </MenuItem>
                             <Divider />
-                            <MenuItem onClick={() => {
-                                navigate('/settings');
-                            }}>
+                            <MenuItem onClick={navigateToSettings}>
                                 <ListItemIcon>
                                     <Settings fontSize="small" color='primary' />
                                 </ListItemIcon>
                                 Settings
                             </MenuItem>
-                            <MenuItem onClick={() => {
-                                signOut(auth);
-                            }}>
+                            <MenuItem onClick={signOutUser}>
                                 <ListItemIcon>
                                     <Logout fontSize="small" color='primary' />
                                 </ListItemIcon>

@@ -1,7 +1,12 @@
+/** ======= FIREBASE ======= */
 import { addDoc, collection, updateDoc } from 'firebase/firestore';
 import { db } from './Firebase';
+
+/** ======= TYPES ======= */
+import type { TaskObject } from './Types';
+
+/** ======= UTILITIES ======= */
 import FirestoreResponse from './FirestoreResponse';
-import { type TaskObject } from './Types';
 
 export class TaskWrapper {
 	/** @description The task's ID */
@@ -20,6 +25,12 @@ export class TaskWrapper {
 	priority: 'high' | 'medium' | 'low' | null;
 	/** @description The people assigned to the task */
 	assignees: string[];
+	/** @description When the task was created */
+	createdAt: Date;
+	/** @description The last time the task was updated */
+	lastUpdated: Date;
+	/** @description The due date for the task if applicable */
+	dueDate: Date | null;
 	constructor(props: TaskObject) {
 		this.id = props.id;
 		this.title = props.title;
@@ -29,6 +40,9 @@ export class TaskWrapper {
 		this.type = props.type;
 		this.priority = props.priority;
 		this.assignees = props.assignees;
+		this.createdAt = props.createdAt;
+		this.lastUpdated = props.lastUpdated;
+		this.dueDate = props.dueDate;
 	}
 	/** @description Returns Firestore Compatible data for storage */
 	toFirestore(): TaskObject {
@@ -41,6 +55,9 @@ export class TaskWrapper {
 			type: this.type,
 			priority: this.priority,
 			assignees: this.assignees,
+			createdAt: this.createdAt,
+			lastUpdated: this.lastUpdated,
+			dueDate: this.dueDate,
 		};
 	}
 	/** @description Deep equals to see if any changes occurred */
@@ -54,7 +71,13 @@ export class TaskWrapper {
 			this.lifecycle === other.lifecycle &&
 			this.type === other.type &&
 			this.assignees.length === other.assignees.length &&
-			this.assignees.every((a, i) => a === other.assignees[i])
+			this.assignees.every((a, i) => a === other.assignees[i]) &&
+			this.createdAt.getTime() === other.createdAt.getTime() &&
+			this.lastUpdated.getTime() === other.lastUpdated.getTime() &&
+			((this.dueDate === null && other.dueDate === null) ||
+				(this.dueDate !== null &&
+					other.dueDate !== null &&
+					this.dueDate.getTime() === other.dueDate.getTime()))
 		);
 	}
 	/** @description Get a task wrapper from raw data */

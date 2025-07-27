@@ -1,8 +1,14 @@
-import Snackbar from '@mui/material/Snackbar';
+/** ======= MUI COMPONENTS ======= */
 import MuiAlert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+
+/** ======= CONTEXT ======= */
 import { useFeedback } from '../contexts/FeedbackContext';
 
+
+/** @description The global snack bar for success, error states */
 const GlobalSnackbar = () => {
+    /** ======= GET FEEDBACK CONTEXT ======= */
     const { message, type, clearFeedback } = useFeedback();
     return (
         <Snackbar

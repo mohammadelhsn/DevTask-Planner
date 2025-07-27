@@ -1,32 +1,34 @@
 /** REACT */
-
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-/** AUTH CONTEXT */
-
+/** CONTEXTS */
 import { AuthContext } from '../contexts/AuthContext';
+import { useFeedback } from '../contexts/FeedbackContext';
+
+/** FIREBASE */
+import { createProject } from '../data/Project';
+import { VIEW_PROJECT } from '../data/Routes';
 
 /** MUI COMPONENTS */
-
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import Stepper from '@mui/material/Stepper';
-import StepLabel from '@mui/material/StepLabel';
-import Step from '@mui/material/Step';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Divider from '@mui/material/Divider';
-import Collapse from '@mui/material/Collapse';
+import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
+import Checkbox from '@mui/material/Checkbox';
+import Collapse from '@mui/material/Collapse';
+import Container from '@mui/material/Container';
+import Divider from '@mui/material/Divider';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import Stack from '@mui/material/Stack';
-import { createProject } from '../data/Project';
-import { useFeedback } from '../contexts/FeedbackContext';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import Stepper from '@mui/material/Stepper';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+
+
 const steps = ['Project Title', 'Settings & Config'];
 
 
@@ -48,14 +50,11 @@ const NewJournalPage = () => {
     const { setFeedback } = useFeedback();
     const [defaultConfig, setDefaultConfig] = useState(dConfig);
     const { user } = useContext(AuthContext);
+    /** NAVIGATION HOOK */
     const navigate = useNavigate();
+    const navigateToViewProject = (id: string) => navigate(VIEW_PROJECT(id));
     const handleNext = () => setActiveStep((prev) => Math.min(prev + 1, steps.length - 1));
     const handleBack = () => setActiveStep((prev) => Math.max(prev - 1, 0));
-    useEffect(() => {
-        if (!user) {
-            navigate('/login');
-        }
-    });
     const handleSubmit = async () => {
         if (!user) return;
 
@@ -63,16 +62,18 @@ const NewJournalPage = () => {
             projectName: title,
             projectDesc: desc,
             config: defaultConfig,
+            lastUpdated: new Date(),
+            createdAt: new Date(),
         };
 
         try {
             const response = await createProject(user.uid, projectToCreate);
 
             if (response.success) {
-                // maybe navigate to the new project's page or show success
-
                 setFeedback('Project created with ID: ' + response.data?.id, 'success');
-                navigate('/project/' + response.data?.id);
+                if (response && response.data) {
+                    navigateToViewProject(response.data.id);
+                }
             } else {
                 setFeedback('Failed to create project: ' + response.message, 'error');
             }

@@ -1,9 +1,15 @@
+/** ======= FIREBASE ======= */
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { db } from './Firebase';
-import FirestoreResponse from './FirestoreResponse';
 import { FirebaseError } from 'firebase/app';
+import { db } from './Firebase';
+
+/** ======= TYPES ======= */
 import type { ProjectWrapper } from './Project';
 import type { UserRole, UserObject } from './Types';
+
+/** ======= UTILITIES ======= */
+import FirestoreResponse from './FirestoreResponse';
+
 export class UserWrapper {
 	/** @description The user's name */
 	name: string;

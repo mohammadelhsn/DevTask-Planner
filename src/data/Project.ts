@@ -1,8 +1,13 @@
+/** ======= FIREBASE ======= */
 import { addDoc, collection, updateDoc } from 'firebase/firestore';
-import FirestoreResponse from './FirestoreResponse';
-import type { TaskWrapper } from './Tasks';
 import { db } from './Firebase';
+
+/** ======= TYPES ======= */
 import type { ColumnConfig, DevProjectObject } from './Types';
+import type { TaskWrapper } from './Tasks';
+
+/** ======= UTILITIES ======= */
+import FirestoreResponse from './FirestoreResponse';
 
 export class ProjectWrapper {
 	/** @description Project ID */
@@ -15,12 +20,18 @@ export class ProjectWrapper {
 	config: ColumnConfig[];
 	/** @description An array containing the tasks for the project */
 	tasks: TaskWrapper[];
+	/** @description When the project was created */
+	createdAt: Date;
+	/** @description When the project was last updated */
+	lastUpdated: Date;
 	constructor(props: DevProjectObject & { tasks?: TaskWrapper[] }) {
 		this.id = props.id;
 		this.projectName = props.projectName;
 		this.projectDesc = props.projectDesc;
 		this.config = props.config;
 		this.tasks = props.tasks ?? []; // Initialize tasks or empty array
+		this.createdAt = props.createdAt;
+		this.lastUpdated = props.lastUpdated;
 	}
 	toFirestore(): DevProjectObject {
 		return {
@@ -28,6 +39,8 @@ export class ProjectWrapper {
 			projectName: this.projectName,
 			projectDesc: this.projectDesc,
 			config: this.config,
+			createdAt: this.createdAt,
+			lastUpdated: this.lastUpdated,
 		};
 	}
 	/**
@@ -55,6 +68,8 @@ export async function createProject(
 			projectName: project.projectName,
 			projectDesc: project.projectDesc,
 			config: project.config,
+			createdAt: project.createdAt,
+			lastUpdated: project.lastUpdated,
 		});
 
 		// Step 2: Update with the generated ID

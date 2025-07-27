@@ -1,10 +1,15 @@
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+/** ======= REACT ROUTER ======= */
 import { useNavigate } from 'react-router-dom';
 
-export default function NotFoundPage() {
+/** ======= MUI COMPONENTS ======= */
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+
+/** @description Renders when the page is non existent */
+const NotFoundPage = () => {
     const navigate = useNavigate();
+    const navigateBack = () => navigate(-1);
     return (
         <Box
             sx={{
@@ -26,9 +31,11 @@ export default function NotFoundPage() {
             <Typography variant="body1" sx={{ mb: 4, maxWidth: 400 }}>
                 It might have been moved or deleted, or you may have typed the URL incorrectly.
             </Typography>
-            <Button variant="contained" onClick={() => navigate('/')}>
-                Go to Home
+            <Button variant="contained" onClick={navigateBack}>
+                Go Back
             </Button>
         </Box>
     );
-}
+};
+
+export default NotFoundPage;

@@ -1,13 +1,27 @@
+/** ======= REACT ======= */
 import {
-    createContext, useContext, useEffect, useState, type ReactNode
+    createContext,
+    useContext,
+    useEffect,
+    useState,
+    type ReactNode,
 } from 'react';
+
+/** ======= FIREBASE AUTH ======= */
 import { onAuthStateChanged, type User } from 'firebase/auth';
-import { auth, db } from '../data/Firebase';
+
+/** ======= FIREBASE FIRESTORE ======= */
 import { doc, onSnapshot, collection, getDocs } from 'firebase/firestore';
+
+/** ======= LOCAL FIREBASE SETUP ======= */
+import { auth, db } from '../data/Firebase';
+
+/** ======= WRAPPERS & TYPES ======= */
 import { UserWrapper } from '../data/User';
 import { ProjectWrapper } from '../data/Project';
 import { TaskWrapper } from '../data/Tasks';
 import type { UserObject, DevProjectObject, TaskObject } from '../data/Types';
+
 
 interface AuthContextType {
     user: User | null;

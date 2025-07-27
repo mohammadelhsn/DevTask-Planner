@@ -1,5 +1,8 @@
+/** ======= FIREBASE ======= */
 import { FirebaseError } from 'firebase/app';
-import { type FirestoreRawData } from './Types';
+
+/** ======= TYPES ======= */
+import type { FirestoreRawData } from './Types';
 
 export const firebaseErrors: Record<string, string> = {
 	'auth/invalid-email': 'The email address is badly formatted.',

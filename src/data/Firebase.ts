@@ -1,8 +1,20 @@
+/** ======= FIREBASE CORE ======= */
 import { FirebaseError, initializeApp } from 'firebase/app';
-import { getAuth, signInWithPopup, type AuthProvider } from 'firebase/auth';
+
+/** ======= FIREBASE AUTH ======= */
+import {
+	getAuth,
+	signInWithPopup,
+	signOut,
+	type AuthProvider,
+} from 'firebase/auth';
+
+/** ======= FIREBASE FIRESTORE ======= */
 import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore';
-import { UserWrapper } from './User';
+
+/** ======= UTILITIES & WRAPPERS ======= */
 import FirestoreResponse from './FirestoreResponse';
+import { UserWrapper } from './User';
 
 const firebaseConfig = {
 	apiKey: 'AIzaSyDK0v4L8ylOZEGJld2ylA1-rqomv9hMTjA',
@@ -91,3 +103,5 @@ export async function handleProviderSignIn(
 		return new FirestoreResponse(error as FirebaseError);
 	}
 }
+
+export const signOutUser = () => signOut(auth);

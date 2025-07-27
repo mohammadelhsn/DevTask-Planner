@@ -1,3 +1,4 @@
+/** ======= REACT ======= */
 import { createContext, useContext, useState, type FC, type ReactNode } from 'react';
 
 type FeedbackType = 'success' | 'error' | 'info' | 'warning';

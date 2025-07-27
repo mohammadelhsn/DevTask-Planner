@@ -1,4 +1,10 @@
-import type { ReactNode } from 'react';
+/** ======= TYPES ======= */
+import type { LazyExoticComponent, ReactNode } from 'react';
+import type { OverridableComponent } from '@mui/material/OverridableComponent';
+import type { SvgIconProps, SvgIconTypeMap } from '@mui/material';
+
+import type { ProjectWrapper } from './Project';
+import type { TaskWrapper } from './Tasks';
 
 export type ParentComp = { children: ReactNode };
 
@@ -31,6 +37,10 @@ export type DevProjectObject = {
 	projectDesc: string;
 	/** @description The config for the project */
 	config: ColumnConfig[];
+	/** @description When the project was created */
+	createdAt: Date;
+	/** @description When the project was last updated */
+	lastUpdated: Date;
 };
 
 /** @description The column the task belongs to */
@@ -65,6 +75,12 @@ export type TaskObject = {
 	priority: TaskPriority;
 	/** @description The people assigned to the task */
 	assignees: string[];
+	/** @description When the task was created */
+	createdAt: Date;
+	/** @description The last time the task was updated */
+	lastUpdated: Date;
+	/** @description The due date for the task if applicable */
+	dueDate: Date | null;
 };
 
 /** @description The user's role in the project */
@@ -80,3 +96,26 @@ export type UserObject = {
 	/** @description The user's role */
 	role: UserRole;
 };
+
+export interface TaskCardProps {
+	t: TaskWrapper;
+	index: number;
+	projectId: string;
+}
+
+export interface LazyIconProps extends SvgIconProps {
+	icon: LazyExoticComponent<
+		OverridableComponent<SvgIconTypeMap<{}, 'svg'>> & { muiName: string }
+	>;
+	size?: number; // fallback size for skeleton loading indicator
+}
+
+export interface ProjectCardProps {
+	proj: ProjectWrapper;
+	index: number;
+}
+
+export interface SettingsProps {
+	mode: 'light' | 'dark';
+	toggleColorMode: (newMode: any) => void;
+}

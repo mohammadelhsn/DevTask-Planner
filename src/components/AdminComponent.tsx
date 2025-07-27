@@ -1,12 +1,20 @@
+/** ======= CONTEXT ======= */
 import { useAuth } from '../contexts/AuthContext';
+
+/** ======= TYPES ======= */
 import type { ParentComp } from '../data/Types';
 
+/** @description A component that shows admin only content for admin users */
 const AdminComponent = ({ children }: ParentComp) => {
+    /** ======= GET THE USER DATA ======= */
     const { userData } = useAuth();
-
+    /** ======= RETURN NOTHING IF THE USER IS NOT AN ADMIN ======= */
     if (!userData?.isAdmin()) return null;
+    /** ======= RETURN THE CHILD ======= */
     return (
-        <>{children}</>
+        <>
+            {children}
+        </>
     );
 };
 

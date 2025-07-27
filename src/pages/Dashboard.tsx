@@ -1,38 +1,36 @@
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
+/** ======= MUI COMPONENTS ======= */
 import Box from '@mui/material/Box';
-import Fab from '@mui/material/Fab';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
+import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
-import CardHeader from '@mui/material/CardHeader';
-import CardActions from '@mui/material/CardActions';
+import Fab from '@mui/material/Fab';
 import Grid from '@mui/material/Grid';
-import AddIcon from '@mui/icons-material/Add';
-import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+
+/** ======= MUI ICONS ======= */
+import AddIcon from '@mui/icons-material/Add';
+
+/** ======= REACT ROUTER ======= */
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+
+/** ======= CONTEXTS ======= */
 import { useAuth } from '../contexts/AuthContext';
-import { useTheme } from '@mui/material';
+
+/** ======= PROJECT FILES ======= */
 import { containerStyles, dividerStyle } from '../data/Styles';
-import { cardStyles } from '../data/Styles';
+import { NEW_PROJECT } from '../data/Routes';
+import ProjectCard from '../components/ProjectCard';
+import NoProjectsMessage from '../components/NoProjects';
+
 
 const Dashboard = () => {
     /** ======= NAVIGATE HOOK ======= */
     const navigate = useNavigate();
-    /** ======= THEME HOOK ======= */
-    const { palette } = useTheme();
+    /** ======= NAVIGATION HELPERS ======= */
+    const navigateToNewProject = () => navigate(NEW_PROJECT);
     /** ======= AUTH CONTEXT ======= */
-    const { userData, user, loading } = useAuth();
-    /** ======= IF THERE IS NO USER, DIRECT THEM TO LOGIN ======= */
-    useEffect(() => {
-        if (!userData && !user) {
-            navigate('/login');
-        }
-    }, []);
+    const { userData, user } = useAuth();
     /** ======= HANDLE LOADING ======= */
-    if (loading) return (<Typography variant='inherit'>Loading...</Typography>);
     return (
         <Container maxWidth='lg' sx={containerStyles}>
             <Box sx={{ mt: 2 }}>
@@ -40,42 +38,9 @@ const Dashboard = () => {
                 <Divider sx={dividerStyle} />
             </Box>
             <Paper sx={{ p: 2 }}>
+                {user && userData && userData.projects.length == 0 && (<NoProjectsMessage />)}
                 <Grid container spacing={3}>
-                    {user && userData && userData.projects.length > 0 && userData.projects.map((proj, index) => (
-                        <Grid size={{ xs: 2, sm: 4, md: 4 }} key={`${index}-${proj.id}`}>
-                            <Card elevation={3} sx={cardStyles}>
-                                <CardHeader
-                                    title={
-                                        <>
-                                            <Box>{proj.projectName}</Box>
-                                            <Divider sx={{ mt: 1 }} />
-                                        </>
-                                    }
-                                />
-                                <CardContent>
-                                    <Typography>
-                                        {proj.projectDesc.trim().length > 0
-                                            ? proj.projectDesc
-                                            : 'There is no content yet! Edit me!'}
-                                    </Typography>
-                                </CardContent>
-                                <CardActions sx={{ paddingLeft: 1 }}>
-                                    <Button
-                                        onClick={() => { navigate(`/project/${proj.id}`); }}
-                                        variant='text'
-                                        sx={{
-                                            transition: '0.3s ease',
-                                            '&:hover': {
-                                                bgcolor: palette.primary.main,
-                                                color: palette.text.primary,
-                                            }
-                                        }}>
-                                        View Entry
-                                    </Button>
-                                </CardActions>
-                            </Card>
-                        </Grid>
-                    ))}
+                    {user && userData && userData.projects.length > 0 && userData.projects.map((proj, index) => (<ProjectCard proj={proj} index={index} />))}
                 </Grid>
             </Paper>
             <Box sx={{
@@ -84,7 +49,7 @@ const Dashboard = () => {
                 right: 24,
                 zIndex: 1000,
             }}>
-                <Fab color="primary" aria-label="add" onClick={() => navigate('/project/new')}
+                <Fab color="primary" aria-label="add" onClick={navigateToNewProject}
                     sx={{
                         '&:hover .spin-icon': {
                             transform: 'rotate(180deg) scale(1.2)',

@@ -1,34 +1,39 @@
-/** REACT */
+/** ========== REACT ========== */
+import { useContext, useState } from 'react';
 
-import { useContext, useEffect, useState } from 'react';
+/** ========== REACT ROUTER ========== */
 import { useNavigate, useParams } from 'react-router-dom';
 
-/** AUTH CONTEXT */
-
+/** ========== CONTEXTS ========== */
 import { AuthContext } from '../contexts/AuthContext';
+import { useFeedback } from '../contexts/FeedbackContext';
 
-/** MUI COMPONENTS */
-
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import Stepper from '@mui/material/Stepper';
-import StepLabel from '@mui/material/StepLabel';
-import Step from '@mui/material/Step';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
+/** ========== MUI COMPONENTS ========== */
 import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
-//import Collapse from '@mui/material/Collapse';
+import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
-import { createTask, } from '../data/Tasks';
-import { useFeedback } from '../contexts/FeedbackContext';
+import Container from '@mui/material/Container';
+import Divider from '@mui/material/Divider';
+// import Collapse from '@mui/material/Collapse';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
-import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import Stepper from '@mui/material/Stepper';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+
+/** ========== DATA / FIREBASE ========== */
+import { createTask } from '../data/Tasks';
 import { type TaskObject } from '../data/Types';
+import { VIEW_TASK } from '../data/Routes';
+
+
+
 const steps = ['Project Title', 'Settings & Config'];
 
 const columns = ['Long Term', 'Short Term', 'Medium Term', 'Doing', 'Done'] as const;
@@ -36,17 +41,6 @@ const lifecycles = ['alpha', 'beta', 'stable'] as const;
 const types = ['feature', 'bug'] as const;
 const priorities = ['high', 'medium', 'low'] as const;
 
-/**
- * export type TaskObject = {
-
-    column: 'Long Term' | 'Short Term' | 'Medium Term' | 'Doing' | 'Done';
-    lifecycle: 'alpha' | 'beta' | 'stable';
-    type: 'feature' | 'bug';
-    priority: 'high' | 'medium' | 'low';
-    assignees: string[];
-};
- */
-/** NEW JOURNAL PAGE */
 
 const NewTask = () => {
     const [activeStep, setActiveStep] = useState(0);
@@ -61,13 +55,9 @@ const NewTask = () => {
     const { setFeedback } = useFeedback();
     const { user } = useContext(AuthContext);
     const navigate = useNavigate();
+    const navigateToNewTask = (projectId: string, taskId: string) => navigate(VIEW_TASK(projectId, taskId));
     const handleNext = () => setActiveStep((prev) => Math.min(prev + 1, steps.length - 1));
     const handleBack = () => setActiveStep((prev) => Math.max(prev - 1, 0));
-    useEffect(() => {
-        if (!user) {
-            navigate('/login');
-        }
-    });
     if (!id) {
         return;
     }
@@ -81,7 +71,10 @@ const NewTask = () => {
             lifecycle: lifecycle ? (lifecycle as 'alpha' | 'beta' | 'stable') : null,
             type: type ? (type as 'feature' | 'bug') : null,
             priority: priority ? (priority as 'high' | 'medium' | 'low') : null,
-            assignees: []
+            assignees: [],
+            createdAt: new Date(),
+            lastUpdated: new Date(),
+            dueDate: null,
         };
 
         try {
@@ -91,7 +84,9 @@ const NewTask = () => {
                 // maybe navigate to the new project's page or show success
 
                 setFeedback('Task created with ID: ' + response.data?.id, 'success');
-                navigate(`/project/${id}/tasks/${response.data?.id}`);
+                if (response.data) {
+                    navigateToNewTask(id, response.data.id);
+                }
             } else {
                 setFeedback('Failed to create project: ' + response.message, 'error');
             }
@@ -100,8 +95,6 @@ const NewTask = () => {
             console.error(error);
         }
     };
-
-
     return (
         <Container
             maxWidth="lg"
@@ -157,7 +150,7 @@ const NewTask = () => {
                                 <CardContent>
                                     <FormControl fullWidth margin="normal">
                                         <InputLabel>Column</InputLabel>
-                                        <Select value={column} label="Column" required onChange={e => setColumn(e.target.value)}>
+                                        <Select value={column} label="Column" required onChange={(e) => setColumn(e.target.value)}>
                                             {columns.map(option => (
                                                 <MenuItem key={option} value={option}>{option}</MenuItem>
                                             ))}
@@ -166,7 +159,7 @@ const NewTask = () => {
 
                                     <FormControl fullWidth margin="normal">
                                         <InputLabel>Lifecycle</InputLabel>
-                                        <Select value={lifecycle} label="Lifecycle" onChange={e => setLifecycle(e.target.value)}>
+                                        <Select value={lifecycle} label="Lifecycle" onChange={(e) => setLifecycle(e.target.value)}>
                                             {lifecycles.map(option => (
                                                 <MenuItem key={option} value={option}>{option}</MenuItem>
                                             ))}
@@ -175,7 +168,7 @@ const NewTask = () => {
 
                                     <FormControl fullWidth margin="normal">
                                         <InputLabel>Type</InputLabel>
-                                        <Select value={type} label="Type" onChange={e => setType(e.target.value)}>
+                                        <Select value={type} label="Type" onChange={(e) => setType(e.target.value)}>
                                             {types.map(option => (
                                                 <MenuItem key={option} value={option}>{option}</MenuItem>
                                             ))}
@@ -184,7 +177,7 @@ const NewTask = () => {
 
                                     <FormControl fullWidth margin="normal">
                                         <InputLabel>Priority</InputLabel>
-                                        <Select value={priority} label="Priority" onChange={e => setPriority(e.target.value)}>
+                                        <Select value={priority} label="Priority" onChange={(e) => setPriority(e.target.value)}>
                                             {priorities.map(option => (
                                                 <MenuItem key={option} value={option}>{option}</MenuItem>
                                             ))}

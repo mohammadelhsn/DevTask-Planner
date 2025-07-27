@@ -1,50 +1,64 @@
-import Container from '@mui/material/Container';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Card from '@mui/material/Card';
-import Divider from '@mui/material/Divider';
-//import CardHeader from '@mui/material/CardHeader';
-//import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
+/** ======= REACT + ROUTER ======= */
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+
+/** ======= CONTEXTS ======= */
 import { useAuth } from '../contexts/AuthContext';
-import { useState, useEffect } from 'react';
-import type { TaskWrapper } from '../data/Tasks';
 import { useFeedback } from '../contexts/FeedbackContext';
-import Fab from '@mui/material/Fab';
-import SaveIcon from '@mui/icons-material/Save';
-import EditIcon from '@mui/icons-material/Edit';
+
+/** ======= MUI COMPONENTS ======= */
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
 import Chip from '@mui/material/Chip';
-//import Collapse from '@mui/material/Collapse';
+import Container from '@mui/material/Container';
+import Divider from '@mui/material/Divider';
+import Fab from '@mui/material/Fab';
+import Typography from '@mui/material/Typography';
+
+/** ======= MUI ICONS ======= */
+import { SaveIcon, EditIcon, LazyIcon } from '../components/LazyIcons';
+
+/** ======= PROJECT FILES ======= */
+import { DASHBOARD } from '../data/Routes';
 import { capitalize, getChipColor, getLifecycleColor, getPriorityColor } from '../data/Functions';
 import { containerStyles, dividerStyle } from '../data/Styles';
+import type { TaskWrapper } from '../data/Tasks';
 
+/** ======= FUTURE FEATURES ======= */
+// import CardActions from '@mui/material/CardActions';
+// import Collapse from '@mui/material/Collapse';
 
+/** @description A page for the individual task */
 const ViewTask = () => {
     const { user, userData } = useAuth();
     const { id, taskId } = useParams();
     const { setFeedback } = useFeedback();
     const [editMode, setEditMode] = useState(false);
     const navigate = useNavigate();
+    const navigateToDashboard = () => navigate(DASHBOARD);
     const [task, setTask] = useState<TaskWrapper | null>(null);
     useEffect(() => {
-        if (!user || !userData) {
-            navigate('/login');
-        } else {
-            const proj = userData.projects.find((p) => p.id == id);
-            if (proj) {
-                const t = proj.tasks.find((ta) => ta.id == taskId);
-                if (t) {
-                    setTask(t);
+        if (user && userData) {
+            if (id) {
+                const proj = userData.findProject(id);
+                if (proj) {
+                    if (taskId) {
+                        const t = proj.findTask(taskId);
+                        if (t) {
+                            setTask(t);
+                        } else {
+                            setFeedback('Task not found!', 'error');
+                            navigateToDashboard();
+                            return;
+                        }
+                    }
                 } else {
-                    setFeedback('Task not found!', 'error');
-                    navigate('/dashboard');
+                    setFeedback('Project not found!', 'error');
+                    navigateToDashboard();
                     return;
                 }
-            } else {
-                setFeedback('Project not found!', 'error');
-                navigate('/dashboard');
-                return;
             }
         }
     }, []);
@@ -60,10 +74,11 @@ const ViewTask = () => {
             </Box>
             {!editMode && (
                 <Card>
+                    <CardHeader
+                        title={<><Typography variant='inherit'>{task?.title}</Typography></>}
+                        subheader={<><Typography variant='inherit' >{task?.description}</Typography></>}
+                    />
                     <CardContent>
-                        <Typography variant='h5' gutterBottom>{task?.title}</Typography>
-                        <Typography variant='body2' sx={{ mb: 2 }}>{task?.description}</Typography>
-
                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
                             {task && task.column != null && (<Chip color='primary' label={`Column: ${capitalize(task?.column)}`} variant="outlined" />)}
                             {task && task.priority != null && (<Chip color={getPriorityColor(task.priority)} label={`Priority: ${capitalize(task?.priority)}`} />)}
@@ -76,7 +91,6 @@ const ViewTask = () => {
                     </CardContent>
                 </Card>
             )}
-
             <Fab
                 color={editMode ? 'success' : 'primary'}
                 onClick={editMode ? handleSave : () => setEditMode(true)}
@@ -87,7 +101,7 @@ const ViewTask = () => {
                     zIndex: 1000
                 }}
             >
-                {editMode ? <SaveIcon /> : <EditIcon />}
+                {editMode ? <LazyIcon icon={SaveIcon} /> : <LazyIcon icon={EditIcon} />}
             </Fab>
         </Container>
 

@@ -1,43 +1,41 @@
+/** ======= REACT ======= */
 import type React from 'react';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Typography from '@mui/material/Typography';
+
+/** ======= CONTEXTS ======= */
+import { useAuth } from '../contexts/AuthContext';
+import { useFeedback } from '../contexts/FeedbackContext';
+
+/** ======= MUI COMPONENTS ======= */
 import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
 import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
+import Divider from '@mui/material/Divider';
+
+/** ======= MUI ICONS ======= */
+import Brightness6Icon from '@mui/icons-material/Brightness6';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import CardContent from '@mui/material/CardContent';
-import Divider from '@mui/material/Divider';
-import Brightness6Icon from '@mui/icons-material/Brightness6';
 import SettingsIcon from '@mui/icons-material/Settings';
 
-import { useAuth } from '../contexts/AuthContext';
-
-/** =========== FIREBASE =========== */
+/** ======= FIREBASE ======= */
 import { doc, updateDoc } from 'firebase/firestore';
-import { db } from '../data/Firebase';
-import { useFeedback } from '../contexts/FeedbackContext';
-import FirestoreResponse from '../data/FirestoreResponse';
 import type { FirebaseError } from 'firebase/app';
+import { db } from '../data/Firebase';
+import FirestoreResponse from '../data/FirestoreResponse';
 
+/** ======= TYPES ======= */
+import type { SettingsProps } from '../data/Types';
 
-interface SettingsProps {
-    mode: 'light' | 'dark';
-    toggleColorMode: (newMode: any) => void;
-}
 
 const SettingsPage: React.FC<SettingsProps> = ({ mode, toggleColorMode }) => {
     const { user, userData } = useAuth();
     const { setFeedback } = useFeedback();
-    const navigate = useNavigate();
     useEffect(() => {
-        if (!user && userData == null) {
-            navigate('/login');
-            return;
-        }
         if (userData != null) {
             if (userData.theme == 'system') {
                 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;

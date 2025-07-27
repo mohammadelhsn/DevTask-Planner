@@ -39,3 +39,16 @@ export const cardStyles: Style = {
 		transform: 'scale(1.03)',
 	},
 };
+
+export const columnCards: Style = {
+	height: { sm: '60vh', md: 'fit-content' },
+	width: { xs: '100%', sm: '280px', md: '340px', lg: '400px' },
+	overflowY: 'auto',
+	display: 'flex',
+	flexDirection: 'column',
+};
+
+export const chipStyles: Style = {
+	mt: 1,
+	mr: 1,
+};
