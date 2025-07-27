@@ -1,0 +1,214 @@
+/** REACT */
+
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+
+/** AUTH CONTEXT */
+
+import { AuthContext } from '../contexts/AuthContext';
+
+/** MUI COMPONENTS */
+
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Stepper from '@mui/material/Stepper';
+import StepLabel from '@mui/material/StepLabel';
+import Step from '@mui/material/Step';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
+//import Collapse from '@mui/material/Collapse';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
+import { createTask, type TaskObject } from '../data/Tasks';
+import { useFeedback } from '../contexts/FeedbackContext';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+const steps = ['Project Title', 'Settings & Config'];
+
+const columns = ['Long Term', 'Short Term', 'Medium Term', 'Doing', 'Done'] as const;
+const lifecycles = ['alpha', 'beta', 'stable'] as const;
+const types = ['feature', 'bug'] as const;
+const priorities = ['high', 'medium', 'low'] as const;
+
+/**
+ * export type TaskObject = {
+
+    column: 'Long Term' | 'Short Term' | 'Medium Term' | 'Doing' | 'Done';
+    lifecycle: 'alpha' | 'beta' | 'stable';
+    type: 'feature' | 'bug';
+    priority: 'high' | 'medium' | 'low';
+    assignees: string[];
+};
+ */
+/** NEW JOURNAL PAGE */
+
+const NewTask = () => {
+    const [activeStep, setActiveStep] = useState(0);
+    const { id } = useParams();
+    const [title, setTitle] = useState('');
+    const [desc, setDesc] = useState('');
+    const [column, setColumn] = useState('');
+    const [lifecycle, setLifecycle] = useState('');
+    const [type, setType] = useState('');
+    const [priority, setPriority] = useState('');
+    //const [assignees, setAssignees] = useState<string[]>([]);
+    const { setFeedback } = useFeedback();
+    const { user } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const handleNext = () => setActiveStep((prev) => Math.min(prev + 1, steps.length - 1));
+    const handleBack = () => setActiveStep((prev) => Math.max(prev - 1, 0));
+    useEffect(() => {
+        if (!user) {
+            navigate('/login');
+        }
+    });
+    if (!id) {
+        return;
+    }
+    const handleSubmit = async () => {
+        if (!user) return;
+
+        const taskToCreate: Omit<TaskObject, "id"> = {
+            title: title,
+            description: desc,
+            column: column ? (column as 'Long Term' | 'Short Term' | 'Medium Term' | 'Doing' | 'Done') : null,
+            lifecycle: lifecycle ? (lifecycle as 'alpha' | 'beta' | 'stable') : null,
+            type: type ? (type as 'feature' | 'bug') : null,
+            priority: priority ? (priority as 'high' | 'medium' | 'low') : null,
+            assignees: []
+        };
+
+        try {
+            const response = await createTask(user.uid, id, taskToCreate);
+
+            if (response.success) {
+                // maybe navigate to the new project's page or show success
+
+                setFeedback('Task created with ID: ' + response.data?.id, 'success');
+                navigate(`/project/${id}/tasks/${response.data?.id}`);
+            } else {
+                setFeedback('Failed to create project: ' + response.message, 'error');
+            }
+        } catch (error) {
+            setFeedback('Unexpected error creating project.', 'error');
+            console.error(error);
+        }
+    };
+
+
+    return (
+        <Container
+            maxWidth="lg"
+            sx={{
+                px: { xs: 2, sm: 3 },
+                py: { xs: 4, sm: 6 },
+                flexGrow: 1,
+            }}>
+            <Box sx={{ width: '100%', maxWidth: 600, mx: 'auto', mt: 4 }}>
+                <Stepper activeStep={activeStep} alternativeLabel>
+                    {steps.map((label) => (
+                        <Step key={label}>
+                            <StepLabel>{label}</StepLabel>
+                        </Step>
+                    ))}
+                </Stepper>
+                <Box sx={{ mt: 4 }}>
+                    {activeStep === 0 && (
+                        <>
+                            <TextField
+                                label="Title"
+                                fullWidth
+                                margin="normal"
+                                required
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                            />
+                            <TextField
+                                label="Description"
+                                fullWidth
+                                margin="normal"
+                                required
+                                value={desc}
+                                onChange={(e) => setDesc(e.target.value)}
+                            />
+                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+                                <Button variant="contained" onClick={handleNext} disabled={!title || !desc}>
+                                    Next
+                                </Button>
+                            </Box>
+                        </>
+                    )}
+
+                    {activeStep === 1 && (
+                        <Card sx={{ p: 2 }}>
+                            <Card elevation={3}>
+                                <CardHeader title={
+                                    <>
+                                        <Typography variant='inherit'>Config</Typography>
+                                        <Divider sx={{ mt: 2 }} />
+                                    </>
+                                } />
+                                <CardContent>
+                                    <FormControl fullWidth margin="normal">
+                                        <InputLabel>Column</InputLabel>
+                                        <Select value={column} label="Column" required onChange={e => setColumn(e.target.value)}>
+                                            {columns.map(option => (
+                                                <MenuItem key={option} value={option}>{option}</MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+
+                                    <FormControl fullWidth margin="normal">
+                                        <InputLabel>Lifecycle</InputLabel>
+                                        <Select value={lifecycle} label="Lifecycle" onChange={e => setLifecycle(e.target.value)}>
+                                            {lifecycles.map(option => (
+                                                <MenuItem key={option} value={option}>{option}</MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+
+                                    <FormControl fullWidth margin="normal">
+                                        <InputLabel>Type</InputLabel>
+                                        <Select value={type} label="Type" onChange={e => setType(e.target.value)}>
+                                            {types.map(option => (
+                                                <MenuItem key={option} value={option}>{option}</MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+
+                                    <FormControl fullWidth margin="normal">
+                                        <InputLabel>Priority</InputLabel>
+                                        <Select value={priority} label="Priority" onChange={e => setPriority(e.target.value)}>
+                                            {priorities.map(option => (
+                                                <MenuItem key={option} value={option}>{option}</MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+
+                                    {/* Assignees would typically be a multi-select with user emails/names */}
+                                </CardContent>
+                            </Card>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
+                                <Button variant="outlined" onClick={handleBack}>Back</Button>
+                                <Button
+                                    variant="contained"
+                                    onClick={handleSubmit}
+                                    disabled={!column}
+                                >
+                                    Submit
+                                </Button>
+                            </Box>
+                        </Card>
+                    )}
+                </Box>
+            </Box>
+        </Container>
+    );
+};
+
+export default NewTask;
