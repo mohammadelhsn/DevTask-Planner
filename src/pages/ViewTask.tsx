@@ -17,6 +17,14 @@ import EditIcon from '@mui/icons-material/Edit';
 import Chip from '@mui/material/Chip';
 //import Collapse from '@mui/material/Collapse';
 
+function capitalize(str: string) {
+    if (typeof str !== 'string' || str.length === 0) {
+        return ''; // Handle empty or non-string inputs
+    }
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
+
 const ViewTask = () => {
     const { user, userData } = useAuth();
     const { id, taskId } = useParams();
@@ -93,10 +101,10 @@ const ViewTask = () => {
                         <Typography variant='body2' sx={{ mb: 2 }}>{task?.description}</Typography>
 
                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                            {task && task.column != null && (<Chip color='primary' label={`Column: ${task?.column}`} variant="outlined" />)}
-                            {task && task.priority != null && (<Chip color={getPriorityColor(task.priority)} label={`Priority: ${task?.priority}`} />)}
-                            {task && task.type != null && (<Chip color={getChipColor(task.type)} label={`Type: ${task?.type}`} />)}
-                            {task && task.lifecycle != null && (<Chip color={getLifecycleColor(task.lifecycle)} label={`Lifecycle: ${task?.lifecycle}`} variant="outlined" />)}
+                            {task && task.column != null && (<Chip color='primary' label={`Column: ${capitalize(task?.column)}`} variant="outlined" />)}
+                            {task && task.priority != null && (<Chip color={getPriorityColor(task.priority)} label={`Priority: ${capitalize(task?.priority)}`} />)}
+                            {task && task.type != null && (<Chip color={getChipColor(task.type)} label={`Type: ${capitalize(task?.type)}`} />)}
+                            {task && task.lifecycle != null && (<Chip color={getLifecycleColor(task.lifecycle)} label={`Lifecycle: ${capitalize(task?.lifecycle)}`} variant="outlined" />)}
                             {task?.assignees.map((a) => (
                                 <Chip key={a} label={a} color="default" />
                             ))}
