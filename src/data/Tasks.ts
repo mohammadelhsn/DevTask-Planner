@@ -44,8 +44,24 @@ export class TaskWrapper {
 			assignees: this.assignees,
 		};
 	}
+	isEqual(other: TaskWrapper): boolean {
+		return (
+			this.id === other.id &&
+			this.title === other.title &&
+			this.description === other.description &&
+			this.column === other.column &&
+			this.priority === other.priority &&
+			this.lifecycle === other.lifecycle &&
+			this.type === other.type &&
+			this.assignees.length === other.assignees.length &&
+			this.assignees.every((a, i) => a === other.assignees[i])
+		);
+	}
 	static fromFirestore(rawData: TaskObject) {
 		return new TaskWrapper(rawData);
+	}
+	static equals(task1: TaskWrapper, task2: TaskWrapper) {
+		return task1.isEqual(task2);
 	}
 }
 

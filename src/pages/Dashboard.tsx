@@ -84,7 +84,7 @@ const Dashboard = () => {
                 right: 24,
                 zIndex: 1000,
             }}>
-                <Fab color="primary" aria-label="add" onClick={() => navigate('/projects/new')}
+                <Fab color="primary" aria-label="add" onClick={() => navigate('/project/new')}
                     sx={{
                         '&:hover .spin-icon': {
                             transform: 'rotate(180deg) scale(1.2)',

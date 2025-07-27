@@ -22,90 +22,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useEffect, useState } from 'react';
 import type { ProjectWrapper } from '../data/Project';
 import { useFeedback } from '../contexts/FeedbackContext';
-interface SampleTasks {
-    id: number;
-    title: string;
-    description: string;
-    column: 'Long Term' | 'Short Term' | 'Medium Term' | 'Doing' | 'Done';
-    lifecycle: 'alpha' | 'beta' | 'stable';
-    type: 'feature' | 'bug';
-    priority: 'high' | 'medium' | 'low';
-}
-const sampleTasks: SampleTasks[] = [
-    {
-        id: 1,
-        title: 'Implement Authentication',
-        description: 'Set up Firebase login/signup with email and Google OAuth.',
-        column: 'Long Term',
-        type: 'feature',
-        lifecycle: 'alpha',
-        priority: 'high',
-    },
-    {
-        id: 2,
-        title: 'Dark Mode Support',
-        description: 'Allow users to toggle between light and dark themes.',
-        column: 'Medium Term',
-        type: 'feature',
-        lifecycle: 'beta',
-        priority: 'medium',
-    },
-    {
-        id: 3,
-        title: 'Fix Mobile Navbar Overflow',
-        description: 'Navbar overlaps content on iOS Safari browsers.',
-        column: 'Short Term',
-        type: 'bug',
-        lifecycle: 'beta',
-        priority: 'high',
-    },
-    {
-        id: 4,
-        title: 'Profile Editing',
-        description: 'Enable users to update their profile picture and bio.',
-        column: 'Doing',
-        type: 'feature',
-        lifecycle: 'alpha',
-        priority: 'medium',
-    },
-    {
-        id: 5,
-        title: 'Optimize Load Times',
-        description: 'Improve homepage loading speed by lazy loading images.',
-        column: 'Doing',
-        type: 'feature',
-        lifecycle: 'beta',
-        priority: 'high',
-    },
-    {
-        id: 6,
-        title: 'Fix Password Reset Email Bug',
-        description: 'Reset emails sometimes fail to send; investigate and fix.',
-        column: 'Doing',
-        type: 'bug',
-        lifecycle: 'alpha',
-        priority: 'high',
-    },
-    {
-        id: 7,
-        title: 'Unit Test Coverage',
-        description: 'Write unit tests for authentication and profile modules.',
-        column: 'Done',
-        type: 'feature',
-        lifecycle: 'stable',
-        priority: 'low',
-    },
-    {
-        id: 8,
-        title: 'UI Polish',
-        description: 'Tweak button styles and alignments for better UX.',
-        column: 'Done',
-        type: 'feature',
-        lifecycle: 'stable',
-        priority: 'low',
-    },
-];
-
+import InboxIcon from '@mui/icons-material/Inbox';
 
 function capitalize(str: string) {
     if (typeof str !== 'string' || str.length === 0) {
@@ -175,198 +92,241 @@ const ViewProject = () => {
     return (
         <Container maxWidth='lg' sx={{ flexGrow: 1 }}>
             <Box sx={{ my: 2 }}>
-                <Typography variant='h2'>Dev Board</Typography>
-                <Typography variant='h6' sx={{ fontStyle: 'italic' }}>PROJECT NAME GOES HERE</Typography>
+                <Typography variant='h2'>Dev Board - {project?.projectName}</Typography>
+                <Typography variant='h5' sx={{ fontStyle: 'italic' }}>{project?.projectDesc}</Typography>
                 <Divider sx={{ my: 2 }} />
             </Box>
             <Paper sx={{ overflowX: 'auto', maxWidth: '100%' }}>
-                <Stack spacing={3} direction={{ xs: 'column', sm: 'row' }} sx={{ p: 2, flexWrap: { xs: 'wrap', sm: 'nowrap' }, minWidth: { xs: 'auto', sm: 'fit-content' }, }}>
-                    {/* Column Card 1 */}
-                    <Card elevation={3} sx={columnCards}>
-                        <CardHeader title={
-                            <>
-                                <Typography variant='inherit' sx={{ display: 'flex', alignItems: 'center' }}><ScheduleIcon color='primary' sx={{ mr: 1 }} /> Long Term</Typography>
-                                <Divider sx={{ mt: 1 }} />
-                            </>
-                        } />
-                        <CardContent>
-                            <Stack spacing={2}>
-                                {sampleTasks.filter((t) => t.column == 'Long Term').map((t) => {
-                                    return (
-                                        <Card elevation={5}>
-                                            <CardHeader title={
-                                                <>
-                                                    <Typography variant='subtitle1'>{t.title}</Typography>
-                                                    <Divider sx={{ mt: 1 }} />
-                                                </>} subheader={<><Chip color={getChipColor(t.type)}
-                                                    size="small" label={capitalize(t.type)} sx={{ mt: 1, mr: 1 }}></Chip>
-                                                    <Chip variant='outlined' color={getLifecycleColor(t.lifecycle)} label={capitalize(t.lifecycle)} sx={{ mt: 1, mr: 1 }}></Chip>
-                                                    <Chip
-                                                        variant="filled"
-                                                        color={getPriorityColor(t.priority)}
-                                                        label={capitalize(t.priority) + ' Priority'}
-                                                        sx={{ mt: 1 }}
-                                                    /></>} />
-                                            <CardContent sx={{ pt: 0 }}>
-                                                <Typography>{t.description}</Typography>
-                                            </CardContent>
-                                            <CardActions>
-                                                <Button>Edit Task 1</Button>
-                                            </CardActions>
-                                        </Card>
-                                    );
-                                })}
-                            </Stack>
-                        </CardContent>
-                    </Card>
-                    <Card elevation={3} sx={columnCards}>
-                        <CardHeader title={
-                            <>
-                                <Typography variant='inherit' sx={{ display: 'flex', alignItems: 'center' }}><EventIcon color='primary' sx={{ mr: 1 }} />Medium Term</Typography>
-                                <Divider sx={{ mt: 1 }} />
-                            </>
-                        } />
-                        <CardContent>
-                            <Stack spacing={2}>
-                                {sampleTasks.filter((t) => t.column == 'Medium Term').map((t) => {
-                                    return (
-                                        <Card elevation={5}>
-                                            <CardHeader title={
-                                                <>
-                                                    <Typography variant='subtitle1'>{t.title}</Typography>
-                                                    <Divider sx={{ mt: 1 }} />
-                                                </>} subheader={
+                {project && project.tasks.length == 0 && (
+                    <Box sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <InboxIcon fontSize='large' color='primary' sx={{ mr: 1 }} />
+                        <Typography variant="h6" color="text.secondary">
+                            No tasks in this project yet
+                        </Typography>
+                    </Box>
+                )}
+                {project && project.tasks.length > 0 && (
+                    <Stack spacing={3} direction={{ xs: 'column', sm: 'row' }} sx={{ p: 2, flexWrap: { xs: 'wrap', sm: 'nowrap' }, minWidth: { xs: 'auto', sm: 'fit-content' }, }}>
+                        {/* Column Card 1 */}
+                        <Card elevation={3} sx={columnCards}>
+                            <CardHeader title={
+                                <>
+                                    <Typography variant='inherit' sx={{ display: 'flex', alignItems: 'center' }}><ScheduleIcon color='primary' sx={{ mr: 1 }} /> Long Term</Typography>
+                                    <Divider sx={{ mt: 1 }} />
+                                </>
+                            } />
+                            <CardContent>
+                                <Stack spacing={2}>
+                                    {project && project.tasks.filter((t) => t.column == 'Long Term').length == 0 && (
+                                        <Typography>No Tasks here! Woohoo!</Typography>
+                                    )}
+                                    {project && project.tasks.length > 0 && project.tasks.filter((t) => t.column == 'Long Term').map((t, index) => {
+                                        return (
+                                            <Card elevation={5} key={`${t.id}-${index}`}>
+                                                <CardHeader title={
                                                     <>
-                                                        <Chip color={getChipColor(t.type)} size="small" label={capitalize(t.type)} sx={{ mt: 1, mr: 1 }}></Chip>
-                                                        <Chip variant='outlined' color={getLifecycleColor(t.lifecycle)} label={capitalize(t.lifecycle)} sx={{ mt: 1, mr: 1 }}></Chip>
-                                                        <Chip
+                                                        <Typography variant='subtitle1'>{t.title}</Typography>
+                                                        <Divider sx={{ mt: 1 }} />
+                                                    </>}
+                                                    subheader={
+                                                        <>
+                                                            {t.type != null && (<Chip color={getChipColor(t.type)} size="small" label={capitalize(t.type)} sx={{ mt: 1, mr: 1 }}></Chip>)}
+                                                            {t.lifecycle != null && (<Chip variant='outlined' color={getLifecycleColor(t.lifecycle)} label={capitalize(t.lifecycle)} sx={{ mt: 1, mr: 1 }}></Chip>)}
+                                                            {t.priority != null && (<Chip
+                                                                variant="filled"
+                                                                color={getPriorityColor(t.priority)}
+                                                                label={capitalize(t.priority) + ' Priority'}
+                                                                sx={{ mt: 1 }}
+                                                            />)}
+                                                        </>}
+                                                />
+                                                <CardContent sx={{ pt: 0 }}>
+                                                    <Typography>{t.description}</Typography>
+                                                </CardContent>
+                                                <CardActions>
+                                                    <Button onClick={() => navigate(`/project/${id}/tasks/${t.id}`)}>Edit Task</Button>
+                                                </CardActions>
+                                            </Card>
+                                        );
+                                    })}
+                                </Stack>
+                            </CardContent>
+                        </Card>
+                        <Card elevation={3} sx={columnCards}>
+                            <CardHeader title={
+                                <>
+                                    <Typography variant='inherit' sx={{ display: 'flex', alignItems: 'center' }}><EventIcon color='primary' sx={{ mr: 1 }} />Medium Term</Typography>
+                                    <Divider sx={{ mt: 1 }} />
+                                </>
+                            } />
+                            <CardContent>
+                                <Stack spacing={2}>
+                                    {project && project.tasks.filter((t) => t.column == 'Medium Term').length == 0 && (
+                                        <Typography>No Tasks here! Woohoo!</Typography>
+                                    )}
+                                    {project && project.tasks.length > 0 && project.tasks.filter((t) => t.column == 'Medium Term').map((t, index) => {
+                                        return (
+                                            <Card elevation={5} key={`${t.id}-${index}`}>
+                                                <CardHeader title={
+                                                    <>
+                                                        <Typography variant='subtitle1'>{t.title}</Typography>
+                                                        <Divider sx={{ mt: 1 }} />
+                                                    </>}
+                                                    subheader={
+                                                        <>
+                                                            {t.type != null && (<Chip color={getChipColor(t.type)} size="small" label={capitalize(t.type)} sx={{ mt: 1, mr: 1 }}></Chip>)}
+                                                            {t.lifecycle != null && (<Chip variant='outlined' color={getLifecycleColor(t.lifecycle)} label={capitalize(t.lifecycle)} sx={{ mt: 1, mr: 1 }}></Chip>)}
+                                                            {t.priority != null && (<Chip
+                                                                variant="filled"
+                                                                color={getPriorityColor(t.priority)}
+                                                                label={capitalize(t.priority) + ' Priority'}
+                                                                sx={{ mt: 1 }}
+                                                            />)}
+                                                        </>}
+                                                />
+                                                <CardContent sx={{ pt: 0 }}>
+                                                    <Typography>{t.description}</Typography>
+                                                </CardContent>
+                                                <CardActions>
+                                                    <Button onClick={() => navigate(`/project/${id}/tasks/${t.id}`)}>Edit Task</Button>
+                                                </CardActions>
+                                            </Card>
+                                        );
+                                    })}
+                                </Stack>
+                            </CardContent>
+                        </Card>
+                        <Card elevation={3} sx={columnCards}>
+                            <CardHeader title={
+                                <>
+                                    <Typography variant='inherit'><FlashOnIcon color='primary' sx={{ mr: 1 }} />Short Term</Typography>
+                                    <Divider sx={{ mt: 1 }} />
+                                </>
+                            } />
+                            <CardContent>
+                                {project && project.tasks.filter((t) => t.column == 'Short Term').length == 0 && (
+                                    <Typography>No Tasks here! Woohoo!</Typography>
+                                )}
+                                {project && project.tasks.length > 0 && project.tasks.filter((t) => t.column == 'Short Term').map((t, index) => {
+                                    return (
+                                        <Card elevation={5} key={`${t.id}-${index}`}>
+                                            <CardHeader title={
+                                                <>
+                                                    <Typography variant='subtitle1'>{t.title}</Typography>
+                                                    <Divider sx={{ mt: 1 }} />
+                                                </>}
+                                                subheader={
+                                                    <>
+                                                        {t.type != null && (<Chip color={getChipColor(t.type)} size="small" label={capitalize(t.type)} sx={{ mt: 1, mr: 1 }}></Chip>)}
+                                                        {t.lifecycle != null && (<Chip variant='outlined' color={getLifecycleColor(t.lifecycle)} label={capitalize(t.lifecycle)} sx={{ mt: 1, mr: 1 }}></Chip>)}
+                                                        {t.priority != null && (<Chip
                                                             variant="filled"
                                                             color={getPriorityColor(t.priority)}
                                                             label={capitalize(t.priority) + ' Priority'}
                                                             sx={{ mt: 1 }}
-                                                        />
-                                                    </>
-                                                } />
+                                                        />)}
+                                                    </>}
+                                            />
                                             <CardContent sx={{ pt: 0 }}>
                                                 <Typography>{t.description}</Typography>
                                             </CardContent>
                                             <CardActions>
-                                                <Button>Edit Task 1</Button>
+                                                <Button onClick={() => navigate(`/project/${id}/tasks/${t.id}`)}>Edit Task</Button>
                                             </CardActions>
                                         </Card>
                                     );
                                 })}
-                            </Stack>
-                        </CardContent>
-                    </Card>
-                    <Card elevation={3} sx={columnCards}>
-                        <CardHeader title={
-                            <>
-                                <Typography variant='inherit'><FlashOnIcon color='primary' sx={{ mr: 1 }} />Short Term</Typography>
-                                <Divider sx={{ mt: 1 }} />
-                            </>
-                        } />
-                        <CardContent>
-                            {sampleTasks.filter((t) => t.column == 'Short Term').map((t) => {
-                                return (
-                                    <Card elevation={5}>
-                                        <CardHeader title={
-                                            <>
-                                                <Typography variant='subtitle1'>{t.title}</Typography>
-                                                <Divider sx={{ mt: 1 }} />
-                                            </>} subheader={<><Chip color={getChipColor(t.type)}
-                                                size="small" label={capitalize(t.type)} sx={{ mt: 1, mr: 1 }}></Chip>
-                                                <Chip variant='outlined' color={getLifecycleColor(t.lifecycle)} label={capitalize(t.lifecycle)} sx={{ mt: 1, mr: 1 }}></Chip>
-                                                <Chip
-                                                    variant="filled"
-                                                    color={getPriorityColor(t.priority)}
-                                                    label={capitalize(t.priority) + ' Priority'}
-                                                    sx={{ mt: 1 }}
-                                                /></>} />
-                                        <CardContent sx={{ pt: 0 }}>
-                                            <Typography>{t.description}</Typography>
-                                        </CardContent>
-                                        <CardActions>
-                                            <Button>Edit Task 1</Button>
-                                        </CardActions>
-                                    </Card>
-                                );
-                            })}
-                        </CardContent>
-                    </Card>
-                    <Card elevation={3} sx={columnCards}>
-                        <CardHeader title={
-                            <>
-                                <Typography variant='inherit' sx={{ display: 'flex', alignItems: 'center' }}><AutorenewIcon color='primary' sx={{ mr: 1 }} /> Doing</Typography>
-                                <Divider sx={{ mt: 1 }} />
-                            </>
-                        } />
-                        <CardContent>
-                            <Stack spacing={2}>
-                                {sampleTasks.filter((t) => t.column == 'Doing').map((t) => {
-                                    return (
-                                        <Card elevation={5}>
-                                            <CardHeader title={
-                                                <>
-                                                    <Typography variant='subtitle1'>{t.title}</Typography>
-                                                    <Divider sx={{ mt: 1 }} />
-                                                </>} subheader={<><Chip color={getChipColor(t.type)}
-                                                    size="small" label={capitalize(t.type)} sx={{ mt: 1, mr: 1 }}></Chip>
-                                                    <Chip variant='outlined' color={getLifecycleColor(t.lifecycle)} label={capitalize(t.lifecycle)} sx={{ mt: 1, mr: 1 }}></Chip>
-                                                    <Chip
-                                                        variant="filled"
-                                                        color={getPriorityColor(t.priority)}
-                                                        label={capitalize(t.priority) + ' Priority'}
-                                                        sx={{ mt: 1 }}
-                                                    /></>} />
-                                            <CardContent sx={{ pt: 0 }}>
-                                                <Typography>{t.description}</Typography>
-                                            </CardContent>
-                                            <CardActions>
-                                                <Button>Edit Task 1</Button>
-                                            </CardActions>
-                                        </Card>
-                                    );
-                                })}
-                            </Stack>
+                            </CardContent>
+                        </Card>
+                        <Card elevation={3} sx={columnCards}>
+                            <CardHeader title={
+                                <>
+                                    <Typography variant='inherit' sx={{ display: 'flex', alignItems: 'center' }}><AutorenewIcon color='primary' sx={{ mr: 1 }} /> Doing</Typography>
+                                    <Divider sx={{ mt: 1 }} />
+                                </>
+                            } />
+                            <CardContent>
+                                <Stack spacing={2}>
+                                    {project && project.tasks.filter((t) => t.column == 'Doing').length == 0 && (
+                                        <Typography>No Tasks here! Woohoo!</Typography>
+                                    )}
+                                    {project && project.tasks.length > 0 && project.tasks.filter((t) => t.column == 'Doing').map((t, index) => {
+                                        return (
+                                            <Card elevation={5} key={`${t.id}-${index}`}>
+                                                <CardHeader title={
+                                                    <>
+                                                        <Typography variant='subtitle1'>{t.title}</Typography>
+                                                        <Divider sx={{ mt: 1 }} />
+                                                    </>}
+                                                    subheader={
+                                                        <>
+                                                            {t.type != null && (<Chip color={getChipColor(t.type)} size="small" label={capitalize(t.type)} sx={{ mt: 1, mr: 1 }}></Chip>)}
+                                                            {t.lifecycle != null && (<Chip variant='outlined' color={getLifecycleColor(t.lifecycle)} label={capitalize(t.lifecycle)} sx={{ mt: 1, mr: 1 }}></Chip>)}
+                                                            {t.priority != null && (<Chip
+                                                                variant="filled"
+                                                                color={getPriorityColor(t.priority)}
+                                                                label={capitalize(t.priority) + ' Priority'}
+                                                                sx={{ mt: 1 }}
+                                                            />)}
+                                                        </>}
+                                                />
+                                                <CardContent sx={{ pt: 0 }}>
+                                                    <Typography>{t.description}</Typography>
+                                                </CardContent>
+                                                <CardActions>
+                                                    <Button onClick={() => navigate(`/project/${id}/tasks/${t.id}`)}>Edit Task</Button>
+                                                </CardActions>
+                                            </Card>
+                                        );
+                                    })}
+                                </Stack>
 
-                        </CardContent>
-                    </Card>
-                    <Card elevation={3} sx={columnCards}>
-                        <CardHeader title={
-                            <>
-                                <Typography variant='inherit' sx={{ display: 'flex', alignItems: 'center' }}><CheckCircleIcon color='primary' sx={{ mr: 1 }} />Done</Typography>
-                            </>
-                        } />
-                        <CardContent>
-                            <Stack spacing={2}>{sampleTasks.filter((t) => t.column == 'Done').map((t) => {
-                                return (
-                                    <Card elevation={5}>
-                                        <CardHeader title={
-                                            <>
-                                                <Typography variant='subtitle1'>{t.title}</Typography>
-                                                <Divider sx={{ mt: 1 }} />
-                                            </>} subheader={<><Chip color={getChipColor(t.type)}
-                                                size="small" label={capitalize(t.type)} sx={{ mt: 1, mr: 1 }}></Chip>
-                                                <Chip variant='outlined' color={getLifecycleColor(t.lifecycle)} label={capitalize(t.lifecycle)} sx={{ mt: 1, mr: 1 }}></Chip>
-                                                <Chip
-                                                    variant="filled"
-                                                    color={getPriorityColor(t.priority)}
-                                                    label={capitalize(t.priority) + ' Priority'}
-                                                    sx={{ mt: 1 }}
-                                                /></>} />
-                                        <CardContent sx={{ pt: 0 }}>
-                                            <Typography>{t.description}</Typography>
-                                        </CardContent>
-                                        <CardActions>
-                                            <Button>Edit Task 1</Button>
-                                        </CardActions>
-                                    </Card>
-                                );
-                            })}</Stack>
-                        </CardContent>
-                    </Card>
-                </Stack>
+                            </CardContent>
+                        </Card>
+                        <Card elevation={3} sx={columnCards}>
+                            <CardHeader title={
+                                <Box>
+                                    <Typography variant='inherit' sx={{ display: 'flex', alignItems: 'center' }}><CheckCircleIcon color='primary' sx={{ mr: 1 }} />Done</Typography>
+                                    <Divider sx={{ mt: 1 }} />
+                                </Box>
+                            } />
+                            <CardContent>
+                                <Stack spacing={2}>{project && project.tasks.filter((t) => t.column == 'Done').length == 0 && (
+                                    <Typography>No Tasks here! Woohoo!</Typography>
+                                )}
+                                    {project && project.tasks.length > 0 && project.tasks.filter((t) => t.column == 'Done').map((t, index) => {
+                                        return (
+                                            <Card elevation={5} key={`${t.id}-${index}`}>
+                                                <CardHeader title={
+                                                    <>
+                                                        <Typography variant='subtitle1'>{t.title}</Typography>
+                                                        <Divider sx={{ mt: 1 }} />
+                                                    </>}
+                                                    subheader={
+                                                        <>
+                                                            {t.type != null && (<Chip color={getChipColor(t.type)} size="small" label={capitalize(t.type)} sx={{ mt: 1, mr: 1 }}></Chip>)}
+                                                            {t.lifecycle != null && (<Chip variant='outlined' color={getLifecycleColor(t.lifecycle)} label={capitalize(t.lifecycle)} sx={{ mt: 1, mr: 1 }}></Chip>)}
+                                                            {t.priority != null && (<Chip
+                                                                variant="filled"
+                                                                color={getPriorityColor(t.priority)}
+                                                                label={capitalize(t.priority) + ' Priority'}
+                                                                sx={{ mt: 1 }}
+                                                            />)}
+                                                        </>}
+                                                />
+                                                <CardContent sx={{ pt: 0 }}>
+                                                    <Typography>{t.description}</Typography>
+                                                </CardContent>
+                                                <CardActions>
+                                                    <Button onClick={() => navigate(`/project/${id}/tasks/${t.id}`)}>Edit Task</Button>
+                                                </CardActions>
+                                            </Card>
+                                        );
+                                    })}</Stack>
+                            </CardContent>
+                        </Card>
+                    </Stack>
+                )}
             </Paper>
             <Box sx={{
                 position: 'fixed',
