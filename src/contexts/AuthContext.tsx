@@ -49,7 +49,6 @@ const AuthProvider = ({ children }: { children: ReactNode; }) => {
 
         const unsubAuth = onAuthStateChanged(auth, (user) => {
             setUser(user);
-
             if (!user) {
                 setUserData(null);
                 setLoading(false);
@@ -58,7 +57,6 @@ const AuthProvider = ({ children }: { children: ReactNode; }) => {
                 unsubTasksArr.forEach((unsub) => unsub());
                 return;
             }
-
             const uid = user.uid;
             const userRef = doc(db, 'users', uid);
 
