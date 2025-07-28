@@ -120,3 +120,11 @@ export interface SettingsProps {
 	mode: 'light' | 'dark';
 	toggleColorMode: (newMode: any) => void;
 }
+
+export type LoginButtonState = {
+	google: boolean;
+	github: boolean;
+	facebook: boolean;
+};
+
+export type ProviderName = 'google' | 'github' | 'facebook';

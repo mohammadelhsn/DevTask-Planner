@@ -22,7 +22,7 @@ const ProjectCard = ({ proj, index }: ProjectCardProps) => {
     const navigate = useNavigate();
     const navigateToViewProject = (id: string) => navigate(VIEW_PROJECT(id));
     return (
-        <Grid size={{ xs: 2, sm: 4, md: 4 }} key={`${index}-${proj.id}`}>
+        <Grid size={{ xs: 12, sm: 6, md: 4 }} key={`${index}-${proj.id}`}>
             <Card elevation={3} sx={cardStyles}>
                 <CardHeader
                     title={

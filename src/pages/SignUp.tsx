@@ -16,7 +16,7 @@ import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material';
 
 /** ======= FIREBASE ======= */
-import { GithubAuthProvider, GoogleAuthProvider, FacebookAuthProvider } from 'firebase/auth';
+import { GithubAuthProvider, GoogleAuthProvider, FacebookAuthProvider, type AuthProvider } from 'firebase/auth';
 import { handleProviderSignUp } from '../data/Firebase';
 
 /** ======= ICONS ======= */
@@ -25,6 +25,15 @@ import { FaGithub, FaFacebook, FaGoogle, } from 'react-icons/fa';
 /** ======= PROJECT FILES ======= */
 import { combinedStyles, providerButton } from '../data/Styles';
 import { DASHBOARD } from '../data/Routes';
+import type { LoginButtonState, ProviderName } from '../data/Types';
+
+/** ======= PROVIDER INSTANCE =======*/
+const googleProvider = new GoogleAuthProvider();
+const githubProvider = new GithubAuthProvider();
+const facebookProvider = new FacebookAuthProvider();
+
+/** ======= CURRENT ACTION ======= */
+const action = 'Sign Up';
 
 /** @description The Sign Up page */
 const SignUpPage = () => {
@@ -35,48 +44,33 @@ const SignUpPage = () => {
     /** ======= AUTH CONTEXT ======= */
     const { user, loading } = useAuth();
     /** ======= LOADING STATE FOR EACH PROVIDER BUTTON ======= */
-    const [loadingG, setLoadingG] = useState<boolean>(false);
-    const [loadingGH, setLoadingGH] = useState<boolean>(false);
-    const [loadingF, setLoadingF] = useState<boolean>(false);
+    const [loadingButton, setLoadingButton] = useState<LoginButtonState>({
+        google: false,
+        github: false,
+        facebook: false,
+    });
     const navigate = useNavigate();
     const navigateToDashboard = () => navigate(DASHBOARD);
-    /** ======= PROVIDER INSTANCE =======*/
-    const googleProvider = new GoogleAuthProvider();
-    const githubProvider = new GithubAuthProvider();
-    const facebookProvider = new FacebookAuthProvider();
     /** ======= CHECK IF THERE IS A USER ======= */
     useEffect(() => {
-        if (user) {
-            navigateToDashboard();
-        }
+        if (user) navigateToDashboard();
     }, [user, navigate]);
     /** ======= HANDLE LOADING STATE ======= */
     if (loading) return <Typography>Loading...</Typography>;
-    /** ======= CURRENT ACTION ======= */
-    const action = 'Sign Up';
     /** ======= PROVIDER METHODS ======= */
-    const handleGoogleSignUp = async () => {
-        setLoadingG(true);
-        const result = await handleProviderSignUp(googleProvider);
-        setLoadingG(false);
+    const setProviderLoading = (provider: ProviderName, value: boolean) => {
+        setLoadingButton((prev) => ({ ...prev, [provider]: value }));
+    };
+    const handleProviderSignUpWrapper = async (provider: AuthProvider, providerName: ProviderName) => {
+        setProviderLoading(providerName, true);
+        const result = await handleProviderSignUp(provider);
         setFeedback(result.message, result.success ? 'success' : 'error');
+        setProviderLoading(providerName, false);
         if (result.success) navigateToDashboard();
     };
-    const handleGitHubSignUp = async () => {
-        setLoadingGH(true);
-        const result = await handleProviderSignUp(githubProvider);
-        setLoadingGH(false);
-        setFeedback(result.message, result.success ? 'success' : 'error');
-        if (result.success) navigateToDashboard();
-    };
-    const handleFacebookSignUp = async () => {
-        setLoadingF(true);
-        const result = await handleProviderSignUp(facebookProvider);
-        setLoadingF(false);
-        setFeedback(result.message, result.success ? 'success' : 'error');
-        if (result.success) navigateToDashboard();
-    };
-
+    const handleGoogleSignUp = () => handleProviderSignUpWrapper(googleProvider, 'google');
+    const handleGitHubSignUp = () => handleProviderSignUpWrapper(githubProvider, 'github');
+    const handleFacebookSignUp = () => handleProviderSignUpWrapper(facebookProvider, 'facebook');
     /** ======= COMPONENT ======= */
     return (
         <Container
@@ -91,14 +85,12 @@ const SignUpPage = () => {
                         gap: 2
                     }}
                 >
-                    <Typography variant="h4">
-                        {action}
-                    </Typography>
+                    <Typography variant="h4">{action}</Typography>
                     <Divider sx={{ mb: 4 }} />
                     <Button
                         variant='outlined'
                         fullWidth
-                        loading={loadingG}
+                        loading={loadingButton.google}
                         onClick={handleGoogleSignUp}
                         startIcon={<FaGoogle color={palette.text.primary} />}
                         sx={providerButton}
@@ -109,7 +101,7 @@ const SignUpPage = () => {
                         variant='outlined'
                         onClick={handleGitHubSignUp}
                         startIcon={<FaGithub color={palette.text.primary} />}
-                        loading={loadingGH}
+                        loading={loadingButton.github}
                         sx={providerButton}
                     >
                         {action} with GitHub
@@ -118,7 +110,7 @@ const SignUpPage = () => {
                         variant='outlined'
                         onClick={handleFacebookSignUp}
                         startIcon={<FaFacebook color={palette.text.primary} />}
-                        loading={loadingF}
+                        loading={loadingButton.facebook}
                         sx={providerButton}
                     >
                         {action} with Facebook

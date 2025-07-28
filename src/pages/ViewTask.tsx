@@ -25,6 +25,8 @@ import { DASHBOARD } from '../data/Routes';
 import { capitalize, getChipColor, getLifecycleColor, getPriorityColor } from '../data/Functions';
 import { containerStyles, dividerStyle } from '../data/Styles';
 import type { TaskWrapper } from '../data/Tasks';
+import LoadingPage from './LoadingPage';
+import NotFoundPage from './NotFoundPage';
 
 /** ======= FUTURE FEATURES ======= */
 // import CardActions from '@mui/material/CardActions';
@@ -35,10 +37,12 @@ const ViewTask = () => {
     const { user, userData } = useAuth();
     const { id, taskId } = useParams();
     const { setFeedback } = useFeedback();
+    // const [project, setProject] = useState<ProjectWrapper | null>(null);
+    const [task, setTask] = useState<TaskWrapper | null>(null);
     const [editMode, setEditMode] = useState(false);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const navigateToDashboard = () => navigate(DASHBOARD);
-    const [task, setTask] = useState<TaskWrapper | null>(null);
     useEffect(() => {
         if (user && userData) {
             if (id) {
@@ -48,16 +52,15 @@ const ViewTask = () => {
                         const t = proj.findTask(taskId);
                         if (t) {
                             setTask(t);
+                            setLoading(false);
                         } else {
                             setFeedback('Task not found!', 'error');
                             navigateToDashboard();
-                            return;
                         }
                     }
                 } else {
                     setFeedback('Project not found!', 'error');
                     navigateToDashboard();
-                    return;
                 }
             }
         }
@@ -66,6 +69,8 @@ const ViewTask = () => {
         setEditMode(false);
         setFeedback('Task updated!', 'success');
     };
+    if (loading) return <LoadingPage />;
+    if (!task) return <NotFoundPage />;
     return (
         <Container maxWidth="lg" sx={containerStyles}>
             <Box>
@@ -75,8 +80,8 @@ const ViewTask = () => {
             {!editMode && (
                 <Card>
                     <CardHeader
-                        title={<><Typography variant='inherit'>{task?.title}</Typography></>}
-                        subheader={<><Typography variant='inherit' >{task?.description}</Typography></>}
+                        title={<><Typography variant='inherit'>{task.title}</Typography></>}
+                        subheader={<><Typography variant='inherit' >{task.description}</Typography></>}
                     />
                     <CardContent>
                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>

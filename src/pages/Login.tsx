@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 /** ======= FIREBASE & AUTH ======= */
-import { GoogleAuthProvider, GithubAuthProvider, FacebookAuthProvider } from 'firebase/auth';
+import { GoogleAuthProvider, GithubAuthProvider, FacebookAuthProvider, type AuthProvider } from 'firebase/auth';
 import { handleProviderSignIn } from '../data/Firebase';
 import { useAuth } from '../contexts/AuthContext';
 import { useFeedback } from '../contexts/FeedbackContext';
@@ -22,8 +22,17 @@ import { FaGithub, FaFacebook, FaGoogle, } from 'react-icons/fa';
 
 /** ======= STYLES & ROUTES ======= */
 import { combinedStyles, providerButton } from '../data/Styles';
+import type { LoginButtonState, ProviderName } from '../data/Types';
 import { DASHBOARD } from '../data/Routes';
 import LoadingPage from './LoadingPage';
+
+/** =========== INITIATE THE PROVIDERS =========== */
+const googleProvider = new GoogleAuthProvider();
+const githubProvider = new GithubAuthProvider();
+const facebookProvider = new FacebookAuthProvider();
+
+/** ======= DEFINE THE ACTION ======= */
+const action = 'Log In';
 
 
 /** ======= LOGIN ======= */
@@ -36,47 +45,34 @@ const LogIn = () => {
     /** ======= THEME CONTEXT ======= */
     const { palette } = useTheme();
     /** =========== LOADING STATE FOR EACH OF THE BUTTONS =========== */
-    const [loadingG, setLoadingG] = useState<boolean>(false);
-    const [loadingGH, setLoadingGH] = useState<boolean>(false);
-    const [loadingF, setLoadingF] = useState<boolean>(false);
+    const [loadingButton, setLoadingButton] = useState<LoginButtonState>({
+        google: false,
+        github: false,
+        facebook: false,
+    });
+    const setProviderLoading = (provider: ProviderName, value: boolean) => {
+        setLoadingButton((prev) => ({ ...prev, [provider]: value }));
+    };
     /** ======= NAVIGATE HOOK ======= */
     const navigate = useNavigate();
+    /**  */
     const navigateToDashboard = () => navigate(DASHBOARD);
-    /** =========== INITIATE THE PROVIDERS =========== */
-    const googleProvider = new GoogleAuthProvider();
-    const githubProvider = new GithubAuthProvider();
-    const facebookProvider = new FacebookAuthProvider();
     useEffect(() => {
-        if (user) {
-            navigateToDashboard();
-        }
-    }, [user]);
+        if (user) navigateToDashboard();
+    }, [user, navigate]);
     /** ======= HANDLE LOADING ======= */
     if (loading) return <LoadingPage />;
-    /** ======= DEFINE THE ACTION ======= */
-    const action = 'Log In';
     /** ======= PROVIDER HANDLERS ======= */
-    const handleGoogleSignIn = async () => {
-        setLoadingG(true);
-        const result = await handleProviderSignIn(googleProvider);
-        setLoadingG(false);
+    const handleProviderSignInWrapper = async (provider: AuthProvider, providerName: ProviderName) => {
+        setProviderLoading(providerName, true);
+        const result = await handleProviderSignIn(provider);
         setFeedback(result.message, result.success ? 'success' : 'error');
+        setProviderLoading(providerName, false);
         if (result.success) navigateToDashboard();
     };
-    const handleGitHubSignIn = async () => {
-        setLoadingGH(true);
-        const result = await handleProviderSignIn(githubProvider);
-        setLoadingGH(false);
-        setFeedback(result.message, result.success ? 'success' : 'error');
-        if (result.success) navigateToDashboard();
-    };
-    const handleFacebookSignIn = async () => {
-        setLoadingF(true);
-        const result = await handleProviderSignIn(facebookProvider);
-        setLoadingF(false);
-        setFeedback(result.message, result.success ? 'success' : 'error');
-        if (result.success) navigateToDashboard();
-    };
+    const handleGoogleSignIn = () => handleProviderSignInWrapper(googleProvider, 'google');
+    const handleGitHubSignIn = () => handleProviderSignInWrapper(githubProvider, 'github');
+    const handleFacebookSignIn = () => handleProviderSignInWrapper(facebookProvider, 'facebook');
     return (
         <Container
             maxWidth="lg"
@@ -96,7 +92,7 @@ const LogIn = () => {
                         variant='outlined'
                         onClick={handleGoogleSignIn}
                         startIcon={<FaGoogle color={palette.text.primary} />}
-                        loading={loadingG}
+                        loading={loadingButton.google}
                         sx={providerButton}
                     >
                         {action} with Google
@@ -105,7 +101,7 @@ const LogIn = () => {
                         variant='outlined'
                         onClick={handleGitHubSignIn}
                         startIcon={<FaGithub color={palette.text.primary} />}
-                        loading={loadingGH}
+                        loading={loadingButton.github}
                         sx={providerButton}
                     >
                         {action} with GitHub
@@ -114,7 +110,7 @@ const LogIn = () => {
                         variant='outlined'
                         onClick={handleFacebookSignIn}
                         startIcon={<FaFacebook color={palette.text.primary} />}
-                        loading={loadingF}
+                        loading={loadingButton.facebook}
                         sx={providerButton}
                     >
                         {action} with Facebook

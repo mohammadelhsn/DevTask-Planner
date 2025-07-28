@@ -13,7 +13,7 @@ const ProtectedRoute = () => {
     /** ======= DISPLAY THE LOADING UI WHILE AUTH STATE IS BEING RETRIEVED ======= */
     if (loading) return <LoadingPage />;
     /** ======= IF THERE IS NO USER OR USER DATA, THERE IS NO USER LOGGED IN ======= */
-    if (!user || userData) <Navigate to="/login" replace />;
+    if (!user || !userData) return <Navigate to="/login" replace />;
     /** ======= RETURN THE PROTECTED ROUTE IF IT PASSED ALL THE CHECKS ======= */
     return <Outlet />;
 };

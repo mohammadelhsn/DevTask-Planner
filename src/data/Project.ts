@@ -29,7 +29,7 @@ export class ProjectWrapper {
 		this.projectName = props.projectName;
 		this.projectDesc = props.projectDesc;
 		this.config = props.config;
-		this.tasks = props.tasks ?? []; // Initialize tasks or empty array
+		this.tasks = props.tasks ?? [];
 		this.createdAt = props.createdAt;
 		this.lastUpdated = props.lastUpdated;
 	}
@@ -63,7 +63,6 @@ export async function createProject(
 	try {
 		const projectsCol = collection(db, 'users', userId, 'projects');
 
-		// Step 1: Add doc without ID
 		const docRef = await addDoc(projectsCol, {
 			projectName: project.projectName,
 			projectDesc: project.projectDesc,
@@ -72,10 +71,8 @@ export async function createProject(
 			lastUpdated: project.lastUpdated,
 		});
 
-		// Step 2: Update with the generated ID
 		await updateDoc(docRef, { id: docRef.id });
 
-		// Step 3: Build ProjectWrapper with ID and return
 		const wrapper = new ProjectWrapper({
 			...project,
 			id: docRef.id,

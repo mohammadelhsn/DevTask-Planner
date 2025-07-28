@@ -40,7 +40,7 @@ const Dashboard = () => {
             <Paper sx={{ p: 2 }}>
                 {user && userData && userData.projects.length == 0 && (<NoProjectsMessage />)}
                 <Grid container spacing={3}>
-                    {user && userData && userData.projects.length > 0 && userData.projects.map((proj, index) => (<ProjectCard proj={proj} index={index} />))}
+                    {user && userData && userData.projects.length > 0 && userData.projects.map((proj, index) => ((<ProjectCard proj={proj} index={index} />)))}
                 </Grid>
             </Paper>
             <Box sx={{

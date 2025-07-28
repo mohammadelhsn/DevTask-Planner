@@ -28,7 +28,7 @@ export const firebaseErrors: Record<string, string> = {
 export default class FirestoreResponse<T> {
 	/** @description Success state of the operation */
 	success: boolean;
-	/** @description Data if applicable*/
+	/** @description Data if applicable */
 	data: T | null;
 	/** @description The error itself (non readable version) */
 	error: string | null;
@@ -47,7 +47,6 @@ export default class FirestoreResponse<T> {
 			this.error = data.message;
 			this.message = 'Oops, an unexpected error has occurred!';
 		} else {
-			// instanceof FirestoreRawData<T>
 			this.success = data.success;
 			this.data = data.data;
 			this.error = data.error;
