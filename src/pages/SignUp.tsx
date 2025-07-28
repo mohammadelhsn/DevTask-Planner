@@ -20,7 +20,7 @@ import { GithubAuthProvider, GoogleAuthProvider, FacebookAuthProvider } from 'fi
 import { handleProviderSignUp } from '../data/Firebase';
 
 /** ======= ICONS ======= */
-import { FaGithub, FaFacebook, FaGoogle } from 'react-icons/fa';
+import { FaGithub, FaFacebook, FaGoogle, } from 'react-icons/fa';
 
 /** ======= PROJECT FILES ======= */
 import { combinedStyles, providerButton } from '../data/Styles';

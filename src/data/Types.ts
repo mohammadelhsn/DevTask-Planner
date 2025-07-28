@@ -107,6 +107,7 @@ export interface LazyIconProps extends SvgIconProps {
 	icon: LazyExoticComponent<
 		OverridableComponent<SvgIconTypeMap<{}, 'svg'>> & { muiName: string }
 	>;
+
 	size?: number; // fallback size for skeleton loading indicator
 }
 

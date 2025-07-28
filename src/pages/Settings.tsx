@@ -17,10 +17,7 @@ import CardHeader from '@mui/material/CardHeader';
 import Divider from '@mui/material/Divider';
 
 /** ======= MUI ICONS ======= */
-import Brightness6Icon from '@mui/icons-material/Brightness6';
-import DarkModeIcon from '@mui/icons-material/DarkMode';
-import LightModeIcon from '@mui/icons-material/LightMode';
-import SettingsIcon from '@mui/icons-material/Settings';
+import { Brightness6Icon, DarkModeIcon, LightModeIcon, SettingsIcon, LazyIcon } from '../components/LazyIcons';
 
 /** ======= FIREBASE ======= */
 import { doc, updateDoc } from 'firebase/firestore';
@@ -76,10 +73,10 @@ const SettingsPage: React.FC<SettingsProps> = ({ mode, toggleColorMode }) => {
                 py: { xs: 4, sm: 6 },
                 flexGrow: 1,
             }}>
-            <Typography variant='h2' sx={{ display: 'flex', alignItems: 'center' }} ><SettingsIcon color='primary' fontSize='inherit' sx={{ mr: 1 }} />Settings</Typography>
+            <Typography variant='h2' sx={{ display: 'flex', alignItems: 'center' }} ><LazyIcon icon={SettingsIcon} color='primary' fontSize='inherit' sx={{ mr: 1 }} />Settings</Typography>
             <Divider sx={{ my: 4 }} />
             <Card>
-                <CardHeader title={<><Typography variant='inherit' sx={{ display: 'flex', alignItems: 'center' }}><Brightness6Icon sx={{ mr: 1 }} color='primary' /> Theme Settings</Typography><Divider sx={{ my: 2 }} /></>} />
+                <CardHeader title={<><Typography variant='inherit' sx={{ display: 'flex', alignItems: 'center' }}><LazyIcon icon={Brightness6Icon} sx={{ mr: 1 }} color='primary' /> Theme Settings</Typography><Divider sx={{ my: 2 }} /></>} />
                 <CardContent>
                     <ToggleButtonGroup
                         value={mode}
@@ -89,11 +86,11 @@ const SettingsPage: React.FC<SettingsProps> = ({ mode, toggleColorMode }) => {
                         color="primary"
                     >
                         <ToggleButton value="light">
-                            <LightModeIcon sx={{ mx: 1 }} />
+                            <LazyIcon icon={LightModeIcon} sx={{ mx: 1 }} />
                             <Typography>Light</Typography>
                         </ToggleButton>
                         <ToggleButton value="dark">
-                            <DarkModeIcon sx={{ mx: 1 }} />
+                            <LazyIcon icon={DarkModeIcon} sx={{ mx: 1 }} />
                             <Typography>Dark</Typography>
                         </ToggleButton>
                     </ToggleButtonGroup>

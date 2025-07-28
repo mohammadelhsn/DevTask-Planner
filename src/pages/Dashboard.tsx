@@ -8,7 +8,7 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 
 /** ======= MUI ICONS ======= */
-import AddIcon from '@mui/icons-material/Add';
+import { AddIcon, LazyIcon } from '../components/LazyIcons';
 
 /** ======= REACT ROUTER ======= */
 import { useNavigate } from 'react-router-dom';
@@ -61,7 +61,7 @@ const Dashboard = () => {
                         }
                     }}
                 >
-                    <AddIcon className="spin-icon" sx={{
+                    <LazyIcon icon={AddIcon} className="spin-icon" sx={{
                         transition: 'transform 0.8s ease',
                         transformOrigin: 'center',
                     }} />

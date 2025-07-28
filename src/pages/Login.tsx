@@ -18,7 +18,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useFeedback } from '../contexts/FeedbackContext';
 
 /** ======= ICONS ======= */
-import { FaGithub, FaFacebook, FaGoogle } from 'react-icons/fa';
+import { FaGithub, FaFacebook, FaGoogle, } from 'react-icons/fa';
 
 /** ======= STYLES & ROUTES ======= */
 import { combinedStyles, providerButton } from '../data/Styles';
