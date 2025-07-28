@@ -1,12 +1,11 @@
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import { divCenter } from '../data/Styles';
 
 const LoadingPlaceholder = () => (
     <Box
         sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
+            ...divCenter,
             height: '100vh'
         }}
     >

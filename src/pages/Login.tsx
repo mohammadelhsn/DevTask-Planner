@@ -23,6 +23,7 @@ import { FaGithub, FaFacebook, FaGoogle, } from 'react-icons/fa';
 /** ======= STYLES & ROUTES ======= */
 import { combinedStyles, providerButton } from '../data/Styles';
 import { DASHBOARD } from '../data/Routes';
+import LoadingPage from './LoadingPage';
 
 
 /** ======= LOGIN ======= */
@@ -49,9 +50,9 @@ const LogIn = () => {
         if (user) {
             navigateToDashboard();
         }
-    }, [user, navigate]);
+    }, [user]);
     /** ======= HANDLE LOADING ======= */
-    if (loading) return <Typography>Loading...</Typography>;
+    if (loading) return <LoadingPage />;
     /** ======= DEFINE THE ACTION ======= */
     const action = 'Log In';
     /** ======= PROVIDER HANDLERS ======= */

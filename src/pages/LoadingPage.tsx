@@ -3,6 +3,7 @@
 import CircularProgress from '@mui/material/CircularProgress';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
+import { divCenter } from '../data/Styles';
 
 /** The loading page for the project */
 const LoadingPage = () => {
@@ -10,9 +11,7 @@ const LoadingPage = () => {
         <Box
             sx={{
                 height: '100vh',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
+                ...divCenter,
                 backgroundColor: 'background.default',
                 p: 2,
             }}
@@ -21,9 +20,7 @@ const LoadingPage = () => {
                 elevation={3}
                 sx={{
                     padding: 4,
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                    ...divCenter,
                     minWidth: 200,
                     minHeight: 200,
                 }}

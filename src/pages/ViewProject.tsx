@@ -58,7 +58,7 @@ const ViewProject = () => {
     if (!id) return (<Typography>An ID must be included</Typography>);
     return (
         <Container maxWidth='lg' sx={containerStyles}>
-            <Box sx={{ my: 2 }}>
+            <Box my={2}>
                 <Typography variant='h2'>Dev Board - {project?.projectName}</Typography>
                 <Typography variant='h5' sx={{ fontStyle: 'italic' }}>{project?.projectDesc}</Typography>
                 <Divider sx={dividerStyle} />

@@ -31,6 +31,7 @@ import Typography from '@mui/material/Typography';
 import { createTask } from '../data/Tasks';
 import { type TaskObject } from '../data/Types';
 import { VIEW_TASK } from '../data/Routes';
+import { containerStyles } from '../data/Styles';
 
 
 
@@ -81,12 +82,8 @@ const NewTask = () => {
             const response = await createTask(user.uid, id, taskToCreate);
 
             if (response.success) {
-                // maybe navigate to the new project's page or show success
-
                 setFeedback('Task created with ID: ' + response.data?.id, 'success');
-                if (response.data) {
-                    navigateToNewTask(id, response.data.id);
-                }
+                if (response.data) navigateToNewTask(id, response.data.id);
             } else {
                 setFeedback('Failed to create project: ' + response.message, 'error');
             }
@@ -98,11 +95,7 @@ const NewTask = () => {
     return (
         <Container
             maxWidth="lg"
-            sx={{
-                px: { xs: 2, sm: 3 },
-                py: { xs: 4, sm: 6 },
-                flexGrow: 1,
-            }}>
+            sx={containerStyles}>
             <Box sx={{ width: '100%', maxWidth: 600, mx: 'auto', mt: 4 }}>
                 <Stepper activeStep={activeStep} alternativeLabel>
                     {steps.map((label) => (
