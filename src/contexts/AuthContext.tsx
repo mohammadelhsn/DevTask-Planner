@@ -47,9 +47,22 @@ const AuthProvider = ({ children }: { children: ReactNode; }) => {
         let unsubProjects: (() => void) | null = null;
         const unsubTasksArr: (() => void)[] = [];
 
-        const unsubAuth = onAuthStateChanged(auth, (user) => {
-            setUser(user);
-            if (!user) {
+        // Flags to track initial loading completion
+        let userDocLoaded = false;
+        let projectsLoaded = false;
+        let tasksLoadedCount = 0;
+        let totalProjectsCount = 0;
+
+        const checkLoadingComplete = () => {
+            // Only set loading false when all data is loaded
+            if (userDocLoaded && projectsLoaded && tasksLoadedCount === totalProjectsCount) {
+                setLoading(false);
+            }
+        };
+
+        const unsubAuth = onAuthStateChanged(auth, (firebaseUser) => {
+            setUser(firebaseUser);
+            if (!firebaseUser) {
                 setUserData(null);
                 setLoading(false);
                 unsubUser && unsubUser();
@@ -57,7 +70,7 @@ const AuthProvider = ({ children }: { children: ReactNode; }) => {
                 unsubTasksArr.forEach((unsub) => unsub());
                 return;
             }
-            const uid = user.uid;
+            const uid = firebaseUser.uid;
             const userRef = doc(db, 'users', uid);
 
             unsubUser = onSnapshot(userRef, async (userSnap) => {
@@ -66,17 +79,27 @@ const AuthProvider = ({ children }: { children: ReactNode; }) => {
                     setLoading(false);
                     return;
                 }
-
                 const userDoc = userSnap.data() as UserObject;
                 const userWrapper = new UserWrapper(userDoc);
+                userDocLoaded = true;
+                checkLoadingComplete();
 
                 const projectsRef = collection(db, 'users', uid, 'projects');
 
-                // assign, don't redeclare
                 unsubProjects = onSnapshot(projectsRef, async (projectSnaps) => {
-                    // clean up old task listeners before adding new ones
+                    // Reset task listeners
                     unsubTasksArr.forEach((unsub) => unsub());
                     unsubTasksArr.length = 0;
+
+                    totalProjectsCount = projectSnaps.docs.length;
+                    tasksLoadedCount = 0;
+
+                    if (totalProjectsCount === 0) {
+                        projectsLoaded = true;
+                        checkLoadingComplete();
+                        setUserData(userWrapper);
+                        return;
+                    }
 
                     const updatedProjects = await Promise.all(
                         projectSnaps.docs.map(async (projectDoc) => {
@@ -98,7 +121,7 @@ const AuthProvider = ({ children }: { children: ReactNode; }) => {
                                 tasks: initialTasks,
                             });
 
-                            // subscribe to live tasks updates
+                            // Listen for live task updates
                             const unsubTasks = onSnapshot(tasksRef, (taskSnaps) => {
                                 const liveTasks = taskSnaps.docs.map((doc) =>
                                     TaskWrapper.fromFirestore({
@@ -123,17 +146,29 @@ const AuthProvider = ({ children }: { children: ReactNode; }) => {
                                 }
 
                                 setUserData(userWrapper);
-                                setLoading(false); // set loading false after update
+
+                                // Only set loading false on first update per project
+                                tasksLoadedCount++;
+                                if (tasksLoadedCount === totalProjectsCount) {
+                                    projectsLoaded = true;
+                                    checkLoadingComplete();
+                                }
                             });
 
                             unsubTasksArr.push(unsubTasks);
+
                             return project;
                         })
                     );
 
                     userWrapper.projects = updatedProjects;
                     setUserData(userWrapper);
-                    setLoading(false); // set loading false after projects loaded
+
+                    // In case no live updates happen, mark projects loaded here as well
+                    if (tasksLoadedCount === totalProjectsCount) {
+                        projectsLoaded = true;
+                        checkLoadingComplete();
+                    }
                 });
             });
         });
@@ -146,12 +181,12 @@ const AuthProvider = ({ children }: { children: ReactNode; }) => {
         };
     }, []);
 
-
     return (
         <AuthContext.Provider value={{ user, userData, loading }}>
             {children}
         </AuthContext.Provider>
     );
 };
+
 
 export { AuthProvider };

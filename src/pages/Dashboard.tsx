@@ -19,6 +19,7 @@ import ProjectCard from '../components/ProjectCard';
 import NoProjectsMessage from '../components/NoProjects';
 import LayoutContainer from '../components/LayoutContainer';
 import PageTitle from '../components/PageTitle';
+import LoadingPage from './LoadingPage';
 
 
 const Dashboard = () => {
@@ -27,8 +28,9 @@ const Dashboard = () => {
     /** ======= NAVIGATION HELPERS ======= */
     const navigateToNewProject = () => navigate(NEW_PROJECT);
     /** ======= AUTH CONTEXT ======= */
-    const { userData, user } = useAuth();
+    const { loading, userData, user } = useAuth();
     /** ======= HANDLE LOADING ======= */
+    if (loading) return <LoadingPage />;
     return (
         <LayoutContainer>
             <PageTitle title={`Welcome, ${userData?.name}!`} divider />

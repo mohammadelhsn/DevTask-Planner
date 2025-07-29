@@ -39,7 +39,7 @@ const action = 'Log In';
 
 const LogIn = () => {
     /** ======= AUTH CONTEXT ======= */
-    const { user, loading } = useAuth();
+    const { user, loading, userData } = useAuth();
     /** ======= GENERAL FEEDBACK PROVIDER ======= */
     const { setFeedback } = useFeedback();
     /** ======= THEME CONTEXT ======= */
@@ -56,19 +56,18 @@ const LogIn = () => {
     /** ======= NAVIGATE HOOK ======= */
     const navigate = useNavigate();
     /**  */
+    /** ======= HANDLE LOADING ======= */
     const navigateToDashboard = () => navigate(DASHBOARD);
     useEffect(() => {
-        if (user) navigateToDashboard();
-    }, [user, navigate]);
-    /** ======= HANDLE LOADING ======= */
-    if (loading) return <LoadingPage />;
+        if (!loading && user && userData) navigateToDashboard();
+    }, [loading, user, userData, navigate]);
     /** ======= PROVIDER HANDLERS ======= */
+    if (loading) return <LoadingPage />;
     const handleProviderSignInWrapper = async (provider: AuthProvider, providerName: ProviderName) => {
         setProviderLoading(providerName, true);
         const result = await handleProviderSignIn(provider);
         setFeedback(result.message, result.success ? 'success' : 'error');
         setProviderLoading(providerName, false);
-        if (result.success) navigateToDashboard();
     };
     const handleGoogleSignIn = () => handleProviderSignInWrapper(googleProvider, 'google');
     const handleGitHubSignIn = () => handleProviderSignInWrapper(githubProvider, 'github');

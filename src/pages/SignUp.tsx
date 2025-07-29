@@ -42,7 +42,7 @@ const SignUpPage = () => {
     /** ======= THEME ======= */
     const { palette } = useTheme();
     /** ======= AUTH CONTEXT ======= */
-    const { user, loading } = useAuth();
+    const { user, loading, userData } = useAuth();
     /** ======= LOADING STATE FOR EACH PROVIDER BUTTON ======= */
     const [loadingButton, setLoadingButton] = useState<LoginButtonState>({
         google: false,
@@ -53,8 +53,8 @@ const SignUpPage = () => {
     const navigateToDashboard = () => navigate(DASHBOARD);
     /** ======= CHECK IF THERE IS A USER ======= */
     useEffect(() => {
-        if (user) navigateToDashboard();
-    }, [user, navigate]);
+        if (!loading && userData && user) navigateToDashboard();
+    }, [user, userData, loading, navigate]);
     /** ======= HANDLE LOADING STATE ======= */
     if (loading) return <Typography>Loading...</Typography>;
     /** ======= PROVIDER METHODS ======= */
