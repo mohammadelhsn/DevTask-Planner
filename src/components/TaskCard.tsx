@@ -41,7 +41,7 @@ const TaskCard = ({ t, projectId }: TaskCardProps) => {
                     </>}
             />
             <CardContent sx={{ pt: 0 }}><Typography>{t.description}</Typography></CardContent>
-            <CardActions><Button onClick={() => navigateToTask(projectId, t.id)}>Edit Task</Button></CardActions>
+            <CardActions><Button onClick={() => navigateToTask(projectId, t.id)}>View Task</Button></CardActions>
         </Card>
     );
 };

@@ -35,7 +35,7 @@ import LayoutContainer from '../components/LayoutContainer';
 
 
 
-const steps = ['Project Title', 'Settings & Config'];
+const steps = ['New Task', 'Settings & Config'];
 
 const lifecycles = ['alpha', 'beta', 'stable'] as const;
 const types = ['feature', 'bug'] as const;
@@ -80,8 +80,8 @@ const NewTask = () => {
             type: type ? (type as 'feature' | 'bug') : null,
             priority: priority ? (priority as 'high' | 'medium' | 'low') : null,
             assignees: [],
-            createdAt: new Date(),
-            lastUpdated: new Date(),
+            createdAt: new Date().toISOString(),
+            lastUpdated: new Date().toISOString(),
             dueDate: null,
         };
 

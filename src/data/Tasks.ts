@@ -1,5 +1,11 @@
 /** ======= FIREBASE ======= */
-import { addDoc, collection, updateDoc } from 'firebase/firestore';
+import {
+	addDoc,
+	collection,
+	deleteDoc,
+	doc,
+	updateDoc,
+} from 'firebase/firestore';
 import { db } from './Firebase';
 
 /** ======= TYPES ======= */
@@ -40,9 +46,9 @@ export class TaskWrapper {
 		this.type = props.type;
 		this.priority = props.priority;
 		this.assignees = props.assignees;
-		this.createdAt = props.createdAt;
-		this.lastUpdated = props.lastUpdated;
-		this.dueDate = props.dueDate;
+		this.createdAt = new Date(props.createdAt);
+		this.lastUpdated = new Date(props.lastUpdated);
+		this.dueDate = props.dueDate ? new Date(props.dueDate) : null;
 	}
 	/** @description Returns Firestore Compatible data for storage */
 	toFirestore(): TaskObject {
@@ -55,9 +61,9 @@ export class TaskWrapper {
 			type: this.type,
 			priority: this.priority,
 			assignees: this.assignees,
-			createdAt: this.createdAt,
-			lastUpdated: this.lastUpdated,
-			dueDate: this.dueDate,
+			createdAt: this.createdAt.toISOString(),
+			lastUpdated: this.lastUpdated.toISOString(),
+			dueDate: this.dueDate ? this.dueDate.toISOString() : null,
 		};
 	}
 	/** @description Deep equals to see if any changes occurred */
@@ -133,6 +139,79 @@ export async function createTask(
 		});
 	} catch (error) {
 		console.error(error);
+		return new FirestoreResponse(error as Error);
+	}
+}
+
+/**
+ * @description Updates a task in Firestore
+ * @param userId - ID of the current user
+ * @param projectId - ID of the project
+ * @param task - TaskWrapper with updated data
+ * @returns FirestoreResponse
+ */
+export async function updateTask(
+	userId: string,
+	projectId: string,
+	task: TaskWrapper
+): Promise<FirestoreResponse<TaskWrapper>> {
+	try {
+		const taskRef = doc(
+			db,
+			'users',
+			userId,
+			'projects',
+			projectId,
+			'tasks',
+			task.id
+		);
+
+		// Update the task
+		await updateDoc(taskRef, task.toFirestore());
+
+		// Return success response
+		return new FirestoreResponse({
+			success: true,
+			data: task,
+			error: null,
+			message: 'Task updated successfully.',
+		});
+	} catch (error) {
+		return new FirestoreResponse(error as Error);
+	}
+}
+
+/**
+ * @description Deletes a task from Firestore
+ * @param userId - ID of the user
+ * @param projectId - ID of the project
+ * @param taskId - ID of the task to delete
+ * @returns FirestoreResponse with success/failure
+ */
+export async function deleteTask(
+	userId: string,
+	projectId: string,
+	taskId: string
+): Promise<FirestoreResponse<null>> {
+	try {
+		const taskRef = doc(
+			db,
+			'users',
+			userId,
+			'projects',
+			projectId,
+			'tasks',
+			taskId
+		);
+		await deleteDoc(taskRef);
+
+		return new FirestoreResponse({
+			success: true,
+			data: null,
+			error: null,
+			message: 'Task deleted successfully.',
+		});
+	} catch (error) {
 		return new FirestoreResponse(error as Error);
 	}
 }

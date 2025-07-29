@@ -38,9 +38,9 @@ export type DevProjectObject = {
 	/** @description The config for the project */
 	config: ColumnConfig[];
 	/** @description When the project was created */
-	createdAt: Date;
+	createdAt: string;
 	/** @description When the project was last updated */
-	lastUpdated: Date;
+	lastUpdated: string;
 };
 
 /** @description The column the task belongs to */
@@ -76,11 +76,11 @@ export type TaskObject = {
 	/** @description The people assigned to the task */
 	assignees: string[];
 	/** @description When the task was created */
-	createdAt: Date;
+	createdAt: string;
 	/** @description The last time the task was updated */
-	lastUpdated: Date;
+	lastUpdated: string;
 	/** @description The due date for the task if applicable */
-	dueDate: Date | null;
+	dueDate: string | null;
 };
 
 /** @description The user's role in the project */

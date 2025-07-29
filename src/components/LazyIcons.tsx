@@ -23,6 +23,18 @@ export const FolderOffIcon = lazy(() => import('@mui/icons-material/FolderOff'))
 export const SaveIcon = lazy(() => import('@mui/icons-material/Save'));
 export const EditIcon = lazy(() => import('@mui/icons-material/Edit'));
 export const ArrowBackIcon = lazy(() => import('@mui/icons-material/ArrowBack'));
+export const DeleteIcon = lazy(() => import('@mui/icons-material/Delete'));
+export const CloseIcon = lazy(() => import('@mui/icons-material/Close'));
+export const FolderIcon = lazy(() => import('@mui/icons-material/Folder'));
+export const TaskIcon = lazy(() => import('@mui/icons-material/Task'));
+export const BugIcon = lazy(() => import('@mui/icons-material/BugReport'));
+export const ExtensionIcon = lazy(() => import('@mui/icons-material/Extension'));
+export const PriorityHighIcon = lazy(() => import('@mui/icons-material/PriorityHigh'));
+export const PriorityMedIcon = lazy(() => import('@mui/icons-material/ArrowUpward'));
+export const PriorityLowIcon = lazy(() => import('@mui/icons-material/LowPriority'));
+export const AlphaIcon = lazy(() => import('@mui/icons-material/Science'));
+export const BetaIcon = lazy(() => import('@mui/icons-material/Build'));
+export const StableIcon = lazy(() => import('@mui/icons-material/Verified'));
 
 export const LazyIcon = ({ icon: Icon, size = 24, ...rest }: LazyIconProps) => {
     return (

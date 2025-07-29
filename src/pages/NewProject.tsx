@@ -66,8 +66,8 @@ const NewJournalPage = () => {
             projectName: title,
             projectDesc: desc,
             config: defaultConfig,
-            lastUpdated: new Date(),
-            createdAt: new Date(),
+            lastUpdated: new Date().toISOString(),
+            createdAt: new Date().toISOString(),
         };
 
         try {
@@ -86,8 +86,6 @@ const NewJournalPage = () => {
             console.error(error);
         }
     };
-
-
     return (
         <Container
             maxWidth="lg"

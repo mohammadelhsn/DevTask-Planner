@@ -53,11 +53,11 @@ const StyledExternalLink = styled(NavLink)(({ theme }) => ({
 }));
 
 const Header = () => {
-    const theme = useTheme();
+    const { breakpoints } = useTheme();
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
-    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+    const isSmallScreen = useMediaQuery(breakpoints.down('sm'));
     const handleClick = (event: MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -71,8 +71,8 @@ const Header = () => {
         <AppBar
             position="static"
             sx={{
-                bgcolor: (theme) => theme.palette.background.default,
-                color: (theme) => theme.palette.text.primary,
+                bgcolor: ({ palette }) => palette.background.default,
+                color: ({ palette }) => palette.text.primary,
             }}
         >
             <Toolbar>
@@ -82,7 +82,7 @@ const Header = () => {
                     </Tooltip>
                 </StyledExternalLink>
                 <Divider orientation='vertical' sx={{
-                    borderColor: theme.palette.text.primary,
+                    borderColor: ({ palette }) => palette.text.primary,
                     borderWidth: '1px',
                     borderStyle: 'solid',
                     height: 20,    // set height explicitly
@@ -160,7 +160,7 @@ const Header = () => {
                                             right: 14,
                                             width: 10,
                                             height: 10,
-                                            bgcolor: 'background.paper',
+                                            bgcolor: ({ palette }) => palette.background.paper,
                                             transform: 'translateY(-50%) rotate(45deg)',
                                             zIndex: 0,
                                         },
