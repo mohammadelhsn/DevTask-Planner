@@ -21,7 +21,7 @@ export type FirestoreRawData<T> = {
 
 export type ColumnConfig = {
 	/** @description The ID of the Column */
-	id: string;
+	id: ColumnType;
 	/** @description Whether the category is enabled */
 	enabled: boolean;
 	/** @description The label for the category */
@@ -50,7 +50,7 @@ export type ColumnType =
 	| 'Medium Term'
 	| 'Doing'
 	| 'Done'
-	| null;
+	| 'Uncategorized';
 /** @description The lifecycle stage that the task is in */
 export type LifecycleType = 'alpha' | 'beta' | 'stable' | null;
 /** @description The type of task it is  */
@@ -99,9 +99,14 @@ export type UserObject = {
 
 export interface TaskCardProps {
 	t: TaskWrapper;
-	index: number;
 	projectId: string;
 }
+
+export type LazyIconType = React.LazyExoticComponent<
+	OverridableComponent<SvgIconTypeMap<{}, 'svg'>> & {
+		muiName: string;
+	}
+>;
 
 export interface LazyIconProps extends SvgIconProps {
 	icon: LazyExoticComponent<
@@ -113,7 +118,6 @@ export interface LazyIconProps extends SvgIconProps {
 
 export interface ProjectCardProps {
 	proj: ProjectWrapper;
-	index: number;
 }
 
 export interface SettingsProps {

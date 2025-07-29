@@ -22,6 +22,7 @@ export const DarkModeIcon = lazy(() => import('@mui/icons-material/DarkMode'));
 export const FolderOffIcon = lazy(() => import('@mui/icons-material/FolderOff'));
 export const SaveIcon = lazy(() => import('@mui/icons-material/Save'));
 export const EditIcon = lazy(() => import('@mui/icons-material/Edit'));
+export const ArrowBackIcon = lazy(() => import('@mui/icons-material/ArrowBack'));
 
 export const LazyIcon = ({ icon: Icon, size = 24, ...rest }: LazyIconProps) => {
     return (

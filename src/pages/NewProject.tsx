@@ -27,12 +27,16 @@ import StepLabel from '@mui/material/StepLabel';
 import Stepper from '@mui/material/Stepper';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { containerStyles } from '../data/Styles';
+import type { ColumnConfig } from '../data/Types';
+import BackIcon from '../components/BackIcon';
 
 
 const steps = ['Project Title', 'Settings & Config'];
 
 
-const dConfig = [
+const dConfig: ColumnConfig[] = [
+    { "id": "Uncategorized", "enabled": true, "label": "Uncategorized" },
     { "id": "Long Term", "enabled": true, "label": "Long Term" },
     { "id": "Medium Term", "enabled": true, "label": "Medium Term" },
     { "id": "Short Term", "enabled": true, "label": "Short Term" },
@@ -48,7 +52,7 @@ const NewJournalPage = () => {
     const [title, setTitle] = useState('');
     const [desc, setDesc] = useState('');
     const { setFeedback } = useFeedback();
-    const [defaultConfig, setDefaultConfig] = useState(dConfig);
+    const [defaultConfig, setDefaultConfig] = useState<ColumnConfig[]>(dConfig);
     const { user } = useContext(AuthContext);
     /** NAVIGATION HOOK */
     const navigate = useNavigate();
@@ -87,11 +91,8 @@ const NewJournalPage = () => {
     return (
         <Container
             maxWidth="lg"
-            sx={{
-                px: { xs: 2, sm: 3 },
-                py: { xs: 4, sm: 6 },
-                flexGrow: 1,
-            }}>
+            sx={containerStyles}>
+            <BackIcon />
             <Box sx={{ width: '100%', maxWidth: 600, mx: 'auto', mt: 4 }}>
                 <Stepper activeStep={activeStep} alternativeLabel>
                     {steps.map((label) => (
@@ -138,40 +139,46 @@ const NewJournalPage = () => {
                                 } />
                                 <CardContent>
                                     <Stack spacing={2}>
-                                        {defaultConfig.map((config) => {
-                                            return <>
-                                                <FormControlLabel
-                                                    key={config.id}
-                                                    control={
-                                                        <Checkbox
-                                                            checked={config.enabled}
-                                                            onChange={() =>
+                                        {defaultConfig.map((config, index) => {
+                                            const isUncategorized = config.id === 'Uncategorized';
+                                            return (
+                                                <Box key={`${config.id}-${index}`}>
+                                                    <FormControlLabel
+                                                        name={config.id}
+                                                        control={
+                                                            <Checkbox
+                                                                checked={config.enabled}
+                                                                onChange={() =>
+                                                                    !isUncategorized && setDefaultConfig((prev) =>
+                                                                        prev.map((c) =>
+                                                                            c.id === config.id ? { ...c, enabled: !c.enabled } : c
+                                                                        )
+                                                                    )
+                                                                }
+                                                                disabled={isUncategorized}
+                                                            />
+                                                        }
+                                                        label={`Enable ${config.id}`}
+                                                    />
+                                                    <Collapse in={config.enabled} timeout={{ enter: 350, exit: 350 }}>
+                                                        <TextField
+                                                            label={config.id}
+                                                            fullWidth
+                                                            required
+                                                            value={config.label}
+                                                            onChange={(e) =>
                                                                 setDefaultConfig((prev) =>
                                                                     prev.map((c) =>
-                                                                        c.id === config.id ? { ...c, enabled: !c.enabled } : c
+                                                                        c.id === config.id ? { ...c, label: e.target.value } : c
                                                                     )
                                                                 )
                                                             }
+                                                            sx={{ mt: 2 }}
+                                                            disabled={isUncategorized}
                                                         />
-                                                    }
-                                                    label={`Enable ${config.label}`} />
-                                                <Collapse in={config.enabled} timeout={{ enter: 350, exit: 350 }}>
-                                                    <TextField
-                                                        label={config.id}
-                                                        fullWidth
-                                                        required
-                                                        value={config.label}
-                                                        onChange={(e) =>
-                                                            setDefaultConfig((prev) =>
-                                                                prev.map((c) =>
-                                                                    c.id === config.id ? { ...c, label: e.target.value } : c
-                                                                )
-                                                            )
-                                                        }
-                                                        sx={{ mt: 2 }}
-                                                    />
-                                                </Collapse>
-                                            </>;
+                                                    </Collapse>
+                                                </Box>
+                                            );
                                         })}
                                     </Stack>
                                 </CardContent>

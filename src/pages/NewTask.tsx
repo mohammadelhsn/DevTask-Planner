@@ -1,5 +1,5 @@
 /** ========== REACT ========== */
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 /** ========== REACT ROUTER ========== */
 import { useNavigate, useParams } from 'react-router-dom';
@@ -14,7 +14,6 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
-import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 // import Collapse from '@mui/material/Collapse';
 import FormControl from '@mui/material/FormControl';
@@ -29,15 +28,15 @@ import Typography from '@mui/material/Typography';
 
 /** ========== DATA / FIREBASE ========== */
 import { createTask } from '../data/Tasks';
-import { type TaskObject } from '../data/Types';
+import { type ColumnType, type TaskObject } from '../data/Types';
 import { VIEW_TASK } from '../data/Routes';
-import { containerStyles } from '../data/Styles';
+import type { ProjectWrapper } from '../data/Project';
+import LayoutContainer from '../components/LayoutContainer';
 
 
 
 const steps = ['Project Title', 'Settings & Config'];
 
-const columns = ['Long Term', 'Short Term', 'Medium Term', 'Doing', 'Done'] as const;
 const lifecycles = ['alpha', 'beta', 'stable'] as const;
 const types = ['feature', 'bug'] as const;
 const priorities = ['high', 'medium', 'low'] as const;
@@ -46,6 +45,7 @@ const priorities = ['high', 'medium', 'low'] as const;
 const NewTask = () => {
     const [activeStep, setActiveStep] = useState(0);
     const { id } = useParams();
+    const [project, setProject] = useState<ProjectWrapper | null>(null);
     const [title, setTitle] = useState('');
     const [desc, setDesc] = useState('');
     const [column, setColumn] = useState('');
@@ -54,7 +54,7 @@ const NewTask = () => {
     const [priority, setPriority] = useState('');
     //const [assignees, setAssignees] = useState<string[]>([]);
     const { setFeedback } = useFeedback();
-    const { user } = useContext(AuthContext);
+    const { user, userData } = useContext(AuthContext);
     const navigate = useNavigate();
     const navigateToNewTask = (projectId: string, taskId: string) => navigate(VIEW_TASK(projectId, taskId));
     const handleNext = () => setActiveStep((prev) => Math.min(prev + 1, steps.length - 1));
@@ -62,13 +62,20 @@ const NewTask = () => {
     if (!id) {
         return;
     }
+    useEffect(() => {
+        if (user && userData) {
+            const proj = userData.findProject(id);
+            if (proj) setProject(proj);
+        }
+    }, [user, userData, id]);
+    if (!project) return;
     const handleSubmit = async () => {
         if (!user) return;
 
         const taskToCreate: Omit<TaskObject, "id"> = {
             title: title,
             description: desc,
-            column: column ? (column as 'Long Term' | 'Short Term' | 'Medium Term' | 'Doing' | 'Done') : null,
+            column: column ? (column as ColumnType) : 'Uncategorized',
             lifecycle: lifecycle ? (lifecycle as 'alpha' | 'beta' | 'stable') : null,
             type: type ? (type as 'feature' | 'bug') : null,
             priority: priority ? (priority as 'high' | 'medium' | 'low') : null,
@@ -93,10 +100,8 @@ const NewTask = () => {
         }
     };
     return (
-        <Container
-            maxWidth="lg"
-            sx={containerStyles}>
-            <Box sx={{ width: '100%', maxWidth: 600, mx: 'auto', mt: 4 }}>
+        <LayoutContainer backIcon>
+            <Box mt={4} sx={{ width: '100%', maxWidth: 600, mx: 'auto' }}>
                 <Stepper activeStep={activeStep} alternativeLabel>
                     {steps.map((label) => (
                         <Step key={label}>
@@ -144,8 +149,12 @@ const NewTask = () => {
                                     <FormControl fullWidth margin="normal">
                                         <InputLabel>Column</InputLabel>
                                         <Select value={column} label="Column" required onChange={(e) => setColumn(e.target.value)}>
-                                            {columns.map(option => (
-                                                <MenuItem key={option} value={option}>{option}</MenuItem>
+                                            {project.config.map((option, index) => (
+                                                option.enabled && (
+                                                    <MenuItem key={`${option.id}-${index}-newTask`} value={option.id}>
+                                                        {option.label}
+                                                    </MenuItem>
+                                                )
                                             ))}
                                         </Select>
                                     </FormControl>
@@ -185,7 +194,6 @@ const NewTask = () => {
                                 <Button
                                     variant="contained"
                                     onClick={handleSubmit}
-                                    disabled={!column}
                                 >
                                     Submit
                                 </Button>
@@ -194,7 +202,7 @@ const NewTask = () => {
                     )}
                 </Box>
             </Box>
-        </Container>
+        </LayoutContainer>
     );
 };
 

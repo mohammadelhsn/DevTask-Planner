@@ -18,11 +18,11 @@ import { VIEW_TASK } from '../data/Routes';
 import type { TaskCardProps } from '../data/Types';
 
 /** @description Task Card for Project Page */
-const TaskCard = ({ t, index, projectId }: TaskCardProps) => {
+const TaskCard = ({ t, projectId }: TaskCardProps) => {
     const navigate = useNavigate();
     const navigateToTask = (projectId: string, taskId: string) => navigate(VIEW_TASK(projectId, taskId));
     return (
-        <Card elevation={5} key={`${t.id}-${index}`}>
+        <Card elevation={5}>
             <CardHeader title={
                 <>
                     <Typography variant='subtitle1'>{t.title}</Typography>

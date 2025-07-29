@@ -18,11 +18,11 @@ import { VIEW_PROJECT } from '../data/Routes';
 import type { ProjectCardProps } from '../data/Types';
 
 /** @description Project Card for Dashboard Page */
-const ProjectCard = ({ proj, index }: ProjectCardProps) => {
+const ProjectCard = ({ proj }: ProjectCardProps) => {
     const navigate = useNavigate();
     const navigateToViewProject = (id: string) => navigate(VIEW_PROJECT(id));
     return (
-        <Grid size={{ xs: 12, sm: 6, md: 4 }} key={`${index}-${proj.id}`}>
+        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
             <Card elevation={3} sx={cardStyles}>
                 <CardHeader
                     title={

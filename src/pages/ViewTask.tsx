@@ -12,8 +12,6 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import Chip from '@mui/material/Chip';
-import Container from '@mui/material/Container';
-import Divider from '@mui/material/Divider';
 import Fab from '@mui/material/Fab';
 import Typography from '@mui/material/Typography';
 
@@ -23,10 +21,11 @@ import { SaveIcon, EditIcon, LazyIcon } from '../components/LazyIcons';
 /** ======= PROJECT FILES ======= */
 import { DASHBOARD } from '../data/Routes';
 import { capitalize, getChipColor, getLifecycleColor, getPriorityColor } from '../data/Functions';
-import { containerStyles, dividerStyle } from '../data/Styles';
 import type { TaskWrapper } from '../data/Tasks';
 import LoadingPage from './LoadingPage';
 import NotFoundPage from './NotFoundPage';
+import LayoutContainer from '../components/LayoutContainer';
+import PageTitle from '../components/PageTitle';
 
 /** ======= FUTURE FEATURES ======= */
 // import CardActions from '@mui/material/CardActions';
@@ -72,11 +71,8 @@ const ViewTask = () => {
     if (loading) return <LoadingPage />;
     if (!task) return <NotFoundPage />;
     return (
-        <Container maxWidth="lg" sx={containerStyles}>
-            <Box>
-                <Typography variant='h2'>View Task</Typography>
-                <Divider sx={dividerStyle} />
-            </Box>
+        <LayoutContainer backIcon>
+            <PageTitle title="View Task" divider />
             {!editMode && (
                 <Card>
                     <CardHeader
@@ -108,8 +104,7 @@ const ViewTask = () => {
             >
                 {editMode ? <LazyIcon icon={SaveIcon} /> : <LazyIcon icon={EditIcon} />}
             </Fab>
-        </Container>
-
+        </LayoutContainer>
     );
 };
 export default ViewTask;

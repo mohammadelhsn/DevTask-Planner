@@ -3,7 +3,7 @@ import { addDoc, collection, updateDoc } from 'firebase/firestore';
 import { db } from './Firebase';
 
 /** ======= TYPES ======= */
-import type { TaskObject } from './Types';
+import type { ColumnType, TaskObject } from './Types';
 
 /** ======= UTILITIES ======= */
 import FirestoreResponse from './FirestoreResponse';
@@ -16,7 +16,7 @@ export class TaskWrapper {
 	/** @description The task's description */
 	description: string;
 	/** @description The column the task belongs to */
-	column: 'Long Term' | 'Short Term' | 'Medium Term' | 'Doing' | 'Done' | null;
+	column: ColumnType;
 	/** @description The lifecycle stage that the task is in */
 	lifecycle: 'alpha' | 'beta' | 'stable' | null;
 	/** @description The type of task it is  */

@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 /** ======= MUI Components ======= **/
-import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
@@ -23,10 +22,22 @@ import { useFeedback } from '../contexts/FeedbackContext';
 
 /** ======= Project-specific Imports ======= **/
 import type { ProjectWrapper } from '../data/Project';
-import { columnCards, containerStyles, divCenter, dividerStyle } from '../data/Styles';
+import { columnCards, divCenter } from '../data/Styles';
 import { NEW_PROJECT } from '../data/Routes';
 import TaskCard from '../components/TaskCard';
 import NoTasks from '../components/NoTasks';
+import type { ColumnType, LazyIconType } from '../data/Types';
+import LayoutContainer from '../components/LayoutContainer';
+import PageTitle from '../components/PageTitle';
+
+const icons: Record<Exclude<ColumnType, null>, LazyIconType> = {
+    "Uncategorized": InboxIcon,
+    "Long Term": ScheduleIcon,
+    "Medium Term": EventIcon,
+    "Short Term": FlashOnIcon,
+    "Doing": AutorenewIcon,
+    "Done": CheckCircleIcon
+};
 
 
 const ViewProject = () => {
@@ -54,15 +65,11 @@ const ViewProject = () => {
                 }
             }
         }
-    });
+    }, [user, userData, id]);
     if (!id) return (<Typography>An ID must be included</Typography>);
     return (
-        <Container maxWidth='lg' sx={containerStyles}>
-            <Box my={2}>
-                <Typography variant='h2'>Dev Board - {project?.projectName}</Typography>
-                <Typography variant='h5' sx={{ fontStyle: 'italic' }}>{project?.projectDesc}</Typography>
-                <Divider sx={dividerStyle} />
-            </Box>
+        <LayoutContainer backIcon>
+            <PageTitle title={`Dev Board - ${project?.projectName}`} desc={project?.projectDesc} divider />
             <Paper sx={{ overflowX: 'auto', maxWidth: '100%' }}>
                 {project && project.tasks.length == 0 && (
                     <Box p={2} sx={{ ...divCenter }}>
@@ -72,74 +79,25 @@ const ViewProject = () => {
                 )}
                 {project && project.tasks.length > 0 && (
                     <Stack spacing={3} direction={{ xs: 'column', sm: 'row' }} sx={{ p: 2, flexWrap: { xs: 'wrap', sm: 'nowrap' }, minWidth: { xs: 'auto', sm: 'fit-content' }, }}>
-                        <Card elevation={3} sx={columnCards}>
-                            <CardHeader title={
-                                <>
-                                    <Typography variant='inherit' sx={{ display: 'flex', alignItems: 'center' }}><LazyIcon icon={ScheduleIcon} color='primary' sx={{ mr: 1 }} /> Long Term</Typography>
-                                    <Divider sx={{ mt: 1 }} />
-                                </>
-                            } />
-                            <CardContent>
-                                <Stack spacing={2}>
-                                    {project && project.tasks.filter((t) => t.column == 'Long Term').length == 0 && (<NoTasks />)}
-                                    {project && project.tasks.length > 0 && project.tasks.filter((t) => t.column == 'Long Term').map((t, index) => (<TaskCard t={t} index={index} projectId={id} />))}
-                                </Stack>
-                            </CardContent>
-                        </Card>
-                        <Card elevation={3} sx={columnCards}>
-                            <CardHeader title={
-                                <>
-                                    <Typography variant='inherit' sx={{ display: 'flex', alignItems: 'center' }}><LazyIcon icon={EventIcon} color='primary' sx={{ mr: 1 }} />Medium Term</Typography>
-                                    <Divider sx={{ mt: 1 }} />
-                                </>
-                            } />
-                            <CardContent>
-                                <Stack spacing={2}>
-                                    {project && project.tasks.filter((t) => t.column == 'Medium Term').length == 0 && (<NoTasks />)}
-                                    {project && project.tasks.length > 0 && project.tasks.filter((t) => t.column == 'Medium Term').map((t, index) => (<TaskCard t={t} index={index} projectId={id} />))}
-                                </Stack>
-                            </CardContent>
-                        </Card>
-                        <Card elevation={3} sx={columnCards}>
-                            <CardHeader title={
-                                <>
-                                    <Typography variant='inherit'><LazyIcon icon={FlashOnIcon} color='primary' sx={{ mr: 1 }} />Short Term</Typography>
-                                    <Divider sx={{ mt: 1 }} />
-                                </>
-                            } />
-                            <CardContent>
-                                {project && project.tasks.filter((t) => t.column == 'Short Term').length == 0 && (<NoTasks />)}
-                                {project && project.tasks.length > 0 && project.tasks.filter((t) => t.column == 'Short Term').map((t, index) => (<TaskCard t={t} index={index} projectId={id} />))}
-                            </CardContent>
-                        </Card>
-                        <Card elevation={3} sx={columnCards}>
-                            <CardHeader title={
-                                <>
-                                    <Typography variant='inherit' sx={{ display: 'flex', alignItems: 'center' }}><LazyIcon icon={AutorenewIcon} color='primary' sx={{ mr: 1 }} /> Doing</Typography>
-                                    <Divider sx={{ mt: 1 }} />
-                                </>
-                            } />
-                            <CardContent>
-                                <Stack spacing={2}>
-                                    {project && project.tasks.filter((t) => t.column == 'Doing').length == 0 && (<NoTasks />)}
-                                    {project && project.tasks.length > 0 && project.tasks.filter((t) => t.column == 'Doing').map((t, index) => (<TaskCard t={t} index={index} projectId={id} />))}
-                                </Stack>
-                            </CardContent>
-                        </Card>
-                        <Card elevation={3} sx={columnCards}>
-                            <CardHeader title={
-                                <Box>
-                                    <Typography variant='inherit' sx={{ display: 'flex', alignItems: 'center' }}><LazyIcon icon={CheckCircleIcon} color='primary' sx={{ mr: 1 }} />Done</Typography>
-                                    <Divider sx={{ mt: 1 }} />
-                                </Box>
-                            } />
-                            <CardContent>
-                                <Stack spacing={2}>
-                                    {project && project.tasks.filter((t) => t.column == 'Done').length == 0 && (<NoTasks />)}
-                                    {project && project.tasks.length > 0 && project.tasks.filter((t) => t.column == 'Done').map((t, index) => (<TaskCard t={t} index={index} projectId={id} />))}
-                                </Stack>
-                            </CardContent>
-                        </Card>
+                        {project.config.map((col, index) => {
+                            const columnTasks = project.tasks.filter((t) => t.column === col.id);
+                            return (
+                                <Card elevation={3} sx={columnCards} key={`${col.id}-${index}-ViewProject`}>
+                                    <CardHeader title={
+                                        <>
+                                            <Typography variant='inherit' sx={{ display: 'flex', alignItems: 'center' }}><LazyIcon icon={icons[col.id]} color='primary' sx={{ mr: 1 }} />{col.label}</Typography>
+                                            <Divider sx={{ mt: 1 }} />
+                                        </>
+                                    } />
+                                    <CardContent>
+                                        <Stack spacing={2}>
+                                            {columnTasks.length === 0 ? <NoTasks /> : columnTasks.map((t, index) => {
+                                                return (<TaskCard t={t} key={`${t.id}-${index}-ViewProject`} projectId={id} />);
+                                            })}
+                                        </Stack>
+                                    </CardContent>
+                                </Card>);
+                        })}
                     </Stack>
                 )}
             </Paper>
@@ -167,7 +125,7 @@ const ViewProject = () => {
                     }} />
                 </Fab>
             </Box>
-        </Container>
+        </LayoutContainer>
     );
 };
 

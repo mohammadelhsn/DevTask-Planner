@@ -1,11 +1,8 @@
 /** ======= MUI COMPONENTS ======= */
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Divider from '@mui/material/Divider';
 import Fab from '@mui/material/Fab';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
 
 /** ======= MUI ICONS ======= */
 import { AddIcon, LazyIcon } from '../components/LazyIcons';
@@ -17,10 +14,11 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 /** ======= PROJECT FILES ======= */
-import { containerStyles, dividerStyle } from '../data/Styles';
 import { NEW_PROJECT } from '../data/Routes';
 import ProjectCard from '../components/ProjectCard';
 import NoProjectsMessage from '../components/NoProjects';
+import LayoutContainer from '../components/LayoutContainer';
+import PageTitle from '../components/PageTitle';
 
 
 const Dashboard = () => {
@@ -32,15 +30,12 @@ const Dashboard = () => {
     const { userData, user } = useAuth();
     /** ======= HANDLE LOADING ======= */
     return (
-        <Container maxWidth='lg' sx={containerStyles}>
-            <Box sx={{ mt: 2 }}>
-                <Typography variant='h2'>Welcome, {userData?.name}!</Typography>
-                <Divider sx={dividerStyle} />
-            </Box>
+        <LayoutContainer>
+            <PageTitle title={`Welcome, ${userData?.name}!`} divider />
             <Paper sx={{ p: 2 }}>
                 {user && userData && userData.projects.length == 0 && (<NoProjectsMessage />)}
                 <Grid container spacing={3}>
-                    {user && userData && userData.projects.length > 0 && userData.projects.map((proj, index) => ((<ProjectCard proj={proj} index={index} />)))}
+                    {user && userData && userData.projects.length > 0 && userData.projects.map((proj, index) => ((<ProjectCard key={`${index}-${proj.id}`} proj={proj} />)))}
                 </Grid>
             </Paper>
             <Box sx={{
@@ -67,8 +62,7 @@ const Dashboard = () => {
                     }} />
                 </Fab>
             </Box>
-
-        </Container>
+        </LayoutContainer>
     );
 };
 

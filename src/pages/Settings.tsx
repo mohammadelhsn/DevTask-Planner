@@ -7,7 +7,6 @@ import { useAuth } from '../contexts/AuthContext';
 import { useFeedback } from '../contexts/FeedbackContext';
 
 /** ======= MUI COMPONENTS ======= */
-import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
@@ -27,6 +26,8 @@ import FirestoreResponse from '../data/FirestoreResponse';
 
 /** ======= TYPES ======= */
 import type { SettingsProps } from '../data/Types';
+import LayoutContainer from '../components/LayoutContainer';
+import PageTitle from '../components/PageTitle';
 
 
 const SettingsPage: React.FC<SettingsProps> = ({ mode, toggleColorMode }) => {
@@ -66,15 +67,8 @@ const SettingsPage: React.FC<SettingsProps> = ({ mode, toggleColorMode }) => {
         }
     };
     return (
-        <Container
-            maxWidth="lg"
-            sx={{
-                px: { xs: 2, sm: 3 },
-                py: { xs: 4, sm: 6 },
-                flexGrow: 1,
-            }}>
-            <Typography variant='h2' sx={{ display: 'flex', alignItems: 'center' }} ><LazyIcon icon={SettingsIcon} color='primary' fontSize='inherit' sx={{ mr: 1 }} />Settings</Typography>
-            <Divider sx={{ my: 4 }} />
+        <LayoutContainer backIcon>
+            <PageTitle title="Settings" icon={SettingsIcon} divider />
             <Card>
                 <CardHeader title={<><Typography variant='inherit' sx={{ display: 'flex', alignItems: 'center' }}><LazyIcon icon={Brightness6Icon} sx={{ mr: 1 }} color='primary' /> Theme Settings</Typography><Divider sx={{ my: 2 }} /></>} />
                 <CardContent>
@@ -96,7 +90,7 @@ const SettingsPage: React.FC<SettingsProps> = ({ mode, toggleColorMode }) => {
                     </ToggleButtonGroup>
                 </CardContent>
             </Card>
-        </Container>
+        </LayoutContainer>
     );
 };
 export default SettingsPage;
