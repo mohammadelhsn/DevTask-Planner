@@ -13,6 +13,7 @@ import Card from '@mui/material/Card';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
+import Fade from '@mui/material/Fade';
 import { useTheme } from '@mui/material';
 
 /** ======= FIREBASE ======= */
@@ -73,51 +74,53 @@ const SignUpPage = () => {
     const handleFacebookSignUp = () => handleProviderSignUpWrapper(facebookProvider, 'facebook');
     /** ======= COMPONENT ======= */
     return (
-        <Container
-            maxWidth="lg"
-            sx={combinedStyles}
-        >
-            <Card sx={{ width: '100%', maxWidth: 500, p: 4 }}>
-                <Box
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: 2
-                    }}
-                >
-                    <Typography variant="h4">{action}</Typography>
-                    <Divider sx={{ mb: 4 }} />
-                    <Button
-                        variant='outlined'
-                        fullWidth
-                        loading={loadingButton.google}
-                        onClick={handleGoogleSignUp}
-                        startIcon={<FaGoogle color={palette.text.primary} />}
-                        sx={providerButton}
+        <Fade in={!loading} timeout={500}>
+            <Container
+                maxWidth="lg"
+                sx={combinedStyles}
+            >
+                <Card sx={{ width: '100%', maxWidth: 500, p: 4 }}>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: 2
+                        }}
                     >
-                        {action} with Google
-                    </Button>
-                    <Button
-                        variant='outlined'
-                        onClick={handleGitHubSignUp}
-                        startIcon={<FaGithub color={palette.text.primary} />}
-                        loading={loadingButton.github}
-                        sx={providerButton}
-                    >
-                        {action} with GitHub
-                    </Button>
-                    <Button
-                        variant='outlined'
-                        onClick={handleFacebookSignUp}
-                        startIcon={<FaFacebook color={palette.text.primary} />}
-                        loading={loadingButton.facebook}
-                        sx={providerButton}
-                    >
-                        {action} with Facebook
-                    </Button>
-                </Box>
-            </Card>
-        </Container>
+                        <Typography variant="h4">{action}</Typography>
+                        <Divider sx={{ mb: 4 }} />
+                        <Button
+                            variant='outlined'
+                            fullWidth
+                            loading={loadingButton.google}
+                            onClick={handleGoogleSignUp}
+                            startIcon={<FaGoogle color={palette.text.primary} />}
+                            sx={providerButton}
+                        >
+                            {action} with Google
+                        </Button>
+                        <Button
+                            variant='outlined'
+                            onClick={handleGitHubSignUp}
+                            startIcon={<FaGithub color={palette.text.primary} />}
+                            loading={loadingButton.github}
+                            sx={providerButton}
+                        >
+                            {action} with GitHub
+                        </Button>
+                        <Button
+                            variant='outlined'
+                            onClick={handleFacebookSignUp}
+                            startIcon={<FaFacebook color={palette.text.primary} />}
+                            loading={loadingButton.facebook}
+                            sx={providerButton}
+                        >
+                            {action} with Facebook
+                        </Button>
+                    </Box>
+                </Card>
+            </Container>
+        </Fade>
     );
 };
 

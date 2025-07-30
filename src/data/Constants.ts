@@ -1,14 +1,21 @@
 import {
 	AlphaIcon,
+	AutorenewIcon,
 	BetaIcon,
 	BugIcon,
+	CheckCircleIcon,
+	EventIcon,
 	FeatureIcon,
+	FlashOnIcon,
+	InboxIcon,
 	PriorityHighIcon,
 	PriorityLowIcon,
 	PriorityMedIcon,
+	ScheduleIcon,
 	StableIcon,
 } from '../components/LazyIcons';
 import type {
+	ColumnType,
 	LazyIconType,
 	LifecycleType,
 	TaskPriority,
@@ -23,6 +30,15 @@ import {
 export const lifecycles = ['alpha', 'beta', 'stable'] as const;
 export const types = ['feature', 'bug'] as const;
 export const priorities = ['high', 'medium', 'low'] as const;
+
+export const categoryIcons: Record<Exclude<ColumnType, null>, LazyIconType> = {
+	Uncategorized: InboxIcon,
+	'Long Term': ScheduleIcon,
+	'Medium Term': EventIcon,
+	'Short Term': FlashOnIcon,
+	Doing: AutorenewIcon,
+	Done: CheckCircleIcon,
+};
 
 export const priorityIcons: Record<
 	Exclude<TaskPriority, null>,

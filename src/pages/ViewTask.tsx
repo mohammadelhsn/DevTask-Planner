@@ -21,6 +21,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
+import Fade from '@mui/material/Fade';
 
 
 /** ======= MUI ICONS ======= */
@@ -56,6 +57,7 @@ const ViewTask = () => {
     const [editMode, setEditMode] = useState(false);
     const [loading, setLoading] = useState(true);
     const [openDialog, setOpenDialog] = useState(false);
+    const [loaded, setLoaded] = useState(false);
     const navigate = useNavigate();
     useEffect(() => {
         if (user && userData) {
@@ -68,6 +70,7 @@ const ViewTask = () => {
                         if (t) {
                             setTask(new TaskWrapper(t.toFirestore()));
                             setLoading(false);
+                            setLoaded(true);
                         } else {
                             setLoading(false);
                             setFeedback('Task not found!', 'error');
@@ -135,102 +138,106 @@ const ViewTask = () => {
     if (loading) return <LoadingPage />;
     if (!project || !task) return <NotFoundPage />;
     return (
-        <LayoutContainer backIcon to={VIEW_PROJECT(id)}>
-            <PageTitle title={`${editMode ? 'Editing' : 'Viewing'} Task`} divider />
-            <DeleteDialog openDialog={openDialog} setOpenDialog={setOpenDialog} handleDelete={handleDelete} />
-            {editMode && (
-                <Card sx={{ p: 2 }}>
-                    <CardContent>
-                        <TextField
-                            label="Title"
-                            fullWidth
-                            margin="normal"
-                            value={task.title}
-                            onChange={(e) => updateTaskField({ title: e.target.value })}
-                        />
-                        <TextField
-                            label="Description"
-                            fullWidth
-                            multiline
-                            margin="normal"
-                            value={task.description}
-                            onChange={(e) => updateTaskField({ description: e.target.value })}
-                        />
-                        <FormControl fullWidth margin="normal">
-                            <InputLabel>Column</InputLabel>
-                            <Select value={task.column ? task.column : ''} label="Column" onChange={(e) => updateTaskField({ column: e.target.value })}>
-                                {project.config.map((option, index) => (
-                                    option.enabled && (
-                                        <MenuItem key={`${option.id}-${index}-newTask`} value={option.id}>
-                                            {capitalize(option.label)}
-                                        </MenuItem>
-                                    )
-                                ))}
-                            </Select>
-                        </FormControl>
-                        <FormControl fullWidth margin="normal">
-                            <InputLabel>Lifecycle</InputLabel>
-                            <Select value={task.lifecycle ? task.lifecycle : ''} label="Lifecycle" onChange={(e) => updateTaskField({ lifecycle: e.target.value })}>
-                                {lifecycles.map(option => (
-                                    <MenuItem key={option} value={option}>{capitalize(option)}</MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                        <FormControl fullWidth margin="normal">
-                            <InputLabel>Type</InputLabel>
-                            <Select value={task.type ? task.type : ''} label="Type" onChange={(e) => updateTaskField({ type: e.target.value })}>
-                                {types.map(option => (
-                                    <MenuItem key={option} value={option}>{capitalize(option)}</MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                        <FormControl fullWidth margin="normal">
-                            <InputLabel>Priority</InputLabel>
-                            <Select value={task.priority ? task.priority : ''} label="Priority" onChange={(e) => updateTaskField({ priority: e.target.value })}>
-                                {priorities.map(option => (
-                                    <MenuItem key={option} value={option}>{capitalize(option)}</MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                    </CardContent>
-                    <CardActions>
-                        <Button startIcon={<LazyIcon icon={CloseIcon} />} onClick={() => setEditMode(false)}>Cancel</Button>
-                        <Button startIcon={<LazyIcon icon={DeleteIcon} />} color='error' onClick={() => setOpenDialog(true)}>Delete</Button>
-                    </CardActions>
-                </Card>
-            )}
-            {!editMode && (
-                <Card>
-                    <CardHeader
-                        title={<><Typography variant='inherit'>{task.title}</Typography></>}
-                        subheader={<><Typography variant='inherit' >{task.description}</Typography><Divider sx={{ my: 2 }} /></>}
-                    />
-                    <CardContent>
-                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                            {task && task.column != null && (<Chip color='primary' label={`Column: ${capitalize(task?.column)}`} variant="outlined" />)}
-                            {task && task.priority != null && (<Chip color={getPriorityColor(task.priority)} label={`Priority: ${capitalize(task?.priority)}`} />)}
-                            {task && task.type != null && (<Chip color={getChipColor(task.type)} label={`Type: ${capitalize(task?.type)}`} />)}
-                            {task && task.lifecycle != null && (<Chip color={getLifecycleColor(task.lifecycle)} label={`Lifecycle: ${capitalize(task?.lifecycle)}`} variant="outlined" />)}
-                            {task?.assignees.map((a) => (
-                                <Chip key={a} label={a} color="default" />
-                            ))}
-                        </Box>
-                    </CardContent>
-                </Card>
-            )}
-            <Fab
-                color={editMode ? 'success' : 'primary'}
-                onClick={editMode ? handleSave : () => setEditMode(true)}
-                sx={{
-                    position: 'fixed',
-                    bottom: 110,
-                    right: 32,
-                    zIndex: 100
-                }}
-            >
-                {editMode ? <LazyIcon icon={SaveIcon} /> : <LazyIcon icon={EditIcon} />}
-            </Fab>
-        </LayoutContainer>
+        <Fade in={loaded} timeout={500}>
+            <div>
+                <LayoutContainer backIcon to={VIEW_PROJECT(id)}>
+                    <PageTitle title={`${editMode ? 'Editing' : 'Viewing'} Task`} divider />
+                    <DeleteDialog openDialog={openDialog} setOpenDialog={setOpenDialog} handleDelete={handleDelete} />
+                    {editMode && (
+                        <Card sx={{ p: 2 }}>
+                            <CardContent>
+                                <TextField
+                                    label="Title"
+                                    fullWidth
+                                    margin="normal"
+                                    value={task.title}
+                                    onChange={(e) => updateTaskField({ title: e.target.value })}
+                                />
+                                <TextField
+                                    label="Description"
+                                    fullWidth
+                                    multiline
+                                    margin="normal"
+                                    value={task.description}
+                                    onChange={(e) => updateTaskField({ description: e.target.value })}
+                                />
+                                <FormControl fullWidth margin="normal">
+                                    <InputLabel>Column</InputLabel>
+                                    <Select value={task.column ? task.column : ''} label="Column" onChange={(e) => updateTaskField({ column: e.target.value })}>
+                                        {project.config.map((option, index) => (
+                                            option.enabled && (
+                                                <MenuItem key={`${option.id}-${index}-newTask`} value={option.id}>
+                                                    {capitalize(option.label)}
+                                                </MenuItem>
+                                            )
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                                <FormControl fullWidth margin="normal">
+                                    <InputLabel>Lifecycle</InputLabel>
+                                    <Select value={task.lifecycle ? task.lifecycle : ''} label="Lifecycle" onChange={(e) => updateTaskField({ lifecycle: e.target.value })}>
+                                        {lifecycles.map(option => (
+                                            <MenuItem key={option} value={option}>{capitalize(option)}</MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                                <FormControl fullWidth margin="normal">
+                                    <InputLabel>Type</InputLabel>
+                                    <Select value={task.type ? task.type : ''} label="Type" onChange={(e) => updateTaskField({ type: e.target.value })}>
+                                        {types.map(option => (
+                                            <MenuItem key={option} value={option}>{capitalize(option)}</MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                                <FormControl fullWidth margin="normal">
+                                    <InputLabel>Priority</InputLabel>
+                                    <Select value={task.priority ? task.priority : ''} label="Priority" onChange={(e) => updateTaskField({ priority: e.target.value })}>
+                                        {priorities.map(option => (
+                                            <MenuItem key={option} value={option}>{capitalize(option)}</MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </CardContent>
+                            <CardActions>
+                                <Button startIcon={<LazyIcon icon={CloseIcon} />} onClick={() => setEditMode(false)}>Cancel</Button>
+                                <Button startIcon={<LazyIcon icon={DeleteIcon} />} color='error' onClick={() => setOpenDialog(true)}>Delete</Button>
+                            </CardActions>
+                        </Card>
+                    )}
+                    {!editMode && (
+                        <Card>
+                            <CardHeader
+                                title={<><Typography variant='inherit'>{task.title}</Typography></>}
+                                subheader={<><Typography variant='inherit' >{task.description}</Typography><Divider sx={{ my: 2 }} /></>}
+                            />
+                            <CardContent>
+                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                                    {task && task.column != null && (<Chip color='primary' label={`Column: ${capitalize(task?.column)}`} variant="outlined" />)}
+                                    {task && task.priority != null && (<Chip color={getPriorityColor(task.priority)} label={`Priority: ${capitalize(task?.priority)}`} />)}
+                                    {task && task.type != null && (<Chip color={getChipColor(task.type)} label={`Type: ${capitalize(task?.type)}`} />)}
+                                    {task && task.lifecycle != null && (<Chip color={getLifecycleColor(task.lifecycle)} label={`Lifecycle: ${capitalize(task?.lifecycle)}`} variant="outlined" />)}
+                                    {task?.assignees.map((a) => (
+                                        <Chip key={a} label={a} color="default" />
+                                    ))}
+                                </Box>
+                            </CardContent>
+                        </Card>
+                    )}
+                    <Fab
+                        color={editMode ? 'success' : 'primary'}
+                        onClick={editMode ? handleSave : () => setEditMode(true)}
+                        sx={{
+                            position: 'fixed',
+                            bottom: 110,
+                            right: 32,
+                            zIndex: 100
+                        }}
+                    >
+                        {editMode ? <LazyIcon icon={SaveIcon} /> : <LazyIcon icon={EditIcon} />}
+                    </Fab>
+                </LayoutContainer>
+            </div>
+        </Fade>
     );
 };
 export default ViewTask;

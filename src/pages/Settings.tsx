@@ -14,6 +14,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import Divider from '@mui/material/Divider';
+import Fade from '@mui/material/Fade';
 
 /** ======= MUI ICONS ======= */
 import { Brightness6Icon, DarkModeIcon, LightModeIcon, SettingsIcon, LazyIcon } from '../components/LazyIcons';
@@ -31,7 +32,7 @@ import PageTitle from '../components/PageTitle';
 
 
 const SettingsPage: React.FC<SettingsProps> = ({ mode, toggleColorMode }) => {
-    const { user, userData } = useAuth();
+    const { user, userData, loading } = useAuth();
     const { setFeedback } = useFeedback();
     useEffect(() => {
         if (userData != null) {
@@ -67,30 +68,34 @@ const SettingsPage: React.FC<SettingsProps> = ({ mode, toggleColorMode }) => {
         }
     };
     return (
-        <LayoutContainer backIcon>
-            <PageTitle title="Settings" icon={SettingsIcon} divider />
-            <Card>
-                <CardHeader title={<><Typography variant='inherit' sx={{ display: 'flex', alignItems: 'center' }}><LazyIcon icon={Brightness6Icon} sx={{ mr: 1 }} color='primary' /> Theme Settings</Typography><Divider sx={{ my: 2 }} /></>} />
-                <CardContent>
-                    <ToggleButtonGroup
-                        value={mode}
-                        exclusive
-                        onChange={handleChange}
-                        size="small"
-                        color="primary"
-                    >
-                        <ToggleButton value="light">
-                            <LazyIcon icon={LightModeIcon} sx={{ mx: 1 }} />
-                            <Typography>Light</Typography>
-                        </ToggleButton>
-                        <ToggleButton value="dark">
-                            <LazyIcon icon={DarkModeIcon} sx={{ mx: 1 }} />
-                            <Typography>Dark</Typography>
-                        </ToggleButton>
-                    </ToggleButtonGroup>
-                </CardContent>
-            </Card>
-        </LayoutContainer>
+        <Fade in={!loading} timeout={500}>
+            <div>
+                <LayoutContainer backIcon>
+                    <PageTitle title="Settings" icon={SettingsIcon} divider />
+                    <Card>
+                        <CardHeader title={<><Typography variant='inherit' sx={{ display: 'flex', alignItems: 'center' }}><LazyIcon icon={Brightness6Icon} sx={{ mr: 1 }} color='primary' /> Theme Settings</Typography><Divider sx={{ my: 2 }} /></>} />
+                        <CardContent>
+                            <ToggleButtonGroup
+                                value={mode}
+                                exclusive
+                                onChange={handleChange}
+                                size="small"
+                                color="primary"
+                            >
+                                <ToggleButton value="light">
+                                    <LazyIcon icon={LightModeIcon} sx={{ mx: 1 }} />
+                                    <Typography>Light</Typography>
+                                </ToggleButton>
+                                <ToggleButton value="dark">
+                                    <LazyIcon icon={DarkModeIcon} sx={{ mx: 1 }} />
+                                    <Typography>Dark</Typography>
+                                </ToggleButton>
+                            </ToggleButtonGroup>
+                        </CardContent>
+                    </Card>
+                </LayoutContainer>
+            </div>
+        </Fade>
     );
 };
 export default SettingsPage;
