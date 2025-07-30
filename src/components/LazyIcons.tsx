@@ -28,7 +28,7 @@ export const CloseIcon = lazy(() => import('@mui/icons-material/Close'));
 export const FolderIcon = lazy(() => import('@mui/icons-material/Folder'));
 export const TaskIcon = lazy(() => import('@mui/icons-material/Task'));
 export const BugIcon = lazy(() => import('@mui/icons-material/BugReport'));
-export const ExtensionIcon = lazy(() => import('@mui/icons-material/Extension'));
+export const FeatureIcon = lazy(() => import('@mui/icons-material/Extension'));
 export const PriorityHighIcon = lazy(() => import('@mui/icons-material/PriorityHigh'));
 export const PriorityMedIcon = lazy(() => import('@mui/icons-material/ArrowUpward'));
 export const PriorityLowIcon = lazy(() => import('@mui/icons-material/LowPriority'));

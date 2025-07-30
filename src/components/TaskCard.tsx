@@ -16,6 +16,8 @@ import { capitalize, getChipColor, getLifecycleColor, getPriorityColor } from '.
 import { chipStyles } from '../data/Styles';
 import { VIEW_TASK } from '../data/Routes';
 import type { TaskCardProps } from '../data/Types';
+import { LazyIcon } from './LazyIcons';
+import { priorityIcons, typeIcons, lifecycleIcons } from '../data/Constants';
 
 /** @description Task Card for Project Page */
 const TaskCard = ({ t, projectId }: TaskCardProps) => {
@@ -30,18 +32,29 @@ const TaskCard = ({ t, projectId }: TaskCardProps) => {
                 </>}
                 subheader={
                     <>
-                        {t.type != null && (<Chip color={getChipColor(t.type)} label={capitalize(t.type)} sx={chipStyles}></Chip>)}
-                        {t.lifecycle != null && (<Chip variant='outlined' color={getLifecycleColor(t.lifecycle)} label={capitalize(t.lifecycle)} sx={chipStyles}></Chip>)}
+                        {t.type != null && (<Chip color={getChipColor(t.type)} label={capitalize(t.type)} sx={chipStyles} icon={<LazyIcon icon={typeIcons[t.type]} />}></Chip>)}
+                        {t.lifecycle != null && (<Chip variant='outlined' color={getLifecycleColor(t.lifecycle)} label={capitalize(t.lifecycle)} icon={<LazyIcon icon={lifecycleIcons[t.lifecycle]} />} sx={chipStyles}></Chip>)}
                         {t.priority != null && (<Chip
                             variant="filled"
                             color={getPriorityColor(t.priority)}
                             label={capitalize(t.priority) + ' Priority'}
+                            icon={<LazyIcon icon={priorityIcons[t.priority]} color='inherit' />}
                             sx={chipStyles}
                         />)}
                     </>}
             />
             <CardContent sx={{ pt: 0 }}><Typography>{t.description}</Typography></CardContent>
-            <CardActions><Button onClick={() => navigateToTask(projectId, t.id)}>View Task</Button></CardActions>
+            <CardActions>
+                <Button onClick={() => navigateToTask(projectId, t.id)} sx={{
+                    transition: '0.3s ease',
+                    '&:hover': {
+                        bgcolor: ({ palette }) => palette.primary.main,
+                        color: ({ palette }) => palette.text.primary,
+                    }
+                }}>
+                    View Task
+                </Button>
+            </CardActions>
         </Card>
     );
 };
