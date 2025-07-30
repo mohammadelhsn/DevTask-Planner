@@ -6,6 +6,7 @@ import {
     Grid,
     Card,
     CardContent,
+    Divider
 } from '@mui/material';
 
 const features = [
@@ -38,7 +39,6 @@ const features = [
 export default function HomePage() {
     return (
         <Box>
-            {/* Hero Section */}
             <Box
                 sx={{
                     py: 10,
@@ -51,7 +51,7 @@ export default function HomePage() {
                     <Typography variant="h2" gutterBottom>
                         DevTask
                     </Typography>
-                    <Typography variant="h5" color="text.secondary" paragraph>
+                    <Typography variant="h5" color="text.secondary" sx={{ mb: 1 }}>
                         Your developer-first task planner. Simple. Powerful. Focused.
                     </Typography>
                     <Button variant="contained" size="large">
@@ -59,12 +59,8 @@ export default function HomePage() {
                     </Button>
                 </Container>
             </Box>
-
-            {/* Features Section */}
             <Container sx={{ py: 8 }}>
-                <Typography variant="h4" align="center" gutterBottom>
-                    Features
-                </Typography>
+                <Divider><Typography variant="h4" align="center" gutterBottom>Features</Typography></Divider>
                 <Grid container spacing={4} sx={{ mt: 2 }}>
                     {features.map((feature, index) => (
                         <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
@@ -82,13 +78,11 @@ export default function HomePage() {
                     ))}
                 </Grid>
             </Container>
-
-            {/* Call to Action */}
             <Box
                 sx={{
                     py: 8,
                     backgroundColor: 'background.default',
-                    color: 'primary.contrastText',
+                    color: 'text.primary',
                     textAlign: 'center',
                 }}
             >
