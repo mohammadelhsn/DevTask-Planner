@@ -29,7 +29,7 @@ import Typography from '@mui/material/Typography';
 /** ========== DATA / FIREBASE ========== */
 import { createTask } from '../data/Tasks';
 import { type ColumnType, type TaskObject } from '../data/Types';
-import { VIEW_TASK } from '../data/Routes';
+import { VIEW_PROJECT, VIEW_TASK } from '../data/Routes';
 import type { ProjectWrapper } from '../data/Project';
 import LayoutContainer from '../components/LayoutContainer';
 
@@ -100,7 +100,7 @@ const NewTask = () => {
         }
     };
     return (
-        <LayoutContainer backIcon>
+        <LayoutContainer backIcon to={VIEW_PROJECT(id)}>
             <Box mt={4} sx={{ width: '100%', maxWidth: 600, mx: 'auto' }}>
                 <Stepper activeStep={activeStep} alternativeLabel>
                     {steps.map((label) => (

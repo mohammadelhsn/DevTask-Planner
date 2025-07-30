@@ -133,7 +133,7 @@ const ViewTask = () => {
     if (!project) return <NotFoundPage />;
     if (!task) return <NotFoundPage />;
     return (
-        <LayoutContainer backIcon>
+        <LayoutContainer backIcon to={VIEW_PROJECT(id)}>
             <PageTitle title={`${editMode ? 'Editing' : 'Viewing'} Task`} divider />
             <Dialog open={openDialog}>
                 <DialogTitle sx={{ display: 'flex', alignItems: 'center' }}><LazyIcon icon={DeleteIcon} color='error' sx={{ mr: 1 }} />Delete Journal</DialogTitle>

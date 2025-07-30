@@ -126,7 +126,7 @@ const ViewProject = () => {
     };
     if (!userData) return;
     return (
-        <LayoutContainer backIcon>
+        <LayoutContainer backIcon to={DASHBOARD}>
             <PageTitle title={`Dev Board - ${project?.projectName}`} desc={project?.projectDesc} divider />
             <Dialog open={openDialog}>
                 <DialogTitle sx={{ display: 'flex', alignItems: 'center' }}><LazyIcon icon={DeleteIcon} color='error' sx={{ mr: 1 }} />Delete Journal</DialogTitle>

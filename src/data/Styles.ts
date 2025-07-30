@@ -2,23 +2,27 @@ import type { SxProps, Theme } from '@mui/material';
 
 export type Style = SxProps<Theme>;
 
+/** @description Container Styles */
 export const containerStyles: Style = {
 	px: { xs: 2, sm: 3 },
 	py: { xs: 4, sm: 6 },
 	flexGrow: 1,
 };
 
+/** @description Styles to centre a div */
 export const divCenter: Style = {
 	display: 'flex',
 	alignItems: 'center',
 	justifyContent: 'center',
 };
 
+/** @description Styles for the container but also to centre a div */
 export const combinedStyles = {
 	...containerStyles,
 	...divCenter,
 } as Style;
 
+/** @description The spacing for the divider */
 export const dividerStyle: Style = {
 	my: 2,
 };

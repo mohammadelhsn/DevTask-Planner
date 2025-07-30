@@ -3,10 +3,10 @@ import type { ReactNode } from 'react';
 import { containerStyles } from '../data/Styles';
 import BackIcon from './BackIcon';
 
-const LayoutContainer = ({ children, backIcon }: { children: ReactNode, backIcon?: boolean; }) => {
+const LayoutContainer = ({ children, backIcon, to }: { children: ReactNode, backIcon?: boolean; to?: string; }) => {
     return (
         <Container maxWidth='xl' sx={containerStyles}>
-            {backIcon && (<BackIcon />)}
+            {backIcon && (<BackIcon TO={to} />)}
             {children}
         </Container>
     );

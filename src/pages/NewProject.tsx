@@ -8,7 +8,7 @@ import { useFeedback } from '../contexts/FeedbackContext';
 
 /** FIREBASE */
 import { createProject } from '../data/Project';
-import { VIEW_PROJECT } from '../data/Routes';
+import { DASHBOARD, VIEW_PROJECT } from '../data/Routes';
 
 /** MUI COMPONENTS */
 import Box from '@mui/material/Box';
@@ -18,7 +18,6 @@ import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import Checkbox from '@mui/material/Checkbox';
 import Collapse from '@mui/material/Collapse';
-import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Stack from '@mui/material/Stack';
@@ -27,9 +26,8 @@ import StepLabel from '@mui/material/StepLabel';
 import Stepper from '@mui/material/Stepper';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { containerStyles } from '../data/Styles';
 import type { ColumnConfig } from '../data/Types';
-import BackIcon from '../components/BackIcon';
+import LayoutContainer from '../components/LayoutContainer';
 
 
 const steps = ['Project Title', 'Settings & Config'];
@@ -87,10 +85,7 @@ const NewJournalPage = () => {
         }
     };
     return (
-        <Container
-            maxWidth="lg"
-            sx={containerStyles}>
-            <BackIcon />
+        <LayoutContainer backIcon to={DASHBOARD}>
             <Box sx={{ width: '100%', maxWidth: 600, mx: 'auto', mt: 4 }}>
                 <Stepper activeStep={activeStep} alternativeLabel>
                     {steps.map((label) => (
@@ -194,7 +189,7 @@ const NewJournalPage = () => {
                     )}
                 </Box>
             </Box>
-        </Container>
+        </LayoutContainer>
     );
 };
 
