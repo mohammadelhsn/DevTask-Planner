@@ -31,13 +31,14 @@ const Dashboard = () => {
     const { loading, userData, user } = useAuth();
     /** ======= HANDLE LOADING ======= */
     if (loading) return <LoadingPage />;
+    if (!user || !userData) return <LoadingPage />;
     return (
         <LayoutContainer>
             <PageTitle title={`Welcome, ${userData?.name}!`} divider />
             <Paper sx={{ p: 2 }}>
-                {user && userData && userData.projects.length == 0 && (<NoProjectsMessage />)}
+                {userData.projects.length == 0 && (<NoProjectsMessage />)}
                 <Grid container spacing={3}>
-                    {user && userData && userData.projects.length > 0 && userData.projects.map((proj, index) => ((<ProjectCard key={`${index}-${proj.id}`} proj={proj} />)))}
+                    {userData.projects.map((proj, index) => ((<ProjectCard key={`${index}-${proj.id}`} proj={proj} />)))}
                 </Grid>
             </Paper>
             <Box sx={{

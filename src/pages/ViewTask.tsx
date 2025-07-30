@@ -21,11 +21,6 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogActions from '@mui/material/DialogActions';
 
 
 /** ======= MUI ICONS ======= */
@@ -34,24 +29,22 @@ import { SaveIcon, EditIcon, DeleteIcon, LazyIcon, CloseIcon } from '../componen
 /** ======= PROJECT FILES ======= */
 import { DASHBOARD, VIEW_PROJECT } from '../data/Routes';
 import { capitalize, getChipColor, getLifecycleColor, getPriorityColor } from '../data/Functions';
-import { deleteTask, TaskWrapper } from '../data/Tasks';
+import { deleteTask, TaskWrapper, } from '../data/Tasks';
 import LoadingPage from './LoadingPage';
 import NotFoundPage from './NotFoundPage';
 import LayoutContainer from '../components/LayoutContainer';
 import PageTitle from '../components/PageTitle';
 import type { ProjectWrapper } from '../data/Project';
-import type { ColumnType, LifecycleType, TaskPriority, TaskType } from '../data/Types';
+import type { TaskObject, } from '../data/Types';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../data/Firebase';
 import { CardActions } from '@mui/material';
+import DeleteDialog from '../components/DeleteDialog';
+import { lifecycles, types, priorities } from '../data/Constants';
 
 /** ======= FUTURE FEATURES ======= */
 // import CardActions from '@mui/material/CardActions';
 // import Collapse from '@mui/material/Collapse';
-
-const lifecycles = ['alpha', 'beta', 'stable'] as const;
-const types = ['feature', 'bug'] as const;
-const priorities = ['high', 'medium', 'low'] as const;
 
 /** @description A page for the individual task */
 const ViewTask = () => {
@@ -59,7 +52,7 @@ const ViewTask = () => {
     const { id, taskId } = useParams();
     const { setFeedback } = useFeedback();
     const [project, setProject] = useState<ProjectWrapper | null>(null);
-    const [task, setTask] = useState<TaskWrapper | null>();
+    const [task, setTask] = useState<TaskWrapper | null>(null);
     const [editMode, setEditMode] = useState(false);
     const [loading, setLoading] = useState(true);
     const [openDialog, setOpenDialog] = useState(false);
@@ -89,9 +82,20 @@ const ViewTask = () => {
                 }
             }
         }
-    }, []);
-    if (!taskId) return;
-    if (!id) return;
+    }, [user, userData, id, taskId, navigateToDashboard, setFeedback]);
+    if (!taskId || !id) return null;
+    const updateTaskField = (field: Partial<TaskObject>) => {
+        setTask(prev => {
+            if (!prev) return prev;
+            return new TaskWrapper({
+                ...prev,
+                createdAt: prev.createdAt.toISOString(),
+                dueDate: prev.dueDate ? prev.dueDate.toISOString() : null,
+                lastUpdated: new Date().toISOString(),
+                ...field,
+            });
+        });
+    };
     const handleSave = async () => {
         const oldTask = project?.findTask(taskId);
         if (oldTask && task && user) {
@@ -130,21 +134,11 @@ const ViewTask = () => {
         }
     };
     if (loading) return <LoadingPage />;
-    if (!project) return <NotFoundPage />;
-    if (!task) return <NotFoundPage />;
+    if (!project || !task) return <NotFoundPage />;
     return (
         <LayoutContainer backIcon to={VIEW_PROJECT(id)}>
             <PageTitle title={`${editMode ? 'Editing' : 'Viewing'} Task`} divider />
-            <Dialog open={openDialog}>
-                <DialogTitle sx={{ display: 'flex', alignItems: 'center' }}><LazyIcon icon={DeleteIcon} color='error' sx={{ mr: 1 }} />Delete Journal</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>Are you sure you want to delete this?</DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setOpenDialog(false)} >Close</Button>
-                    <Button variant='contained' onClick={handleDelete} color='error'>Delete</Button>
-                </DialogActions>
-            </Dialog>
+            <DeleteDialog openDialog={openDialog} setOpenDialog={setOpenDialog} handleDelete={handleDelete} />
             {editMode && (
                 <Card sx={{ p: 2 }}>
                     <CardContent>
@@ -153,15 +147,7 @@ const ViewTask = () => {
                             fullWidth
                             margin="normal"
                             value={task.title}
-                            onChange={(e) => {
-                                setTask((prev) => {
-                                    if (prev) {
-                                        return new TaskWrapper(({ ...prev, createdAt: prev.createdAt.toISOString(), dueDate: prev.dueDate ? prev.dueDate.toISOString() : null, lastUpdated: new Date().toISOString(), title: e.target.value }));
-                                    } else {
-                                        return prev;
-                                    }
-                                });
-                            }}
+                            onChange={(e) => updateTaskField({ title: e.target.value })}
                         />
                         <TextField
                             label="Description"
@@ -169,28 +155,11 @@ const ViewTask = () => {
                             multiline
                             margin="normal"
                             value={task.description}
-                            onChange={(e) => {
-                                setTask((prev) => {
-                                    if (prev) {
-                                        return new TaskWrapper(({ ...prev, createdAt: prev.createdAt.toISOString(), dueDate: prev.dueDate ? prev.dueDate.toISOString() : null, lastUpdated: new Date().toISOString(), description: e.target.value }));
-                                    } else {
-                                        return prev;
-                                    }
-                                });
-                            }}
+                            onChange={(e) => updateTaskField({ description: e.target.value })}
                         />
-
                         <FormControl fullWidth margin="normal">
                             <InputLabel>Column</InputLabel>
-                            <Select value={task.column ? task.column : ''} label="Column" onChange={(e) => {
-                                setTask((prev) => {
-                                    if (prev) {
-                                        return new TaskWrapper(({ ...prev, createdAt: prev.createdAt.toISOString(), dueDate: prev.dueDate ? prev.dueDate.toISOString() : null, lastUpdated: new Date().toISOString(), column: (e.target.value as ColumnType) }));
-                                    } else {
-                                        return prev;
-                                    }
-                                });
-                            }}>
+                            <Select value={task.column ? task.column : ''} label="Column" onChange={(e) => updateTaskField({ column: e.target.value })}>
                                 {project.config.map((option, index) => (
                                     option.enabled && (
                                         <MenuItem key={`${option.id}-${index}-newTask`} value={option.id}>
@@ -200,35 +169,17 @@ const ViewTask = () => {
                                 ))}
                             </Select>
                         </FormControl>
-
                         <FormControl fullWidth margin="normal">
                             <InputLabel>Lifecycle</InputLabel>
-                            <Select value={task.lifecycle ? task.lifecycle : ''} label="Lifecycle" onChange={(e) => {
-                                setTask((prev) => {
-                                    if (prev) {
-                                        return new TaskWrapper(({ ...prev, createdAt: prev.createdAt.toISOString(), dueDate: prev.dueDate ? prev.dueDate.toISOString() : null, lastUpdated: new Date().toISOString(), lifecycle: (e.target.value as LifecycleType) }));
-                                    } else {
-                                        return prev;
-                                    }
-                                });
-                            }}>
+                            <Select value={task.lifecycle ? task.lifecycle : ''} label="Lifecycle" onChange={(e) => updateTaskField({ lifecycle: e.target.value })}>
                                 {lifecycles.map(option => (
                                     <MenuItem key={option} value={option}>{option}</MenuItem>
                                 ))}
                             </Select>
                         </FormControl>
-
                         <FormControl fullWidth margin="normal">
                             <InputLabel>Type</InputLabel>
-                            <Select value={task.type ? task.type : ''} label="Type" onChange={(e) => {
-                                setTask((prev) => {
-                                    if (prev) {
-                                        return new TaskWrapper(({ ...prev, createdAt: prev.createdAt.toISOString(), dueDate: prev.dueDate ? prev.dueDate.toISOString() : null, lastUpdated: new Date().toISOString(), type: (e.target.value as TaskType) }));
-                                    } else {
-                                        return prev;
-                                    }
-                                });
-                            }}>
+                            <Select value={task.type ? task.type : ''} label="Type" onChange={(e) => updateTaskField({ type: e.target.value })}>
                                 {types.map(option => (
                                     <MenuItem key={option} value={option}>{option}</MenuItem>
                                 ))}
@@ -236,15 +187,7 @@ const ViewTask = () => {
                         </FormControl>
                         <FormControl fullWidth margin="normal">
                             <InputLabel>Priority</InputLabel>
-                            <Select value={task.priority ? task.priority : ''} label="Priority" onChange={(e) => {
-                                setTask((prev) => {
-                                    if (prev) {
-                                        return new TaskWrapper(({ ...prev, createdAt: prev.createdAt.toISOString(), dueDate: prev.dueDate ? prev.dueDate.toISOString() : null, lastUpdated: new Date().toISOString(), priority: (e.target.value as TaskPriority) }));
-                                    } else {
-                                        return prev;
-                                    }
-                                });
-                            }}>
+                            <Select value={task.priority ? task.priority : ''} label="Priority" onChange={(e) => updateTaskField({ priority: e.target.value })}>
                                 {priorities.map(option => (
                                     <MenuItem key={option} value={option}>{option}</MenuItem>
                                 ))}
