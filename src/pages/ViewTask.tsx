@@ -57,7 +57,6 @@ const ViewTask = () => {
     const [loading, setLoading] = useState(true);
     const [openDialog, setOpenDialog] = useState(false);
     const navigate = useNavigate();
-    const navigateToDashboard = () => navigate(DASHBOARD);
     useEffect(() => {
         if (user && userData) {
             if (id) {
@@ -72,17 +71,17 @@ const ViewTask = () => {
                         } else {
                             setLoading(false);
                             setFeedback('Task not found!', 'error');
-                            navigateToDashboard();
+                            navigate(DASHBOARD);
                         }
                     }
                 } else {
                     setLoading(false);
                     setFeedback('Project not found!', 'error');
-                    navigateToDashboard();
+                    navigate(DASHBOARD);
                 }
             }
         }
-    }, [user, userData, id, taskId, navigateToDashboard, setFeedback]);
+    }, [user, userData, id, taskId, navigate, setFeedback]);
     if (!taskId || !id) return null;
     const updateTaskField = (field: Partial<TaskObject>) => {
         setTask(prev => {
@@ -163,7 +162,7 @@ const ViewTask = () => {
                                 {project.config.map((option, index) => (
                                     option.enabled && (
                                         <MenuItem key={`${option.id}-${index}-newTask`} value={option.id}>
-                                            {option.label}
+                                            {capitalize(option.label)}
                                         </MenuItem>
                                     )
                                 ))}
@@ -173,7 +172,7 @@ const ViewTask = () => {
                             <InputLabel>Lifecycle</InputLabel>
                             <Select value={task.lifecycle ? task.lifecycle : ''} label="Lifecycle" onChange={(e) => updateTaskField({ lifecycle: e.target.value })}>
                                 {lifecycles.map(option => (
-                                    <MenuItem key={option} value={option}>{option}</MenuItem>
+                                    <MenuItem key={option} value={option}>{capitalize(option)}</MenuItem>
                                 ))}
                             </Select>
                         </FormControl>
@@ -181,7 +180,7 @@ const ViewTask = () => {
                             <InputLabel>Type</InputLabel>
                             <Select value={task.type ? task.type : ''} label="Type" onChange={(e) => updateTaskField({ type: e.target.value })}>
                                 {types.map(option => (
-                                    <MenuItem key={option} value={option}>{option}</MenuItem>
+                                    <MenuItem key={option} value={option}>{capitalize(option)}</MenuItem>
                                 ))}
                             </Select>
                         </FormControl>
@@ -189,7 +188,7 @@ const ViewTask = () => {
                             <InputLabel>Priority</InputLabel>
                             <Select value={task.priority ? task.priority : ''} label="Priority" onChange={(e) => updateTaskField({ priority: e.target.value })}>
                                 {priorities.map(option => (
-                                    <MenuItem key={option} value={option}>{option}</MenuItem>
+                                    <MenuItem key={option} value={option}>{capitalize(option)}</MenuItem>
                                 ))}
                             </Select>
                         </FormControl>

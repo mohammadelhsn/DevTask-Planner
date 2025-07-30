@@ -14,6 +14,11 @@ import type {
 	TaskPriority,
 	TaskType,
 } from './Types';
+import {
+	FacebookAuthProvider,
+	GoogleAuthProvider,
+	GithubAuthProvider,
+} from 'firebase/auth';
 
 export const lifecycles = ['alpha', 'beta', 'stable'] as const;
 export const types = ['feature', 'bug'] as const;
@@ -68,3 +73,7 @@ export const features = [
 	//     description: 'Link pull requests and commits directly to tasks.',
 	// },
 ];
+
+export const googleProvider = new GoogleAuthProvider();
+export const githubProvider = new GithubAuthProvider();
+export const facebookProvider = new FacebookAuthProvider();

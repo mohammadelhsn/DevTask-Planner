@@ -16,7 +16,7 @@ import { capitalize, getChipColor, getLifecycleColor, getPriorityColor } from '.
 import { chipStyles } from '../data/Styles';
 import { VIEW_TASK } from '../data/Routes';
 import type { TaskCardProps } from '../data/Types';
-import { LazyIcon } from './LazyIcons';
+import { LazyIcon, TaskIcon } from './LazyIcons';
 import { priorityIcons, typeIcons, lifecycleIcons } from '../data/Constants';
 
 /** @description Task Card for Project Page */
@@ -27,7 +27,7 @@ const TaskCard = ({ t, projectId }: TaskCardProps) => {
         <Card elevation={5}>
             <CardHeader title={
                 <>
-                    <Typography variant='subtitle1'>{t.title}</Typography>
+                    <Typography variant='subtitle1' sx={{ display: 'flex', alignItems: 'center' }}>{<LazyIcon icon={TaskIcon} color='primary' sx={{ mr: 1 }} />}{t.title}</Typography>
                     <Divider sx={{ mt: 1 }} />
                 </>}
                 subheader={
