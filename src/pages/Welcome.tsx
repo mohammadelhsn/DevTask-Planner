@@ -3,12 +3,11 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import Divider from '@mui/material/Divider';
 import { features } from '../data/Constants';
 import { Fade } from '@mui/material';
 import { useEffect, useState } from 'react';
+import FeatureCard from '../components/FeatureCard';
 
 const HomePage = () => {
     const [loaded, setLoaded] = useState(false);
@@ -43,20 +42,7 @@ const HomePage = () => {
                 <Container sx={{ py: 8 }}>
                     <Divider><Typography variant="h4" align="center" gutterBottom>Features</Typography></Divider>
                     <Grid container spacing={4} sx={{ mt: 2 }}>
-                        {features.map((feature, index) => (
-                            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
-                                <Card variant="outlined" sx={{ height: '100%' }}>
-                                    <CardContent>
-                                        <Typography variant="h6" gutterBottom>
-                                            {feature.title}
-                                        </Typography>
-                                        <Typography variant="body2" color="text.secondary">
-                                            {feature.description}
-                                        </Typography>
-                                    </CardContent>
-                                </Card>
-                            </Grid>
-                        ))}
+                        {features.map((feature, index) => (<FeatureCard feature={feature} index={index} />))}
                     </Grid>
                 </Container>
                 <Box

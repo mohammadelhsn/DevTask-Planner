@@ -15,6 +15,7 @@ import {
 	StableIcon,
 } from '../components/LazyIcons';
 import type {
+	ColumnConfig,
 	ColumnType,
 	LazyIconType,
 	LifecycleType,
@@ -93,3 +94,12 @@ export const features = [
 export const googleProvider = new GoogleAuthProvider();
 export const githubProvider = new GithubAuthProvider();
 export const facebookProvider = new FacebookAuthProvider();
+
+export const dConfig: ColumnConfig[] = [
+	{ id: 'Uncategorized', enabled: true, label: 'Uncategorized' },
+	{ id: 'Long Term', enabled: true, label: 'Long Term' },
+	{ id: 'Medium Term', enabled: true, label: 'Medium Term' },
+	{ id: 'Short Term', enabled: true, label: 'Short Term' },
+	{ id: 'Doing', enabled: true, label: 'Doing' },
+	{ id: 'Done', enabled: true, label: 'Done' },
+];

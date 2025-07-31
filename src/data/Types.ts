@@ -132,3 +132,13 @@ export type LoginButtonState = {
 };
 
 export type ProviderName = 'google' | 'github' | 'facebook';
+
+export type FeatureType = {
+	title: string;
+	description: string;
+};
+
+export interface FeatureCardProps {
+	feature: FeatureType;
+	index: number;
+}

@@ -36,12 +36,13 @@ import NotFoundPage from './NotFoundPage';
 import LayoutContainer from '../components/LayoutContainer';
 import PageTitle from '../components/PageTitle';
 import type { ProjectWrapper } from '../data/Project';
-import type { TaskObject, } from '../data/Types';
+import type { ColumnType, LifecycleType, TaskObject, TaskPriority, TaskType, } from '../data/Types';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../data/Firebase';
 import { CardActions } from '@mui/material';
 import DeleteDialog from '../components/DeleteDialog';
-import { lifecycles, types, priorities } from '../data/Constants';
+import { lifecycles, types, priorities, typeIcons, lifecycleIcons, priorityIcons, categoryIcons } from '../data/Constants';
+import TaskChip from '../components/TaskChip';
 
 /** ======= FUTURE FEATURES ======= */
 // import CardActions from '@mui/material/CardActions';
@@ -135,6 +136,13 @@ const ViewTask = () => {
             }
         }
     };
+    const handleCancel = () => {
+        const oldTask = project?.findTask(taskId);
+        setEditMode(false);
+        if (oldTask) {
+            setTask(oldTask);
+        }
+    };
     if (loading) return <LoadingPage />;
     if (!project || !task) return <NotFoundPage />;
     return (
@@ -163,11 +171,20 @@ const ViewTask = () => {
                                 />
                                 <FormControl fullWidth margin="normal">
                                     <InputLabel>Column</InputLabel>
-                                    <Select value={task.column ? task.column : ''} label="Column" onChange={(e) => updateTaskField({ column: e.target.value })}>
+                                    <Select value={task.column ? task.column : ''} label="Column" onChange={(e) => updateTaskField({ column: e.target.value })} renderValue={(selected) => (
+                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                            <LazyIcon
+                                                icon={categoryIcons[(selected as Exclude<ColumnType, null>)]}
+                                                color={'primary'}
+                                                sx={{ mr: 1 }}
+                                            />
+                                            {capitalize(selected)}
+                                        </Box>
+                                    )}>
                                         {project.config.map((option, index) => (
                                             option.enabled && (
-                                                <MenuItem key={`${option.id}-${index}-newTask`} value={option.id}>
-                                                    {capitalize(option.label)}
+                                                <MenuItem key={`${option.id}-${index}-newTask`} value={option.id} sx={{ display: 'flex', alignItems: 'center' }}>
+                                                    <LazyIcon icon={categoryIcons[option.id]} color={'primary'} sx={{ mr: 1 }} />{capitalize(option.label)}
                                                 </MenuItem>
                                             )
                                         ))}
@@ -175,31 +192,58 @@ const ViewTask = () => {
                                 </FormControl>
                                 <FormControl fullWidth margin="normal">
                                     <InputLabel>Lifecycle</InputLabel>
-                                    <Select value={task.lifecycle ? task.lifecycle : ''} label="Lifecycle" onChange={(e) => updateTaskField({ lifecycle: e.target.value })}>
+                                    <Select value={task.lifecycle ? task.lifecycle : ''} label="Lifecycle" onChange={(e) => updateTaskField({ lifecycle: e.target.value })} renderValue={(selected) => (
+                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                            <LazyIcon
+                                                icon={lifecycleIcons[(selected as Exclude<LifecycleType, null>)]}
+                                                color={getLifecycleColor((selected as Exclude<LifecycleType, null>))}
+                                                sx={{ mr: 1 }}
+                                            />
+                                            {capitalize(selected)}
+                                        </Box>
+                                    )}>
                                         {lifecycles.map(option => (
-                                            <MenuItem key={option} value={option}>{capitalize(option)}</MenuItem>
+                                            <MenuItem key={option} value={option} sx={{ display: 'flex', alignItems: 'center' }}><LazyIcon icon={lifecycleIcons[option]} color={getLifecycleColor(option)} sx={{ mr: 1 }} />{capitalize(option)}</MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
                                 <FormControl fullWidth margin="normal">
                                     <InputLabel>Type</InputLabel>
-                                    <Select value={task.type ? task.type : ''} label="Type" onChange={(e) => updateTaskField({ type: e.target.value })}>
+                                    <Select value={task.type ? task.type : ''} label="Type" onChange={(e) => updateTaskField({ type: e.target.value })} renderValue={(selected) => (
+                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                            <LazyIcon
+                                                icon={typeIcons[(selected as Exclude<TaskType, null>)]}
+                                                color={getChipColor((selected as Exclude<TaskType, null>))}
+                                                sx={{ mr: 1 }}
+                                            />
+                                            {capitalize(selected)}
+                                        </Box>
+                                    )}>
                                         {types.map(option => (
-                                            <MenuItem key={option} value={option}>{capitalize(option)}</MenuItem>
+                                            <MenuItem key={option} value={option} sx={{ display: 'flex', alignItems: 'center' }}><LazyIcon icon={typeIcons[option]} color={getChipColor(option)} sx={{ mr: 1 }} />{capitalize(option)}</MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
                                 <FormControl fullWidth margin="normal">
                                     <InputLabel>Priority</InputLabel>
-                                    <Select value={task.priority ? task.priority : ''} label="Priority" onChange={(e) => updateTaskField({ priority: e.target.value })}>
+                                    <Select value={task.priority ? task.priority : ''} label="Priority" onChange={(e) => updateTaskField({ priority: e.target.value })} renderValue={(selected) => (
+                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                            <LazyIcon
+                                                icon={priorityIcons[(selected as Exclude<TaskPriority, null>)]}
+                                                color={getPriorityColor((selected as Exclude<TaskPriority, null>))}
+                                                sx={{ mr: 1 }}
+                                            />
+                                            {capitalize(selected)}
+                                        </Box>
+                                    )}>
                                         {priorities.map(option => (
-                                            <MenuItem key={option} value={option}>{capitalize(option)}</MenuItem>
+                                            <MenuItem key={option} value={option} sx={{ display: 'flex', alignItems: 'center' }}><LazyIcon icon={priorityIcons[option]} color={getPriorityColor(option)} sx={{ mr: 1 }} />{capitalize(option)}</MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
                             </CardContent>
                             <CardActions>
-                                <Button startIcon={<LazyIcon icon={CloseIcon} />} onClick={() => setEditMode(false)}>Cancel</Button>
+                                <Button startIcon={<LazyIcon icon={CloseIcon} />} onClick={handleCancel}>Cancel</Button>
                                 <Button startIcon={<LazyIcon icon={DeleteIcon} />} color='error' onClick={() => setOpenDialog(true)}>Delete</Button>
                             </CardActions>
                         </Card>
@@ -208,14 +252,17 @@ const ViewTask = () => {
                         <Card>
                             <CardHeader
                                 title={<><Typography variant='inherit'>{task.title}</Typography></>}
-                                subheader={<><Typography variant='inherit' >{task.description}</Typography><Divider sx={{ my: 2 }} /></>}
+                                subheader={<><Typography variant='inherit' sx={{ mt: 2, whiteSpace: 'pre-line' }}>{task.description}</Typography><Divider sx={{ my: 2 }} /></>}
                             />
                             <CardContent>
                                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                                    {task && task.column != null && (<Chip color='primary' label={`Column: ${capitalize(task?.column)}`} variant="outlined" />)}
-                                    {task && task.priority != null && (<Chip color={getPriorityColor(task.priority)} label={`Priority: ${capitalize(task?.priority)}`} />)}
-                                    {task && task.type != null && (<Chip color={getChipColor(task.type)} label={`Type: ${capitalize(task?.type)}`} />)}
-                                    {task && task.lifecycle != null && (<Chip color={getLifecycleColor(task.lifecycle)} label={`Lifecycle: ${capitalize(task?.lifecycle)}`} variant="outlined" />)}
+                                    {task.column != null && (<TaskChip type='column' value={task.column} />)}
+                                    {task.type != null &&
+                                        (<TaskChip type='type' value={task.type} />)}
+                                    {task.lifecycle != null &&
+                                        (<TaskChip type={'lifecycle'} value={task.lifecycle} />)}
+                                    {task.priority != null &&
+                                        (<TaskChip type={'priority'} value={task.priority} />)}
                                     {task?.assignees.map((a) => (
                                         <Chip key={a} label={a} color="default" />
                                     ))}

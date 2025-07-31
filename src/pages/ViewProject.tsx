@@ -17,10 +17,10 @@ import Checkbox from '@mui/material/Checkbox';
 import Collapse from '@mui/material/Collapse';
 import Button from '@mui/material/Button';
 import Fade from '@mui/material/Fade';
+import Fab from '@mui/material/Fab';
 
 /** ======= MUI Icons ======= **/
-import { ScheduleIcon, EventIcon, FlashOnIcon, AutorenewIcon, CheckCircleIcon, AddIcon, InboxIcon, LazyIcon, SaveIcon, EditIcon, CloseIcon, DeleteIcon } from '../components/LazyIcons';
-import Fab from '@mui/material/Fab';
+import { AddIcon, InboxIcon, LazyIcon, SaveIcon, EditIcon, CloseIcon, DeleteIcon } from '../components/LazyIcons';
 
 /** ======= Contexts ======= **/
 import { useAuth } from '../contexts/AuthContext';
@@ -32,29 +32,12 @@ import { columnCards, divCenter } from '../data/Styles';
 import { DASHBOARD, NEW_PROJECT } from '../data/Routes';
 import TaskCard from '../components/TaskCard';
 import NoTasks from '../components/NoTasks';
-import type { ColumnConfig, ColumnType, LazyIconType } from '../data/Types';
+import { type ColumnConfig } from '../data/Types';
 import LayoutContainer from '../components/LayoutContainer';
 import PageTitle from '../components/PageTitle';
 import { CardActions } from '@mui/material';
 import DeleteDialog from '../components/DeleteDialog';
-
-const icons: Record<Exclude<ColumnType, null>, LazyIconType> = {
-    "Uncategorized": InboxIcon,
-    "Long Term": ScheduleIcon,
-    "Medium Term": EventIcon,
-    "Short Term": FlashOnIcon,
-    "Doing": AutorenewIcon,
-    "Done": CheckCircleIcon
-};
-
-const dConfig: ColumnConfig[] = [
-    { "id": "Uncategorized", "enabled": true, "label": "Uncategorized" },
-    { "id": "Long Term", "enabled": true, "label": "Long Term" },
-    { "id": "Medium Term", "enabled": true, "label": "Medium Term" },
-    { "id": "Short Term", "enabled": true, "label": "Short Term" },
-    { "id": "Doing", "enabled": true, "label": "Doing" },
-    { "id": "Done", "enabled": true, "label": "Done" }
-];
+import { categoryIcons, dConfig } from '../data/Constants';
 
 
 const ViewProject = () => {
@@ -110,8 +93,7 @@ const ViewProject = () => {
         setEditing(false);
     };
     const handleDelete = async () => {
-        if (!user) return;
-        if (!project) return;
+        if (!user || !project) return;
         const response = await deleteProject(user.uid, project.id);
 
         if (response.success) {
@@ -224,7 +206,7 @@ const ViewProject = () => {
                                             <Card elevation={3} sx={columnCards} key={`${col.id}-${index}-ViewProject`}>
                                                 <CardHeader title={
                                                     <>
-                                                        <Typography variant='inherit' sx={{ display: 'flex', alignItems: 'center' }}><LazyIcon icon={icons[col.id]} color='primary' sx={{ mr: 1 }} />{col.label}</Typography>
+                                                        <Typography variant='inherit' sx={{ display: 'flex', alignItems: 'center' }}><LazyIcon icon={categoryIcons[col.id]} color='primary' sx={{ mr: 1 }} />{col.label}</Typography>
                                                         <Divider sx={{ mt: 1 }} />
                                                     </>
                                                 } />
