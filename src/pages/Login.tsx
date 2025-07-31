@@ -74,7 +74,7 @@ const LogIn = () => {
     const handleGitHubSignIn = () => handleProviderSignInWrapper(githubProvider, 'github');
     const handleFacebookSignIn = () => handleProviderSignInWrapper(facebookProvider, 'facebook');
     return (
-        <Fade in={show}>
+        <Fade in={show} timeout={500}>
             <Container
                 maxWidth="lg"
                 sx={combinedStyles}

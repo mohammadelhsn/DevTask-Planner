@@ -4,7 +4,6 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
-import Chip from '@mui/material/Chip';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 
@@ -12,12 +11,10 @@ import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 
 /** ======= PROJECT FILES ======= */
-import { capitalize, getChipColor, getLifecycleColor, getPriorityColor } from '../data/Functions';
-import { chipStyles } from '../data/Styles';
 import { VIEW_TASK } from '../data/Routes';
 import type { TaskCardProps } from '../data/Types';
 import { LazyIcon, TaskIcon } from './LazyIcons';
-import { priorityIcons, typeIcons, lifecycleIcons } from '../data/Constants';
+import TaskChip from './TaskChip';
 
 /** @description Task Card for Project Page */
 const TaskCard = ({ t, projectId }: TaskCardProps) => {
@@ -32,15 +29,12 @@ const TaskCard = ({ t, projectId }: TaskCardProps) => {
                 </>}
                 subheader={
                     <>
-                        {t.type != null && (<Chip color={getChipColor(t.type)} label={capitalize(t.type)} sx={chipStyles} icon={<LazyIcon icon={typeIcons[t.type]} />}></Chip>)}
-                        {t.lifecycle != null && (<Chip variant='outlined' color={getLifecycleColor(t.lifecycle)} label={capitalize(t.lifecycle)} icon={<LazyIcon icon={lifecycleIcons[t.lifecycle]} />} sx={chipStyles}></Chip>)}
-                        {t.priority != null && (<Chip
-                            variant="filled"
-                            color={getPriorityColor(t.priority)}
-                            label={capitalize(t.priority) + ' Priority'}
-                            icon={<LazyIcon icon={priorityIcons[t.priority]} color='inherit' />}
-                            sx={chipStyles}
-                        />)}
+                        {t.type != null &&
+                            (<TaskChip type='type' value={t.type} />)}
+                        {t.lifecycle != null &&
+                            (<TaskChip type={'lifecycle'} value={t.lifecycle} />)}
+                        {t.priority != null &&
+                            (<TaskChip type={'priority'} value={t.priority} />)}
                     </>}
             />
             <CardContent sx={{ pt: 0 }}><Typography>{t.description}</Typography></CardContent>

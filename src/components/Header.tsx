@@ -53,20 +53,15 @@ const StyledExternalLink = styled(NavLink)(({ theme }) => ({
 }));
 
 const Header = () => {
+    const { user } = useContext(AuthContext);
     const { breakpoints } = useTheme();
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const open = Boolean(anchorEl);
     const isSmallScreen = useMediaQuery(breakpoints.down('sm'));
-    const handleClick = (event: MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-    const { user } = useContext(AuthContext);
+    const open = Boolean(anchorEl);
     /** HELPERS */
-    const navigateToSettings = () => navigate(SETTINGS);
+    const handleClick = (event: MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
+    const handleClose = () => setAnchorEl(null);
     return (
         <AppBar
             position="static"
@@ -180,7 +175,7 @@ const Header = () => {
                                 </Avatar> Manage my Account
                             </MenuItem>
                             <Divider />
-                            <MenuItem onClick={navigateToSettings}>
+                            <MenuItem onClick={() => navigate(SETTINGS)}>
                                 <ListItemIcon>
                                     <Settings fontSize="small" color='primary' />
                                 </ListItemIcon>
