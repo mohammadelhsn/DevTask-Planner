@@ -29,7 +29,6 @@ const Dashboard = () => {
     const navigate = useNavigate();
     /** ======= NAVIGATION HELPERS ======= */
     const navigateToNewProject = () => navigate(NEW_PROJECT);
-
     /** ======= AUTH CONTEXT ======= */
     const [loaded, setLoaded] = useState(false);
     const { loading, userData, user } = useAuth();

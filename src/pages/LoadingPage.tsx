@@ -1,13 +1,17 @@
+/** ======= REACT ======= */
+import { useEffect, useState } from 'react';
+
 /** ======= MUI COMPONENTS ======= */
 
 import CircularProgress from '@mui/material/CircularProgress';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Fade from '@mui/material/Fade';
-import { divCenter } from '../data/Styles';
-import { useEffect, useState } from 'react';
 
-/** The loading page for the project */
+/** ======= STYLES =======  */
+import { divCenter } from '../data/Styles';
+
+/** @description The loading page for the project */
 const LoadingPage = () => {
     const [loaded, setLoaded] = useState(false);
     useEffect(() => setLoaded(true));

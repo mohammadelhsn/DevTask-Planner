@@ -15,7 +15,6 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import Divider from '@mui/material/Divider';
-// import Collapse from '@mui/material/Collapse';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -27,19 +26,21 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Fade from '@mui/material/Fade';
 
+/** ======= Custom Components ======= */
+import LayoutContainer from '../components/LayoutContainer';
+
+/** ======= Icons ======= */
+import { LazyIcon } from '../components/LazyIcons';
+
 /** ========== DATA / FIREBASE ========== */
 import { createTask } from '../data/Tasks';
-import { type ColumnType, type LifecycleType, type TaskObject, type TaskPriority, type TaskType } from '../data/Types';
+import type { ColumnType, LifecycleType, TaskObject, TaskPriority, TaskType } from '../data/Types';
 import { VIEW_PROJECT, VIEW_TASK } from '../data/Routes';
 import type { ProjectWrapper } from '../data/Project';
-import LayoutContainer from '../components/LayoutContainer';
 import { capitalize, getChipColor, getLifecycleColor, getPriorityColor } from '../data/Functions';
-import { LazyIcon } from '../components/LazyIcons';
 import { priorities, lifecycles, types, typeIcons, lifecycleIcons, priorityIcons, categoryIcons } from '../data/Constants';
 
 const steps = ['New Task', 'Settings & Config'];
-
-
 
 const NewTask = () => {
     const [activeStep, setActiveStep] = useState(0);

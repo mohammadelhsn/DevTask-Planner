@@ -11,6 +11,7 @@ import Paper from '@mui/material/Paper';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
@@ -19,6 +20,13 @@ import Button from '@mui/material/Button';
 import Fade from '@mui/material/Fade';
 import Fab from '@mui/material/Fab';
 
+/** ======= CUSTOM COMPONENTS ======= */
+import TaskCard from '../components/TaskCard';
+import NoTasks from '../components/NoTasks';
+import LayoutContainer from '../components/LayoutContainer';
+import PageTitle from '../components/PageTitle';
+import DeleteDialog from '../components/DeleteDialog';
+
 /** ======= MUI Icons ======= **/
 import { AddIcon, InboxIcon, LazyIcon, SaveIcon, EditIcon, CloseIcon, DeleteIcon } from '../components/LazyIcons';
 
@@ -26,17 +34,11 @@ import { AddIcon, InboxIcon, LazyIcon, SaveIcon, EditIcon, CloseIcon, DeleteIcon
 import { useAuth } from '../contexts/AuthContext';
 import { useFeedback } from '../contexts/FeedbackContext';
 
-/** ======= Project-specific Imports ======= **/
+/** ======= Data & Types ======= **/
 import { deleteProject, ProjectWrapper, updateProject } from '../data/Project';
 import { columnCards, divCenter } from '../data/Styles';
 import { DASHBOARD, NEW_PROJECT } from '../data/Routes';
-import TaskCard from '../components/TaskCard';
-import NoTasks from '../components/NoTasks';
 import { type ColumnConfig } from '../data/Types';
-import LayoutContainer from '../components/LayoutContainer';
-import PageTitle from '../components/PageTitle';
-import { CardActions } from '@mui/material';
-import DeleteDialog from '../components/DeleteDialog';
 import { categoryIcons, dConfig } from '../data/Constants';
 
 

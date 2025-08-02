@@ -1,13 +1,20 @@
+/** ======= React ======= */
+import { useEffect, useState } from 'react';
+
+/** ======= Mui Components ======= */
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
-import { features } from '../data/Constants';
-import { Fade } from '@mui/material';
-import { useEffect, useState } from 'react';
+import Fade from '@mui/material/Fade';
+
+/** ======= Custom Components ======= */
 import FeatureCard from '../components/FeatureCard';
+
+/** ======= Data & Types ======= */
+import { features } from '../data/Constants';
 
 const HomePage = () => {
     const [loaded, setLoaded] = useState(false);

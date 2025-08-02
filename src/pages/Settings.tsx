@@ -16,6 +16,10 @@ import CardHeader from '@mui/material/CardHeader';
 import Divider from '@mui/material/Divider';
 import Fade from '@mui/material/Fade';
 
+/** ======= Custom Components ======= */
+import LayoutContainer from '../components/LayoutContainer';
+import PageTitle from '../components/PageTitle';
+
 /** ======= MUI ICONS ======= */
 import { Brightness6Icon, DarkModeIcon, LightModeIcon, SettingsIcon, LazyIcon } from '../components/LazyIcons';
 
@@ -27,8 +31,7 @@ import FirestoreResponse from '../data/FirestoreResponse';
 
 /** ======= TYPES ======= */
 import type { SettingsProps } from '../data/Types';
-import LayoutContainer from '../components/LayoutContainer';
-import PageTitle from '../components/PageTitle';
+
 
 
 const SettingsPage: React.FC<SettingsProps> = ({ mode, toggleColorMode }) => {

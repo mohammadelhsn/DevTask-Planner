@@ -31,6 +31,7 @@ import { googleProvider, githubProvider, facebookProvider } from '../data/Consta
 
 /** ======= DEFINE THE ACTION ======= */
 const action = 'Log In';
+const hidden = true;
 
 
 /** ======= LOGIN ======= */
@@ -98,24 +99,32 @@ const LogIn = () => {
                         >
                             {action} with Google
                         </Button>
-                        <Button
-                            variant='outlined'
-                            onClick={handleGitHubSignIn}
-                            startIcon={<FaGithub color={palette.text.primary} />}
-                            loading={loadingButton.github}
-                            sx={providerButton}
-                        >
-                            {action} with GitHub
-                        </Button>
-                        <Button
-                            variant='outlined'
-                            onClick={handleFacebookSignIn}
-                            startIcon={<FaFacebook color={palette.text.primary} />}
-                            loading={loadingButton.facebook}
-                            sx={providerButton}
-                        >
-                            {action} with Facebook
-                        </Button>
+                        {/** Disabled for now because it hasn't been configured for this project yet */}
+                        {!hidden && (
+                            <Button
+                                variant='outlined'
+                                onClick={handleGitHubSignIn}
+                                startIcon={<FaGithub color={palette.text.primary} />}
+                                loading={loadingButton.github}
+                                sx={providerButton}
+                            >
+                                {action} with GitHub
+                            </Button>
+                        )}
+                        {/** Disabled for now because it hasn't been configured for this project yet */}
+                        {!hidden && (
+                            <Button
+                                variant='outlined'
+                                onClick={handleFacebookSignIn}
+                                startIcon={<FaFacebook color={palette.text.primary} />}
+                                loading={loadingButton.facebook}
+                                sx={providerButton}
+                                disabled={true}
+
+                            >
+                                {action} with Facebook
+                            </Button>
+                        )}
                     </Box>
                 </Paper>
             </Container>

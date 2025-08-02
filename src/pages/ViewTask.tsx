@@ -11,6 +11,7 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
+import CardActions from '@mui/material/CardActions';
 import Chip from '@mui/material/Chip';
 import Fab from '@mui/material/Fab';
 import Typography from '@mui/material/Typography';
@@ -23,26 +24,32 @@ import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
 import Fade from '@mui/material/Fade';
 
+/** ======= Custom Components ======= */
+import PageTitle from '../components/PageTitle';
+import LayoutContainer from '../components/LayoutContainer';
+import TaskChip from '../components/TaskChip';
+import DeleteDialog from '../components/DeleteDialog';
+
+/** ======= Pages ======= */
+import LoadingPage from './LoadingPage';
+import NotFoundPage from './NotFoundPage';
+
 
 /** ======= MUI ICONS ======= */
 import { SaveIcon, EditIcon, DeleteIcon, LazyIcon, CloseIcon } from '../components/LazyIcons';
 
-/** ======= PROJECT FILES ======= */
+/** ======= Data, Types, Constants && Functions ======= */
+import { lifecycles, types, priorities, typeIcons, lifecycleIcons, priorityIcons, categoryIcons } from '../data/Constants';
 import { DASHBOARD, VIEW_PROJECT } from '../data/Routes';
 import { capitalize, getChipColor, getLifecycleColor, getPriorityColor } from '../data/Functions';
 import { deleteTask, TaskWrapper, } from '../data/Tasks';
-import LoadingPage from './LoadingPage';
-import NotFoundPage from './NotFoundPage';
-import LayoutContainer from '../components/LayoutContainer';
-import PageTitle from '../components/PageTitle';
 import type { ProjectWrapper } from '../data/Project';
 import type { ColumnType, LifecycleType, TaskObject, TaskPriority, TaskType, } from '../data/Types';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../data/Firebase';
-import { CardActions } from '@mui/material';
-import DeleteDialog from '../components/DeleteDialog';
-import { lifecycles, types, priorities, typeIcons, lifecycleIcons, priorityIcons, categoryIcons } from '../data/Constants';
-import TaskChip from '../components/TaskChip';
+
+
+
 
 /** ======= FUTURE FEATURES ======= */
 // import CardActions from '@mui/material/CardActions';

@@ -1,7 +1,5 @@
-/** ======= REACT ======= */
+/** ======= REACT + REACT ROUTER ======= */
 import { useMemo, useState, lazy } from 'react';
-
-/** ======= ROUTER ======= */
 import { HashRouter, Route, Routes } from 'react-router-dom';
 
 /** ======= MUI COMPONENTS ======= */
@@ -24,6 +22,7 @@ const ViewProject = lazy(() => import('./pages/ViewProject.tsx'));
 import Header from './components/Header';
 import Footer from './components/Footer';
 import GlobalSnackbar from './components/GlobalSnackbar.tsx';
+import LazyPage from './components/LazyPage.tsx';
 
 /** ======= CONTEXTS ======= */
 import { FeedbackProvider } from './contexts/FeedbackContext.tsx';
@@ -38,8 +37,8 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-import LazyPage from './components/LazyPage.tsx';
 
+/** @description The main app */
 function App() {
   const [mode, setMode] = useState<'light' | 'dark'>(() => {
     const stored = localStorage.getItem('colorMode');

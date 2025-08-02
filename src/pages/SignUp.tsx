@@ -35,6 +35,7 @@ const facebookProvider = new FacebookAuthProvider();
 
 /** ======= CURRENT ACTION ======= */
 const action = 'Sign Up';
+const hidden = true;
 
 /** @description The Sign Up page */
 const SignUpPage = () => {
@@ -99,24 +100,31 @@ const SignUpPage = () => {
                         >
                             {action} with Google
                         </Button>
-                        <Button
-                            variant='outlined'
-                            onClick={handleGitHubSignUp}
-                            startIcon={<FaGithub color={palette.text.primary} />}
-                            loading={loadingButton.github}
-                            sx={providerButton}
-                        >
-                            {action} with GitHub
-                        </Button>
-                        <Button
-                            variant='outlined'
-                            onClick={handleFacebookSignUp}
-                            startIcon={<FaFacebook color={palette.text.primary} />}
-                            loading={loadingButton.facebook}
-                            sx={providerButton}
-                        >
-                            {action} with Facebook
-                        </Button>
+                        {/** Disabled for now because it hasn't been configured for this project yet */}
+                        {!hidden && (
+                            <Button
+                                variant='outlined'
+                                onClick={handleGitHubSignUp}
+                                startIcon={<FaGithub color={palette.text.primary} />}
+                                loading={loadingButton.github}
+                                sx={providerButton}
+                            >
+                                {action} with GitHub
+                            </Button>
+                        )}
+                        {/** Disabled for now because it hasn't been configured for this project yet */}
+                        {!hidden && (
+                            <Button
+                                variant='outlined'
+                                onClick={handleFacebookSignUp}
+                                startIcon={<FaFacebook color={palette.text.primary} />}
+                                loading={loadingButton.facebook}
+                                sx={providerButton}
+                            >
+                                {action} with Facebook
+                            </Button>
+                        )}
+
                     </Box>
                 </Card>
             </Container>
