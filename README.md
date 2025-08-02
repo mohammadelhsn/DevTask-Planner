@@ -2,7 +2,7 @@
 
 ## Stack
 
-| Technology   |                                                           |
+| Technology                                                              |
 | ------------ | ---------------------------------------------------------------- |
 | Material UI  | ![Material UI](https://go-skill-icons.vercel.app/api/icons?i=mui) |
 | React        | ![React](https://go-skill-icons.vercel.app/api/icons?i=react)     |
