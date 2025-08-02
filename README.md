@@ -20,6 +20,10 @@ Live Demo: URL
 - Creating / Editing / Deleting Projects
 - Creating / Editing / Deleting Tasks
 
+## Status
+
+Currently being built
+
 ## Coming Soon
 
 - Due Dates
