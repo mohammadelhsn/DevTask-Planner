@@ -2,7 +2,7 @@
 
 I got inspiration from Trello while making MindCore. I was looking for a clean way targeted to developers that would allow us to keep track of what we want to add to our projects. I also wanted a way to be able to track what stage a task is in and what type it is.
 
-Live Demo: URL
+Live Demo [here](https://devtask-planner.web.app/)
 
 ## Stack
 
