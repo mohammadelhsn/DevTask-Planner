@@ -10,7 +10,14 @@ import {
 } from 'firebase/auth';
 
 /** ======= FIREBASE FIRESTORE ======= */
-import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore';
+import {
+	doc,
+	getDoc,
+	initializeFirestore,
+	persistentLocalCache,
+	persistentMultipleTabManager,
+	setDoc,
+} from 'firebase/firestore';
 
 /** ======= UTILITIES & WRAPPERS ======= */
 import FirestoreResponse from './FirestoreResponse';
@@ -31,7 +38,11 @@ const app = initializeApp(firebaseConfig);
 /** @description Firebase Auth Instance */
 export const auth = getAuth(app);
 /** @description Firebase Firestore instance */
-export const db = getFirestore(app);
+export const db = initializeFirestore(app, {
+	localCache: persistentLocalCache({
+		tabManager: persistentMultipleTabManager(),
+	}),
+});
 
 /**
  * @description Handles Provider Sign Up, including posting new data

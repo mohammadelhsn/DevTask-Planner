@@ -56,20 +56,19 @@ const NewTask = () => {
     const { setFeedback } = useFeedback();
     const { user, userData, loading } = useContext(AuthContext);
     const navigate = useNavigate();
-    const navigateToNewTask = (projectId: string, taskId: string) => navigate(VIEW_TASK(projectId, taskId));
-    const handleNext = () => setActiveStep((prev) => Math.min(prev + 1, steps.length - 1));
-    const handleBack = () => setActiveStep((prev) => Math.max(prev - 1, 0));
-    if (!id) return null;
     useEffect(() => {
-        if (user && userData) {
+        if (user && userData && id) {
             const proj = userData.findProject(id);
             if (proj) setProject(proj);
         }
     }, [user, userData, id]);
+    const navigateToNewTask = (projectId: string, taskId: string) => navigate(VIEW_TASK(projectId, taskId));
+    const handleNext = () => setActiveStep((prev) => Math.min(prev + 1, steps.length - 1));
+    const handleBack = () => setActiveStep((prev) => Math.max(prev - 1, 0));
+    if (!id) return null;
     if (!project) return;
     const handleSubmit = async () => {
         if (!user) return;
-
         const taskToCreate: Omit<TaskObject, "id"> = {
             title: title,
             description: desc,

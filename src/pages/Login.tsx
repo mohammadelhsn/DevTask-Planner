@@ -57,9 +57,8 @@ const LogIn = () => {
     const navigate = useNavigate();
     /**  */
     /** ======= HANDLE LOADING ======= */
-    const navigateToDashboard = () => navigate(DASHBOARD);
     useEffect(() => {
-        if (!loading && user && userData) navigateToDashboard();
+        if (!loading && user && userData) navigate(DASHBOARD);
         const t = setTimeout(() => setShow(true), 50);
         return () => clearTimeout(t);
     }, [loading, user, userData, navigate]);

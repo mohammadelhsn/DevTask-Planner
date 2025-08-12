@@ -14,7 +14,7 @@ import { divCenter } from '../data/Styles';
 /** @description The loading page for the project */
 const LoadingPage = () => {
     const [loaded, setLoaded] = useState(false);
-    useEffect(() => setLoaded(true));
+    useEffect(() => setLoaded(true), []);
     return (
         <Fade in={loaded} timeout={500}>
             <Box
