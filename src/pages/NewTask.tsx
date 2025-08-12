@@ -57,10 +57,11 @@ const NewTask = () => {
     const { user, userData, loading } = useContext(AuthContext);
     const navigate = useNavigate();
     useEffect(() => {
-        if (user && userData && id) {
-            const proj = userData.findProject(id);
-            if (proj) setProject(proj);
-        }
+        if (!user || !userData || !id) return;
+
+        const proj = userData.findProject(id);
+        if (proj) setProject(proj);
+
     }, [user, userData, id]);
     const navigateToNewTask = (projectId: string, taskId: string) => navigate(VIEW_TASK(projectId, taskId));
     const handleNext = () => setActiveStep((prev) => Math.min(prev + 1, steps.length - 1));

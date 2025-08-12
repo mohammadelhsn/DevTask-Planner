@@ -60,14 +60,12 @@ const SettingsPage: React.FC<SettingsProps> = ({ mode, toggleColorMode }) => {
         }
     }
     const handleChange = (_: any, newMode: 'light' | 'dark') => {
-        if (!newMode) return;
+        if (!newMode || !userData) return;
 
-        if (newMode) {
-            toggleColorMode(newMode);
-            if (userData) {
-                userData.theme = newMode;
-                updateTheme();
-            }
+        toggleColorMode(newMode);
+        if (userData) {
+            userData.theme = newMode;
+            updateTheme();
         }
     };
     return (

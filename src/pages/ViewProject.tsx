@@ -54,43 +54,38 @@ const ViewProject = () => {
     const [project, setProject] = useState<ProjectWrapper | null>(null);
     /**  */
     const navigate = useNavigate();
-    const navigateToNewProject = () => navigate(NEW_PROJECT);
     const [editing, setEditing] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
     useEffect(() => {
-        if (user && userData) {
-            if (id) {
-                const proj = userData.findProject(id);
-                if (proj) {
-                    // this is making a copy
-                    setProject(new ProjectWrapper({ ...proj.toFirestore(), tasks: proj.tasks }));
-                    setDefaultConfig(proj.config);
-                } else {
-                    setFeedback('Project not found!', 'error');
-                    navigateToNewProject();
-                    return;
-                }
-            }
+        if (!user || !userData || !id) return;
+        const proj = userData.findProject(id);
+
+        if (!proj) {
+            setFeedback('Project not found!', 'error');
+            navigate(NEW_PROJECT);
+            return;
         }
-    }, [user, userData, id]);
+
+        setProject(new ProjectWrapper({ ...proj.toFirestore(), tasks: proj.tasks }));
+        setDefaultConfig(proj.config);
+    }, [user, userData, id, navigate, setFeedback]);
     if (!id) return (<Typography>An ID must be included</Typography>);
     const handleSave = async () => {
-        if (!user || !userData) return;
+        if (!user || !userData || !project) return;
         const original = userData.findProject(id);
         if (!original) return;
-        if (project) {
-            project.config = defaultConfig;
-            const equal = original.isEqual(project);
-            if (equal) {
-                setFeedback('No changes made!', 'info');
-            } else {
-                const response = await updateProject(user.uid, id, project);
-                if (response.success) {
-                    setFeedback('Project updated!', 'success');
-                } else {
-                    setFeedback(`Error: ${response.error}`, 'error');
-                }
-            }
+        project.config = defaultConfig;
+        const equal = original.isEqual(project);
+        if (equal) {
+            setFeedback('No changes made!', 'info');
+            setEditing(false);
+            return;
+        }
+        const response = await updateProject(user.uid, id, project);
+        if (response.success) {
+            setFeedback('Project updated!', 'success');
+        } else {
+            setFeedback(`Error: ${response.error}`, 'error');
         }
         setEditing(false);
     };

@@ -68,30 +68,33 @@ const ViewTask = () => {
     const [loaded, setLoaded] = useState(false);
     const navigate = useNavigate();
     useEffect(() => {
-        if (user && userData) {
-            if (id) {
-                const proj = userData.findProject(id);
-                if (proj) {
-                    setProject(proj);
-                    if (taskId) {
-                        const t = proj.findTask(taskId);
-                        if (t) {
-                            setTask(new TaskWrapper(t.toFirestore()));
-                            setLoading(false);
-                            setLoaded(true);
-                        } else {
-                            setLoading(false);
-                            setFeedback('Task not found!', 'error');
-                            navigate(DASHBOARD);
-                        }
-                    }
-                } else {
-                    setLoading(false);
-                    setFeedback('Project not found!', 'error');
-                    navigate(DASHBOARD);
-                }
-            }
+        function handleError(message: string) {
+            setLoading(false);
+            setFeedback(message, 'error');
+            navigate(DASHBOARD);
         }
+        if (!user || !userData || !id) return;
+
+        const proj = userData.findProject(id);
+
+        if (!proj) {
+            handleError('Project not found!');
+            return;
+        }
+
+        setProject(proj);
+        if (!taskId) return;
+
+        const t = proj.findTask(taskId);
+
+        if (!t) {
+            handleError('Task not found!');
+            return;
+        }
+
+        setTask(new TaskWrapper(t.toFirestore()));
+        setLoading(false);
+        setLoaded(true);
     }, [user, userData, id, taskId, navigate, setFeedback]);
     if (!taskId || !id) return null;
     const updateTaskField = (field: Partial<TaskObject>) => {

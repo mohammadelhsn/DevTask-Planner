@@ -55,7 +55,6 @@ const NewJournalPage = () => {
     const { user, loading } = useContext(AuthContext);
     /** NAVIGATION HOOK */
     const navigate = useNavigate();
-    const navigateToViewProject = (id: string) => navigate(VIEW_PROJECT(id));
     const handleNext = () => setActiveStep((prev) => Math.min(prev + 1, steps.length - 1));
     const handleBack = () => setActiveStep((prev) => Math.max(prev - 1, 0));
     const handleSubmit = async () => {
@@ -75,7 +74,7 @@ const NewJournalPage = () => {
             if (response.success) {
                 setFeedback('Project created with ID: ' + response.data?.id, 'success');
                 if (response && response.data) {
-                    navigateToViewProject(response.data.id);
+                    navigate(VIEW_PROJECT(response.data.id));
                 }
             } else {
                 setFeedback('Failed to create project: ' + response.message, 'error');

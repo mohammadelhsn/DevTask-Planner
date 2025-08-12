@@ -37,11 +37,11 @@ const hidden = true;
 /** ======= LOGIN ======= */
 
 const LogIn = () => {
-    /** ======= AUTH CONTEXT ======= */
+    /** =========== AUTH CONTEXT =========== */
     const { user, loading, userData } = useAuth();
-    /** ======= GENERAL FEEDBACK PROVIDER ======= */
+    /** =========== GENERAL FEEDBACK PROVIDER =========== */
     const { setFeedback } = useFeedback();
-    /** ======= THEME CONTEXT ======= */
+    /** =========== THEME CONTEXT =========== */
     const { palette } = useTheme();
     /** =========== LOADING STATE FOR EACH OF THE BUTTONS =========== */
     const [loadingButton, setLoadingButton] = useState<LoginButtonState>({
@@ -53,16 +53,15 @@ const LogIn = () => {
     const setProviderLoading = (provider: ProviderName, value: boolean) => {
         setLoadingButton((prev) => ({ ...prev, [provider]: value }));
     };
-    /** ======= NAVIGATE HOOK ======= */
+    /** =========== NAVIGATE HOOK =========== */
     const navigate = useNavigate();
-    /**  */
-    /** ======= HANDLE LOADING ======= */
+    /** =========== HANDLE LOADING =========== */
     useEffect(() => {
         if (!loading && user && userData) navigate(DASHBOARD);
         const t = setTimeout(() => setShow(true), 50);
         return () => clearTimeout(t);
     }, [loading, user, userData, navigate]);
-    /** ======= PROVIDER HANDLERS ======= */
+    /** =========== PROVIDER HANDLERS =========== */
     if (loading) return <LoadingPage />;
     const handleProviderSignInWrapper = async (provider: AuthProvider, providerName: ProviderName) => {
         setProviderLoading(providerName, true);

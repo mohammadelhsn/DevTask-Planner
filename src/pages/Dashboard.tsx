@@ -27,8 +27,6 @@ import { useEffect, useState } from 'react';
 const Dashboard = () => {
     /** ======= NAVIGATE HOOK ======= */
     const navigate = useNavigate();
-    /** ======= NAVIGATION HELPERS ======= */
-    const navigateToNewProject = () => navigate(NEW_PROJECT);
     /** ======= AUTH CONTEXT ======= */
     const [loaded, setLoaded] = useState(false);
     const { loading, userData, user } = useAuth();
@@ -57,7 +55,7 @@ const Dashboard = () => {
                         right: 24,
                         zIndex: 1000,
                     }}>
-                        <Fab color="primary" aria-label="add" onClick={navigateToNewProject}
+                        <Fab color="primary" aria-label="add" onClick={() => navigate(NEW_PROJECT)}
                             sx={{
                                 '&:hover .spin-icon': {
                                     transform: 'rotate(180deg) scale(1.2)',
