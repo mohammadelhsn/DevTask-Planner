@@ -1,14 +1,15 @@
+/** ======= MUI COMPONENTS ======= */
+
 import Chip from '@mui/material/Chip';
+
+/** =======  TYPES, CONSTANTS, STYLES & FUNCTIONS ======= */
 import { capitalize, getChipColor, getLifecycleColor, getPriorityColor } from '../data/Functions';
-import type { ColumnType, LazyIconType, LifecycleType, TaskPriority, TaskType } from '../data/Types';
+import type { ColumnType, LazyIconType, LifecycleType, TaskChipProps, TaskPriority, TaskType } from '../data/Types';
 import { categoryIcons, lifecycleIcons, priorityIcons, typeIcons } from '../data/Constants';
 import { chipStyles } from '../data/Styles';
-import { LazyIcon } from './LazyIcons';
 
-export interface TaskChipProps {
-    type: 'priority' | 'column' | 'type' | 'lifecycle';
-    value: ColumnType | Exclude<LifecycleType, null> | Exclude<LifecycleType, null> | Exclude<TaskPriority, null> | Exclude<TaskType, null>;
-}
+/** ======= CUSTOM COMPONENTS ======= */
+import { LazyIcon } from './LazyIcons';
 
 const TaskChip = ({ type, value }: TaskChipProps) => {
     let color: "primary" | "warning" | "info" | "success" | "error" | "default" | "secondary";

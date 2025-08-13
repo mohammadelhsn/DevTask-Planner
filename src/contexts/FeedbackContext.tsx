@@ -1,15 +1,7 @@
 /** ======= REACT ======= */
-import { createContext, useContext, useState, type FC, type ReactNode } from 'react';
+import { useState, type FC, type ReactNode } from 'react';
 import type { FeedbackType } from '../data/Types';
-
-interface FeedbackContextProps {
-    message: string | null;
-    type: FeedbackType;
-    setFeedback: (msg: string, type?: FeedbackType) => void;
-    clearFeedback: () => void;
-}
-
-const FeedbackContext = createContext<FeedbackContextProps | undefined>(undefined);
+import { FeedbackContext } from './useFeedback';
 
 export const FeedbackProvider: FC<{ children: ReactNode; }> = ({ children }) => {
     const [message, setMessage] = useState<string | null>(null);
@@ -28,12 +20,4 @@ export const FeedbackProvider: FC<{ children: ReactNode; }> = ({ children }) => 
             {children}
         </FeedbackContext.Provider>
     );
-};
-
-export const useFeedback = () => {
-    const context = useContext(FeedbackContext);
-    if (!context) {
-        throw new Error('useFeedback must be used within a FeedbackProvider');
-    }
-    return context;
 };

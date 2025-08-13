@@ -1,4 +1,7 @@
+/** ======= REACT ======= */
 import { Suspense, type ComponentType, type FC } from 'react';
+
+/** ======= COMPONENTS ======= */
 import LoadingPlaceholder from './LoadingPlaceholder';
 
 type LazyPageProps = {

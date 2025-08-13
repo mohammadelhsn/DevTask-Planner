@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 /** ======= CONTEXTS ======= */
-import { useAuth } from '../contexts/AuthContext';
-import { useFeedback } from '../contexts/FeedbackContext';
+import { useAuth } from '../contexts/useAuth';
+import { useFeedback } from '../contexts/useFeedback';
 
 /** ======= MUI COMPONENTS ======= */
 import Box from '@mui/material/Box';
@@ -47,9 +47,6 @@ import type { ProjectWrapper } from '../data/Project';
 import type { ColumnType, LifecycleType, TaskObject, TaskPriority, TaskType, } from '../data/Types';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../data/Firebase';
-
-
-
 
 /** ======= FUTURE FEATURES ======= */
 // import CardActions from '@mui/material/CardActions';

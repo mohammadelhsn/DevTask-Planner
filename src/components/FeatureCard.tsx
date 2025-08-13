@@ -1,7 +1,10 @@
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
+/** ======= MUI COMPONENTS ======= */
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+
+/** ======= TYPES ======= */
 import type { FeatureCardProps } from '../data/Types';
 
 const FeatureCard = ({ feature, index }: FeatureCardProps) => {

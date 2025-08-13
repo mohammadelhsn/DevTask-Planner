@@ -10,7 +10,7 @@ const BetaComponent = ({ children }: ParentComp) => {
     /** ======= GET THE USERDATA ======= */
     const { userData } = useAuth();
     /** ======= RETURN NOTHING IF THE USER IS NOT A BETA TESTER ======= */
-    if (!userData?.isBetaTester) return null;
+    if (!userData || !userData.isBetaTester) return;
     /** ======= RETURN THE CHILD ======= */
     return (
         <>{children}</>

@@ -9,7 +9,7 @@ const AdminComponent = ({ children }: ParentComp) => {
     /** ======= GET THE USER DATA ======= */
     const { userData } = useAuth();
     /** ======= RETURN NOTHING IF THE USER IS NOT AN ADMIN ======= */
-    if (!userData?.isAdmin()) return null;
+    if (!userData || !userData.isAdmin()) return;
     /** ======= RETURN THE CHILD ======= */
     return (
         <>

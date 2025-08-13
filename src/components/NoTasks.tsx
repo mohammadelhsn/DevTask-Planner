@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 /** ======= LOCAL COMPONENTS ======= */
 import { InboxIcon, LazyIcon } from './LazyIcons';
 
+/** Component for when there are no tasks */
 const NoTasks = ({ message = "No tasks here! Woohoo!" }: { message?: string; }) => {
     return (
         <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" py={2} color="text.secondary">

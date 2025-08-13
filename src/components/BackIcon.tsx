@@ -1,7 +1,14 @@
+/** ======= REACT ======= */
+
+import { useNavigate } from 'react-router-dom';
+
+/** ======= MUI COMPONENTS ======= */
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
-import { useNavigate } from 'react-router-dom';
+
+/** ======= ICONS ======= */
 import { ArrowBackIcon, LazyIcon } from './LazyIcons';
+
 
 const BackIcon = ({ TO }: { TO?: string; }) => {
     const navigate = useNavigate();
@@ -13,7 +20,7 @@ const BackIcon = ({ TO }: { TO?: string; }) => {
         }
     };
     return (
-        <Box sx={{ mb: 2 }}>
+        <Box mb={2}>
             <IconButton onClick={handleClick} aria-label="Go back">
                 <LazyIcon icon={ArrowBackIcon} />
             </IconButton>

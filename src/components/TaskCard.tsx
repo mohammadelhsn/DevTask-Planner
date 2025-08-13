@@ -1,3 +1,6 @@
+/** ======= REACT ROUTER ======= */
+import { useNavigate } from 'react-router-dom';
+
 /** ======= MUI COMPONENTS ======= */
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -7,14 +10,15 @@ import CardHeader from '@mui/material/CardHeader';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 
-/** ======= REACT ROUTER ======= */
-import { useNavigate } from 'react-router-dom';
-
-/** ======= PROJECT FILES ======= */
+/** ======= ROUTES ======= */
 import { VIEW_TASK } from '../data/Routes';
-import type { TaskCardProps } from '../data/Types';
+
+/** ======= CUSTOM COMPONENTS ======= */
 import { LazyIcon, TaskIcon } from './LazyIcons';
 import TaskChip from './TaskChip';
+
+/** ======= TYPES ======= */
+import type { TaskCardProps } from '../data/Types';
 
 /** @description Task Card for Project Page */
 const TaskCard = ({ t, projectId }: TaskCardProps) => {

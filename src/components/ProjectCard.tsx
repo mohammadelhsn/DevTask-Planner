@@ -15,9 +15,11 @@ import { useNavigate } from 'react-router-dom';
 /** ======= PROJECT FILES ======= */
 import { cardStyles } from '../data/Styles';
 import { VIEW_PROJECT } from '../data/Routes';
+
+/** ======= TYPES ======= */
 import type { ProjectCardProps } from '../data/Types';
 
-/** @description Project Card for Dashboard Page */
+/** Project Card for Dashboard Page */
 const ProjectCard = ({ proj }: ProjectCardProps) => {
     const navigate = useNavigate();
     const navigateToViewProject = (id: string) => navigate(VIEW_PROJECT(id));

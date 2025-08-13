@@ -1,7 +1,15 @@
+/** ======= MUI COMPONENT ======= */
 import Container from '@mui/material/Container';
-import type { ReactNode } from 'react';
-import { containerStyles } from '../data/Styles';
+
+/** ======= ICONS ======= */
 import BackIcon from './BackIcon';
+
+/** ======= STYLES ======= */
+import { containerStyles } from '../data/Styles';
+
+/** ======= TYPES ======= */
+import type { ReactNode } from 'react';
+
 
 const LayoutContainer = ({ children, backIcon, to }: { children: ReactNode, backIcon?: boolean; to?: string; }) => {
     return (

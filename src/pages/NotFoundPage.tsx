@@ -6,7 +6,8 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Fade from '@mui/material/Fade';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/useAuth';
+
 
 /** @description Renders when the page is non existent */
 const NotFoundPage = () => {

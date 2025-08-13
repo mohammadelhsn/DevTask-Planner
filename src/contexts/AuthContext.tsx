@@ -1,16 +1,12 @@
 /** ======= REACT ======= */
 import {
-    createContext,
-    useContext,
     useEffect,
     useState,
     type ReactNode,
 } from 'react';
 
-/** ======= FIREBASE AUTH ======= */
+/** ======= FIREBASE AUTH & FIRESTORE ======= */
 import { onAuthStateChanged, type User } from 'firebase/auth';
-
-/** ======= FIREBASE FIRESTORE ======= */
 import { doc, onSnapshot, collection, getDocs } from 'firebase/firestore';
 
 /** ======= LOCAL FIREBASE SETUP ======= */
@@ -21,21 +17,8 @@ import { UserWrapper } from '../data/User';
 import { ProjectWrapper } from '../data/Project';
 import { TaskWrapper } from '../data/Tasks';
 import type { UserObject, DevProjectObject, TaskObject } from '../data/Types';
+import { AuthContext } from './useAuth';
 
-
-interface AuthContextType {
-    user: User | null;
-    userData: UserWrapper | null;
-    loading: boolean;
-}
-
-export const AuthContext = createContext<AuthContextType>({
-    user: null,
-    userData: null,
-    loading: true,
-});
-
-export const useAuth = () => useContext(AuthContext);
 
 const AuthProvider = ({ children }: { children: ReactNode; }) => {
     const [user, setUser] = useState<User | null>(null);
@@ -65,8 +48,8 @@ const AuthProvider = ({ children }: { children: ReactNode; }) => {
             if (!firebaseUser) {
                 setUserData(null);
                 setLoading(false);
-                unsubUser && unsubUser();
-                unsubProjects && unsubProjects();
+                unsubUser?.();
+                unsubProjects?.();
                 unsubTasksArr.forEach((unsub) => unsub());
                 return;
             }
@@ -175,8 +158,8 @@ const AuthProvider = ({ children }: { children: ReactNode; }) => {
 
         return () => {
             unsubAuth();
-            unsubUser && unsubUser();
-            unsubProjects && unsubProjects();
+            unsubUser?.();
+            unsubProjects?.();
             unsubTasksArr.forEach((unsub) => unsub());
         };
     }, []);

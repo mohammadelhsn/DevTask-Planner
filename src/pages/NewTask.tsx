@@ -1,12 +1,12 @@
 /** ========== REACT ========== */
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 /** ========== REACT ROUTER ========== */
 import { useNavigate, useParams } from 'react-router-dom';
 
 /** ========== CONTEXTS ========== */
-import { AuthContext } from '../contexts/AuthContext';
-import { useFeedback } from '../contexts/FeedbackContext';
+import { useAuth } from '../contexts/useAuth';
+import { useFeedback } from '../contexts/useFeedback';
 
 /** ========== MUI COMPONENTS ========== */
 import Box from '@mui/material/Box';
@@ -54,7 +54,7 @@ const NewTask = () => {
     const [priority, setPriority] = useState('');
     //const [assignees, setAssignees] = useState<string[]>([]);
     const { setFeedback } = useFeedback();
-    const { user, userData, loading } = useContext(AuthContext);
+    const { user, userData, loading } = useAuth();
     const navigate = useNavigate();
     useEffect(() => {
         if (!user || !userData || !id) return;

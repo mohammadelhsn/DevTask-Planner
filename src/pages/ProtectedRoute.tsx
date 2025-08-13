@@ -2,7 +2,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
 
 /** ======= CONTEXTS ======= */
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/useAuth';
 
 /** ======= LOADING PAGE ======= */
 import LoadingPage from './LoadingPage';

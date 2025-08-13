@@ -1,11 +1,11 @@
 /** ======= REACT ======= */
-import { useContext, useState, type MouseEvent } from 'react';
+import { useState, type MouseEvent } from 'react';
 
 /** ======= REACT ROUTER ======= */
 import { NavLink, useNavigate } from 'react-router-dom';
 
 /** ======= CONTEXT ======= */
-import { AuthContext } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/useAuth';
 
 /** ======= FIREBASE ======= */
 import { signOutUser } from '../data/Firebase';
@@ -53,7 +53,7 @@ const StyledExternalLink = styled(NavLink)(({ theme }) => ({
 }));
 
 const Header = () => {
-    const { user } = useContext(AuthContext);
+    const { user } = useAuth();
     const { breakpoints } = useTheme();
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

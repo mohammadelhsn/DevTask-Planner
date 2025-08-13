@@ -31,8 +31,8 @@ import DeleteDialog from '../components/DeleteDialog';
 import { AddIcon, InboxIcon, LazyIcon, SaveIcon, EditIcon, CloseIcon, DeleteIcon } from '../components/LazyIcons';
 
 /** ======= Contexts ======= **/
-import { useAuth } from '../contexts/AuthContext';
-import { useFeedback } from '../contexts/FeedbackContext';
+import { useAuth } from '../contexts/useAuth';
+import { useFeedback } from '../contexts/useFeedback';
 
 /** ======= Data & Types ======= **/
 import { deleteProject, ProjectWrapper, updateProject } from '../data/Project';
@@ -40,7 +40,6 @@ import { columnCards, divCenter } from '../data/Styles';
 import { DASHBOARD, NEW_PROJECT, NEW_TASK } from '../data/Routes';
 import { type ColumnConfig } from '../data/Types';
 import { categoryIcons, dConfig } from '../data/Constants';
-
 
 const ViewProject = () => {
     /** ======= GET AUTH STATE ======= */

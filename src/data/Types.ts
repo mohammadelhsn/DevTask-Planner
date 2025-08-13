@@ -5,6 +5,8 @@ import type { SvgIconProps, SvgIconTypeMap } from '@mui/material';
 
 import type { ProjectWrapper } from './Project';
 import type { TaskWrapper } from './Tasks';
+import type { User } from 'firebase/auth';
+import type { UserWrapper } from './User';
 
 export type ParentComp = { children: ReactNode };
 
@@ -103,14 +105,14 @@ export interface TaskCardProps {
 }
 
 export type LazyIconType = React.LazyExoticComponent<
-	OverridableComponent<SvgIconTypeMap<{}, 'svg'>> & {
+	OverridableComponent<SvgIconTypeMap<object, 'svg'>> & {
 		muiName: string;
 	}
 >;
 
 export interface LazyIconProps extends SvgIconProps {
 	icon: LazyExoticComponent<
-		OverridableComponent<SvgIconTypeMap<{}, 'svg'>> & { muiName: string }
+		OverridableComponent<SvgIconTypeMap<object, 'svg'>> & { muiName: string }
 	>;
 
 	size?: number; // fallback size for skeleton loading indicator
@@ -122,7 +124,7 @@ export interface ProjectCardProps {
 
 export interface SettingsProps {
 	mode: 'light' | 'dark';
-	toggleColorMode: (newMode: any) => void;
+	toggleColorMode: (newMode: 'light' | 'dark' | 'oled') => void;
 }
 
 export type LoginButtonState = {
@@ -144,3 +146,26 @@ export interface FeatureCardProps {
 }
 
 export type FeedbackType = 'success' | 'error' | 'info' | 'warning';
+
+export interface TaskChipProps {
+	type: 'priority' | 'column' | 'type' | 'lifecycle';
+	value:
+		| ColumnType
+		| Exclude<LifecycleType, null>
+		| Exclude<LifecycleType, null>
+		| Exclude<TaskPriority, null>
+		| Exclude<TaskType, null>;
+}
+
+export interface AuthContextType {
+	user: User | null;
+	userData: UserWrapper | null;
+	loading: boolean;
+}
+
+export interface FeedbackContextProps {
+	message: string | null;
+	type: FeedbackType;
+	setFeedback: (msg: string, type?: FeedbackType) => void;
+	clearFeedback: () => void;
+}

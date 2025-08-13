@@ -1,10 +1,10 @@
 /** REACT */
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 /** CONTEXTS */
-import { AuthContext } from '../contexts/AuthContext';
-import { useFeedback } from '../contexts/FeedbackContext';
+import { useAuth } from '../contexts/useAuth';
+import { useFeedback } from '../contexts/useFeedback';
 
 /** FIREBASE */
 import { createProject } from '../data/Project';
@@ -52,7 +52,7 @@ const NewJournalPage = () => {
     const [desc, setDesc] = useState('');
     const { setFeedback } = useFeedback();
     const [defaultConfig, setDefaultConfig] = useState<ColumnConfig[]>(dConfig);
-    const { user, loading } = useContext(AuthContext);
+    const { user, loading } = useAuth();
     /** NAVIGATION HOOK */
     const navigate = useNavigate();
     const handleNext = () => setActiveStep((prev) => Math.min(prev + 1, steps.length - 1));

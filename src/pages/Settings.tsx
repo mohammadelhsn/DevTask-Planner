@@ -1,10 +1,9 @@
 /** ======= REACT ======= */
-import type React from 'react';
-import { useEffect } from 'react';
+import { useEffect, type MouseEvent } from 'react';
 
 /** ======= CONTEXTS ======= */
-import { useAuth } from '../contexts/AuthContext';
-import { useFeedback } from '../contexts/FeedbackContext';
+import { useAuth } from '../contexts/useAuth';
+import { useFeedback } from '../contexts/useFeedback';
 
 /** ======= MUI COMPONENTS ======= */
 import Typography from '@mui/material/Typography';
@@ -59,7 +58,7 @@ const SettingsPage: React.FC<SettingsProps> = ({ mode, toggleColorMode }) => {
             }
         }
     }
-    const handleChange = (_: any, newMode: 'light' | 'dark') => {
+    const handleChange = (_event: MouseEvent<HTMLElement>, newMode: 'light' | 'dark') => {
         if (!newMode || !userData) return;
 
         toggleColorMode(newMode);

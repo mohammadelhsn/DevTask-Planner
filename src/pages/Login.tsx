@@ -14,8 +14,8 @@ import { useNavigate } from 'react-router-dom';
 /** ======= FIREBASE & AUTH ======= */
 import { type AuthProvider } from 'firebase/auth';
 import { handleProviderSignIn } from '../data/Firebase';
-import { useAuth } from '../contexts/AuthContext';
-import { useFeedback } from '../contexts/FeedbackContext';
+import { useAuth } from '../contexts/useAuth';
+import { useFeedback } from '../contexts/useFeedback';
 
 /** ======= ICONS ======= */
 import { FaGithub, FaFacebook, FaGoogle, } from 'react-icons/fa';

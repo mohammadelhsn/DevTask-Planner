@@ -1,9 +1,17 @@
+/** ======= MUI COMPONENTS ======= */
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import { dividerStyle } from '../data/Styles';
-import type { LazyIconType } from '../data/Types';
+import Typography from '@mui/material/Typography';
+
+/** ======= CUSTOM LAZY ICONS ======= */
 import { LazyIcon } from './LazyIcons';
+
+/** ======= STYLES ======= */
+import { dividerStyle } from '../data/Styles';
+
+/** ======= TYPES ======= */
+import type { LazyIconType } from '../data/Types';
+
 
 const PageTitle = ({ title, desc, divider, icon }: { title: string, desc?: string, divider?: boolean, icon?: LazyIconType; }) => {
     return (

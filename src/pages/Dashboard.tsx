@@ -12,7 +12,7 @@ import { AddIcon, LazyIcon } from '../components/LazyIcons';
 import { useNavigate } from 'react-router-dom';
 
 /** ======= CONTEXTS ======= */
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/useAuth';
 
 /** ======= PROJECT FILES ======= */
 import { NEW_PROJECT } from '../data/Routes';

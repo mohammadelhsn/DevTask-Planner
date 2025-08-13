@@ -8,7 +8,7 @@ import { divCenter } from '../data/Styles';
 /** ======= LOCAL COMPONENTS ======= */
 import { FolderOffIcon, LazyIcon } from './LazyIcons';
 
-
+/** Component when no project is found */
 const NoProjectsMessage = () => {
     return (
         <Paper
