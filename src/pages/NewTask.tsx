@@ -37,7 +37,7 @@ import { createTask } from '../data/Tasks';
 import type { ColumnType, LifecycleType, TaskObject, TaskPriority, TaskType } from '../data/Types';
 import { VIEW_PROJECT, VIEW_TASK } from '../data/Routes';
 import type { ProjectWrapper } from '../data/Project';
-import { capitalize, getChipColor, getLifecycleColor, getPriorityColor } from '../data/Functions';
+import { capitalize, feedbackMessage, getChipColor, getLifecycleColor, getPriorityColor } from '../data/Functions';
 import { priorities, lifecycles, types, typeIcons, lifecycleIcons, priorityIcons, categoryIcons } from '../data/Constants';
 
 const steps = ['New Task', 'Settings & Config'];
@@ -63,7 +63,6 @@ const NewTask = () => {
         if (proj) setProject(proj);
 
     }, [user, userData, id]);
-    const navigateToNewTask = (projectId: string, taskId: string) => navigate(VIEW_TASK(projectId, taskId));
     const handleNext = () => setActiveStep((prev) => Math.min(prev + 1, steps.length - 1));
     const handleBack = () => setActiveStep((prev) => Math.max(prev - 1, 0));
     if (!id) return null;
@@ -86,9 +85,11 @@ const NewTask = () => {
         try {
             const response = await createTask(user.uid, id, taskToCreate);
 
+            const { message, type } = feedbackMessage(response.success, `Task created successfully`, `Failed to create project: ${response.message}`);
+            setFeedback(message, type);
             if (response.success) {
                 setFeedback('Task created with ID: ' + response.data?.id, 'success');
-                if (response.data) navigateToNewTask(id, response.data.id);
+                if (response.data) navigate(VIEW_TASK(id, response.data.id));
             } else {
                 setFeedback('Failed to create project: ' + response.message, 'error');
             }

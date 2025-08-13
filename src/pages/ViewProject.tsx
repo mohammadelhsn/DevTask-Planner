@@ -37,7 +37,7 @@ import { useFeedback } from '../contexts/FeedbackContext';
 /** ======= Data & Types ======= **/
 import { deleteProject, ProjectWrapper, updateProject } from '../data/Project';
 import { columnCards, divCenter } from '../data/Styles';
-import { DASHBOARD, NEW_PROJECT } from '../data/Routes';
+import { DASHBOARD, NEW_PROJECT, NEW_TASK } from '../data/Routes';
 import { type ColumnConfig } from '../data/Types';
 import { categoryIcons, dConfig } from '../data/Constants';
 
@@ -72,33 +72,34 @@ const ViewProject = () => {
     if (!id) return (<Typography>An ID must be included</Typography>);
     const handleSave = async () => {
         if (!user || !userData || !project) return;
+
         const original = userData.findProject(id);
+
         if (!original) return;
         project.config = defaultConfig;
+
         const equal = original.isEqual(project);
+
         if (equal) {
             setFeedback('No changes made!', 'info');
             setEditing(false);
             return;
         }
+
         const response = await updateProject(user.uid, id, project);
-        if (response.success) {
-            setFeedback('Project updated!', 'success');
-        } else {
-            setFeedback(`Error: ${response.error}`, 'error');
-        }
+
+        setFeedback(response.success ? 'Project updated!' : `Error: ${response.error}`, response.success ? 'success' : 'error');
         setEditing(false);
     };
     const handleDelete = async () => {
         if (!user || !project) return;
         const response = await deleteProject(user.uid, project.id);
 
+        setFeedback(response.success ? 'Project Deleted!' : `Error deleting project: ${response.error}`, response.success ? 'success' : 'error');
         if (response.success) {
-            setFeedback('Project deleted!', 'success');
             navigate(DASHBOARD);
-        } else {
-            setFeedback(`Error deleting project: ${response.error}`, 'error');
         }
+        return;
     };
     if (!userData) return;
     return (
@@ -237,7 +238,7 @@ const ViewProject = () => {
                                 <LazyIcon icon={editing ? SaveIcon : EditIcon} />
                             </Fab>
                         </Box>
-                        <Fab color="primary" aria-label="add" onClick={() => navigate(`/project/${id}/tasks/new`)}
+                        <Fab color="primary" aria-label="add" onClick={() => navigate(NEW_TASK(id))}
                             sx={{
                                 '&:hover .spin-icon': {
                                     transform: 'rotate(180deg) scale(1.2)',

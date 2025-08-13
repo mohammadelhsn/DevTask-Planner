@@ -1,3 +1,5 @@
+import type { FeedbackType } from './Types';
+
 export function capitalize(str: string) {
 	if (typeof str !== 'string' || str.length === 0) {
 		return '';
@@ -33,4 +35,14 @@ export function getPriorityColor(
 		default:
 			return 'success';
 	}
+}
+
+export function feedbackMessage(
+	successStatus: boolean,
+	successMessage: string,
+	errorMessage: string
+) {
+	const message = successStatus ? successMessage : errorMessage;
+	const type: FeedbackType = successStatus ? 'success' : 'error';
+	return { message, type };
 }

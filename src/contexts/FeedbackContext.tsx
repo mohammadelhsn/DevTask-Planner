@@ -1,7 +1,6 @@
 /** ======= REACT ======= */
 import { createContext, useContext, useState, type FC, type ReactNode } from 'react';
-
-type FeedbackType = 'success' | 'error' | 'info' | 'warning';
+import type { FeedbackType } from '../data/Types';
 
 interface FeedbackContextProps {
     message: string | null;

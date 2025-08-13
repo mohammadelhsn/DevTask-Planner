@@ -62,8 +62,10 @@ const ViewTask = () => {
     const { setFeedback } = useFeedback();
     const [project, setProject] = useState<ProjectWrapper | null>(null);
     const [task, setTask] = useState<TaskWrapper | null>(null);
+    /** Whether the task is being edited or viewed */
     const [editMode, setEditMode] = useState(false);
     const [loading, setLoading] = useState(true);
+    /** Delete Dialog */
     const [openDialog, setOpenDialog] = useState(false);
     const [loaded, setLoaded] = useState(false);
     const navigate = useNavigate();
@@ -111,40 +113,40 @@ const ViewTask = () => {
     };
     const handleSave = async () => {
         const oldTask = project?.findTask(taskId);
-        if (oldTask && task && user) {
-            const equal = oldTask.isEqual(task);
-            if (equal) {
-                setEditMode(false);
-                setFeedback('No changes made!', 'info');
-                return;
-            }
-            try {
-                const taskRef = doc(db, 'users', user.uid, 'projects', id, 'tasks', taskId);
-                await updateDoc(taskRef, task.toFirestore());
+        if (!oldTask || !user || !task) return;
+        const equal = oldTask.isEqual(task);
+        if (equal) {
+            setEditMode(false);
+            setFeedback('No changes made!', 'info');
+            return;
+        }
+        try {
+            const taskRef = doc(db, 'users', user.uid, 'projects', id, 'tasks', taskId);
+            await updateDoc(taskRef, task.toFirestore());
 
-                setEditMode(false);
-                setFeedback('Task updated!', 'success');
-                return;
-            } catch (error) {
-                console.error('Failed to update task:', error);
-                setFeedback('Failed to update task', 'error');
-            }
-        };
+            setEditMode(false);
+            setFeedback('Task updated!', 'success');
+            return;
+        } catch (error) {
+            console.error('Failed to update task:', error);
+            setFeedback('Failed to update task', 'error');
+        }
+
     };
     const handleDelete = async () => {
-        if (user) {
-            if (!user.uid || !id || !taskId) {
-                setFeedback('Missing required information.', 'error');
-                return;
-            }
-            const response = await deleteTask(user.uid, id, taskId);
-            setFeedback(response.message, response.success ? 'success' : 'error');
-            if (response.success) {
-                setEditMode(false);
-                setOpenDialog(false);
-                navigate(VIEW_PROJECT(id));
-            }
+        if (!user || !id || !taskId) return;
+
+        const response = await deleteTask(user.uid, id, taskId);
+        setFeedback(response.message, response.success ? 'success' : 'error');
+
+        setEditMode(false);
+        setOpenDialog(false);
+        setFeedback(response.success ? 'Successfully deleted task!' : 'Error deleting task', response.success ? 'success' : 'error');
+        if (response.success) {
+            navigate(VIEW_PROJECT(id));
         }
+        return;
+
     };
     const handleCancel = () => {
         const oldTask = project?.findTask(taskId);

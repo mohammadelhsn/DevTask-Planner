@@ -52,10 +52,9 @@ const SignUpPage = () => {
         facebook: false,
     });
     const navigate = useNavigate();
-    const navigateToDashboard = () => navigate(DASHBOARD);
     /** ======= CHECK IF THERE IS A USER ======= */
     useEffect(() => {
-        if (!loading && userData && user) navigateToDashboard();
+        if (!loading && userData && user) navigate(DASHBOARD);
     }, [user, userData, loading, navigate]);
     /** ======= HANDLE LOADING STATE ======= */
     if (loading) return <Typography>Loading...</Typography>;
@@ -68,7 +67,7 @@ const SignUpPage = () => {
         const result = await handleProviderSignUp(provider);
         setFeedback(result.message, result.success ? 'success' : 'error');
         setProviderLoading(providerName, false);
-        if (result.success) navigateToDashboard();
+        if (result.success) navigate(DASHBOARD);
     };
     const handleGoogleSignUp = () => handleProviderSignUpWrapper(googleProvider, 'google');
     const handleGitHubSignUp = () => handleProviderSignUpWrapper(githubProvider, 'github');

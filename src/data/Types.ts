@@ -142,3 +142,5 @@ export interface FeatureCardProps {
 	feature: FeatureType;
 	index: number;
 }
+
+export type FeedbackType = 'success' | 'error' | 'info' | 'warning';
