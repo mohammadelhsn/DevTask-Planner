@@ -30,7 +30,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import LoginIcon from '@mui/icons-material/Login';
 import Logout from '@mui/icons-material/Logout';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import PsychologyIcon from '@mui/icons-material/Psychology';
+import HomeIcon from '@mui/icons-material/Home';
 import Settings from '@mui/icons-material/Settings';
 
 /** ======= MUI STYLES ======= */
@@ -73,7 +73,7 @@ const Header = () => {
             <Toolbar>
                 <StyledExternalLink to="/">
                     <Tooltip title="Go Home">
-                        <PsychologyIcon />
+                        <HomeIcon />
                     </Tooltip>
                 </StyledExternalLink>
                 <Divider orientation='vertical' sx={{
