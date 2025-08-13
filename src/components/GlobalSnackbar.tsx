@@ -3,7 +3,7 @@ import MuiAlert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 
 /** ======= CONTEXT ======= */
-import { useFeedback } from '../contexts/FeedbackContext';
+import { useFeedback } from '../contexts/useFeedback';
 
 
 /** The global snack bar for success, error states */

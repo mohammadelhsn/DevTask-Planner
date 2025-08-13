@@ -1,5 +1,5 @@
 /** ======= CONTEXT ======= */
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/useAuth';
 
 /** ======= TYPES ======= */
 import type { ParentComp } from '../data/Types';
