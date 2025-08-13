@@ -38,13 +38,13 @@ const SettingsPage: React.FC<SettingsProps> = ({ mode, toggleColorMode }) => {
     const { user, userData, loading } = useAuth();
     const { setFeedback } = useFeedback();
     useEffect(() => {
-        if (userData != null) {
-            if (userData.theme == 'system') {
-                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                mode = prefersDark ? 'dark' : 'light';
-            } else {
-                mode = userData.theme as ('dark' | 'light');
-            }
+        if (!userData) return;
+
+        if (userData.theme == 'system') {
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            toggleColorMode(prefersDark ? 'dark' : 'light');
+        } else {
+            toggleColorMode(userData.theme);
         }
     });
     async function updateTheme() {
