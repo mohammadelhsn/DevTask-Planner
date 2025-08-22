@@ -20,7 +20,7 @@ import TaskChip from './TaskChip';
 /** ======= TYPES ======= */
 import type { TaskCardProps } from '../data/Types';
 
-/** @description Task Card for Project Page */
+/**   Task Card for Project Page */
 const TaskCard = ({ t, projectId }: TaskCardProps) => {
     const navigate = useNavigate();
     const navigateToTask = (projectId: string, taskId: string) => navigate(VIEW_TASK(projectId, taskId));

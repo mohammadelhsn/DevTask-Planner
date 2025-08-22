@@ -11,15 +11,15 @@ import type { UserRole, UserObject } from './Types';
 import FirestoreResponse from './FirestoreResponse';
 
 export class UserWrapper {
-	/** @description The user's name */
+	/**   The user's name */
 	name: string;
-	/** @description The user's theme preference */
+	/**   The user's theme preference */
 	theme: 'light' | 'dark' | 'oled' | 'system';
-	/** @description The user's preferred language */
+	/**   The user's preferred language */
 	language: string;
-	/** @description The user's role */
+	/**   The user's role */
 	role: UserRole;
-	/** @description An array containing the users projects / tasks */
+	/**   An array containing the users projects / tasks */
 	projects: ProjectWrapper[];
 	constructor(rawObject: UserObject & { projects?: ProjectWrapper[] }) {
 		this.name = rawObject.name;
@@ -29,7 +29,7 @@ export class UserWrapper {
 		this.projects = rawObject.projects ?? [];
 	}
 	/**
-	 * @description Update the user's name
+	 *   Update the user's name
 	 *
 	 * @param {string} newName The user's new name
 	 */
@@ -38,7 +38,7 @@ export class UserWrapper {
 		return this;
 	}
 	/**
-	 * @description Updates the user's theme
+	 *   Updates the user's theme
 	 *
 	 * @param newTheme The new setting for the theme
 	 */
@@ -47,7 +47,7 @@ export class UserWrapper {
 		return this;
 	}
 	/**
-	 * @description Updates the theme for the user
+	 *   Updates the theme for the user
 	 *
 	 * @param {string} newLang The new language for the user
 	 */
@@ -55,16 +55,16 @@ export class UserWrapper {
 		this.language = newLang;
 		return this;
 	}
-	/** @description Determines if the user is an admin */
+	/**   Determines if the user is an admin */
 	isAdmin() {
 		return this.role == 'admin';
 	}
-	/** @description Determines if the user is a beta tester */
+	/**   Determines if the user is a beta tester */
 	isBetaTester() {
 		return this.role == 'beta-tester' || this.isAdmin();
 	}
 	/**
-	 * @description This method returns firestore compatible version of the data for storage
+	 *   This method returns firestore compatible version of the data for storage
 	 */
 	toFirestore() {
 		const obj: UserObject = {
@@ -76,7 +76,7 @@ export class UserWrapper {
 		return obj;
 	}
 	/**
-	 * @description Finds the project (if it exists) given an ID
+	 *   Finds the project (if it exists) given an ID
 	 *
 	 * @param id The ID of the project to find
 	 * @returns Project Wrapper of the project if it exists
@@ -84,14 +84,14 @@ export class UserWrapper {
 	findProject(id: string) {
 		return this.projects.find((proj) => proj.id === id);
 	}
-	/** @description Helper to wrap the raw user data to UserWrapper class */
+	/**   Helper to wrap the raw user data to UserWrapper class */
 	static fromFirestore(rawObject: UserObject) {
 		return new UserWrapper(rawObject);
 	}
 }
 
 /**
- * @description Fetches UserData from Users Collection
+ *   Fetches UserData from Users Collection
  *
  * @param uid The user's UID
  * @returns Firestore Response depending on success status

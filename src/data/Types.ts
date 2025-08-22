@@ -11,41 +11,41 @@ import type { UserWrapper } from './User';
 export type ParentComp = { children: ReactNode };
 
 export type FirestoreRawData<T> = {
-	/** @description Success state of the operation */
+	/**   Success state of the operation */
 	success: boolean;
-	/** @description Data */
+	/**   Data */
 	data: T | null;
-	/** @description The error itself (non readable version) */
+	/**   The error itself (non readable version) */
 	error: string | null;
-	/** @description Response message for the user */
+	/**   Response message for the user */
 	message: string;
 };
 
 export type ColumnConfig = {
-	/** @description The ID of the Column */
+	/**   The ID of the Column */
 	id: ColumnType;
-	/** @description Whether the category is enabled */
+	/**   Whether the category is enabled */
 	enabled: boolean;
-	/** @description The label for the category */
+	/**   The label for the category */
 	label: string;
 };
 
 export type DevProjectObject = {
-	/** @description Project ID */
+	/**   Project ID */
 	id: string;
-	/** @description The name of the project */
+	/**   The name of the project */
 	projectName: string;
-	/** @description The description of the project */
+	/**   The description of the project */
 	projectDesc: string;
-	/** @description The config for the project */
+	/**   The config for the project */
 	config: ColumnConfig[];
-	/** @description When the project was created */
+	/**   When the project was created */
 	createdAt: string;
-	/** @description When the project was last updated */
+	/**   When the project was last updated */
 	lastUpdated: string;
 };
 
-/** @description The column the task belongs to */
+/**   The column the task belongs to */
 export type ColumnType =
 	| 'Long Term'
 	| 'Short Term'
@@ -53,49 +53,49 @@ export type ColumnType =
 	| 'Doing'
 	| 'Done'
 	| 'Uncategorized';
-/** @description The lifecycle stage that the task is in */
+/**   The lifecycle stage that the task is in */
 export type LifecycleType = 'alpha' | 'beta' | 'stable' | null;
-/** @description The type of task it is  */
+/**   The type of task it is  */
 export type TaskType = 'feature' | 'bug' | null;
-/** @description The priority of the task */
+/**   The priority of the task */
 export type TaskPriority = 'high' | 'medium' | 'low' | null;
 
 export type TaskObject = {
-	/** @description The ID of the task */
+	/**   The ID of the task */
 	id: string;
-	/** @description The title of the task */
+	/**   The title of the task */
 	title: string;
-	/** @description The description of the task */
+	/**   The description of the task */
 	description: string;
-	/** @description The column the task belongs to */
+	/**   The column the task belongs to */
 	column: ColumnType;
-	/** @description The lifecycle stage that the task is in */
+	/**   The lifecycle stage that the task is in */
 	lifecycle: LifecycleType;
-	/** @description The type of task it is  */
+	/**   The type of task it is  */
 	type: TaskType;
-	/** @description The priority of the task */
+	/**   The priority of the task */
 	priority: TaskPriority;
-	/** @description The people assigned to the task */
+	/**   The people assigned to the task */
 	assignees: string[];
-	/** @description When the task was created */
+	/**   When the task was created */
 	createdAt: string;
-	/** @description The last time the task was updated */
+	/**   The last time the task was updated */
 	lastUpdated: string;
-	/** @description The due date for the task if applicable */
+	/**   The due date for the task if applicable */
 	dueDate: string | null;
 };
 
-/** @description The user's role in the project */
+/**   The user's role in the project */
 export type UserRole = 'admin' | 'beta-tester' | 'stable-user';
 
 export type UserObject = {
-	/** @description The user's name */
+	/**   The user's name */
 	name: string;
-	/** @description The user's theme preference */
+	/**   The user's theme preference */
 	theme: 'light' | 'dark' | 'oled' | 'system';
-	/** @description The user's preferred language */
+	/**   The user's preferred language */
 	language: string;
-	/** @description The user's role */
+	/**   The user's role */
 	role: UserRole;
 };
 

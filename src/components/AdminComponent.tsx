@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/useAuth';
 /** ======= TYPES ======= */
 import type { ParentComp } from '../data/Types';
 
-/** @description A component that shows admin only content for admin users */
+/**   A component that shows admin only content for admin users */
 const AdminComponent = ({ children }: ParentComp) => {
     /** ======= GET THE USER DATA ======= */
     const { userData } = useAuth();

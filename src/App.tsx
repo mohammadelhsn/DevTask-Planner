@@ -38,7 +38,7 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
-/** @description The main app */
+/**   The main app */
 function App() {
   const [mode, setMode] = useState<'light' | 'dark'>(() => {
     const stored = localStorage.getItem('colorMode');

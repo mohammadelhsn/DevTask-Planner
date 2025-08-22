@@ -9,7 +9,7 @@ import Fade from '@mui/material/Fade';
 import { useAuth } from '../contexts/useAuth';
 
 
-/** @description Renders when the page is non existent */
+/**   Renders when the page is non existent */
 const NotFoundPage = () => {
     const { loading } = useAuth();
     const navigate = useNavigate();

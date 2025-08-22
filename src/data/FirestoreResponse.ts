@@ -26,13 +26,13 @@ export const firebaseErrors: Record<string, string> = {
 };
 
 export default class FirestoreResponse<T> {
-	/** @description Success state of the operation */
+	/**   Success state of the operation */
 	success: boolean;
-	/** @description Data if applicable */
+	/**   Data if applicable */
 	data: T | null;
-	/** @description The error itself (non readable version) */
+	/**   The error itself (non readable version) */
 	error: string | null;
-	/** @description Response message for the user */
+	/**   Response message for the user */
 	message: string;
 	constructor(data: FirestoreRawData<T> | FirebaseError | Error) {
 		if (data instanceof FirebaseError) {

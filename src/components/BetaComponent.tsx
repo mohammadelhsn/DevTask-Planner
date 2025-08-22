@@ -5,7 +5,7 @@ import { useAuth } from '../contexts/useAuth';
 import type { ParentComp } from '../data/Types';
 
 
-/** @description A component that selectively shows content for beta testers */
+/**   A component that selectively shows content for beta testers */
 const BetaComponent = ({ children }: ParentComp) => {
     /** ======= GET THE USERDATA ======= */
     const { userData } = useAuth();

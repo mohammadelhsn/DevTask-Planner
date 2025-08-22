@@ -17,19 +17,19 @@ import FirestoreResponse from './FirestoreResponse';
 import type { FirebaseError } from 'firebase/app';
 
 export class ProjectWrapper {
-	/** @description Project ID */
+	/**   Project ID */
 	id: string;
-	/** @description The name of the project */
+	/**   The name of the project */
 	projectName: string;
-	/** @description The description of the project */
+	/**   The description of the project */
 	projectDesc: string;
-	/** @description The config for the project */
+	/**   The config for the project */
 	config: ColumnConfig[];
-	/** @description An array containing the tasks for the project */
+	/**   An array containing the tasks for the project */
 	tasks: TaskWrapper[];
-	/** @description When the project was created */
+	/**   When the project was created */
 	createdAt: Date;
-	/** @description When the project was last updated */
+	/**   When the project was last updated */
 	lastUpdated: Date;
 	constructor(props: DevProjectObject & { tasks?: TaskWrapper[] }) {
 		this.id = props.id;
@@ -58,7 +58,7 @@ export class ProjectWrapper {
 		};
 	}
 	/**
-	 * @description Finds the task if it exists
+	 *   Finds the task if it exists
 	 *
 	 * @param {string} id The task's ID
 	 */

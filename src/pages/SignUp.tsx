@@ -37,7 +37,7 @@ const facebookProvider = new FacebookAuthProvider();
 const action = 'Sign Up';
 const hidden = true;
 
-/** @description The Sign Up page */
+/**   The Sign Up page */
 const SignUpPage = () => {
     /** ======= GLOBAL SNACKBAR ======= */
     const { setFeedback } = useFeedback();

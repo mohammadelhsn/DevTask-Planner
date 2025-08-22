@@ -15,27 +15,27 @@ import type { ColumnType, TaskObject } from './Types';
 import FirestoreResponse from './FirestoreResponse';
 
 export class TaskWrapper {
-	/** @description The task's ID */
+	/**   The task's ID */
 	id: string;
-	/** @description The task's title */
+	/**   The task's title */
 	title: string;
-	/** @description The task's description */
+	/**   The task's description */
 	description: string;
-	/** @description The column the task belongs to */
+	/**   The column the task belongs to */
 	column: ColumnType;
-	/** @description The lifecycle stage that the task is in */
+	/**   The lifecycle stage that the task is in */
 	lifecycle: 'alpha' | 'beta' | 'stable' | null;
-	/** @description The type of task it is  */
+	/**   The type of task it is  */
 	type: 'feature' | 'bug' | null;
-	/** @description The priority of the task */
+	/**   The priority of the task */
 	priority: 'high' | 'medium' | 'low' | null;
-	/** @description The people assigned to the task */
+	/**   The people assigned to the task */
 	assignees: string[];
-	/** @description When the task was created */
+	/**   When the task was created */
 	createdAt: Date;
-	/** @description The last time the task was updated */
+	/**   The last time the task was updated */
 	lastUpdated: Date;
-	/** @description The due date for the task if applicable */
+	/**   The due date for the task if applicable */
 	dueDate: Date | null;
 	constructor(props: TaskObject) {
 		this.id = props.id;
@@ -50,7 +50,7 @@ export class TaskWrapper {
 		this.lastUpdated = new Date(props.lastUpdated);
 		this.dueDate = props.dueDate ? new Date(props.dueDate) : null;
 	}
-	/** @description Returns Firestore Compatible data for storage */
+	/**   Returns Firestore Compatible data for storage */
 	toFirestore(): TaskObject {
 		return {
 			id: this.id,
@@ -66,7 +66,7 @@ export class TaskWrapper {
 			dueDate: this.dueDate ? this.dueDate.toISOString() : null,
 		};
 	}
-	/** @description Deep equals to see if any changes occurred */
+	/**   Deep equals to see if any changes occurred */
 	isEqual(other: TaskWrapper): boolean {
 		return (
 			this.id === other.id &&
@@ -86,18 +86,18 @@ export class TaskWrapper {
 					this.dueDate.getTime() === other.dueDate.getTime()))
 		);
 	}
-	/** @description Get a task wrapper from raw data */
+	/**   Get a task wrapper from raw data */
 	static fromFirestore(rawData: TaskObject) {
 		return new TaskWrapper(rawData);
 	}
-	/** @description Static variant of isEqual */
+	/**   Static variant of isEqual */
 	static equals(task1: TaskWrapper, task2: TaskWrapper) {
 		return task1.isEqual(task2);
 	}
 }
 
 /**
- * @description Creates a blank task
+ *   Creates a blank task
  *
  * @param userId The user's UID
  * @param projectId The project's ID
@@ -144,7 +144,7 @@ export async function createTask(
 }
 
 /**
- * @description Updates a task in Firestore
+ *   Updates a task in Firestore
  * @param userId - ID of the current user
  * @param projectId - ID of the project
  * @param task - TaskWrapper with updated data
@@ -182,7 +182,7 @@ export async function updateTask(
 }
 
 /**
- * @description Deletes a task from Firestore
+ *   Deletes a task from Firestore
  * @param userId - ID of the user
  * @param projectId - ID of the project
  * @param taskId - ID of the task to delete

@@ -52,7 +52,7 @@ import { db } from '../data/Firebase';
 // import CardActions from '@mui/material/CardActions';
 // import Collapse from '@mui/material/Collapse';
 
-/** @description A page for the individual task */
+/**   A page for the individual task */
 const ViewTask = () => {
     const { user, userData } = useAuth();
     const { id, taskId } = useParams();

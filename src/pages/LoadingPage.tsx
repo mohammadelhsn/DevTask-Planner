@@ -11,7 +11,7 @@ import Fade from '@mui/material/Fade';
 /** ======= STYLES =======  */
 import { divCenter } from '../data/Styles';
 
-/** @description The loading page for the project */
+/**   The loading page for the project */
 const LoadingPage = () => {
     const [loaded, setLoaded] = useState(false);
     useEffect(() => setLoaded(true), []);

@@ -1,12 +1,12 @@
 import { createTheme } from '@mui/material';
 
-/** @description Primary Color */
+/**   Primary Color */
 const primary = '#6093EA';
 
-/** @description Secondary Color */
+/**   Secondary Color */
 const secondary = '#9C27B0';
 
-/** @description Light Theme */
+/**   Light Theme */
 export const lightTheme = createTheme({
 	palette: {
 		mode: 'light',
@@ -19,7 +19,7 @@ export const lightTheme = createTheme({
 	},
 });
 
-/** @description Dark Theme */
+/**   Dark Theme */
 export const darkTheme = createTheme({
 	palette: {
 		mode: 'dark',
