@@ -13,7 +13,6 @@ import Card from '@mui/material/Card';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
-import Fade from '@mui/material/Fade';
 import { useTheme } from '@mui/material';
 
 /** ======= FIREBASE ======= */
@@ -74,60 +73,58 @@ const SignUpPage = () => {
     const handleFacebookSignUp = () => handleProviderSignUpWrapper(facebookProvider, 'facebook');
     /** ======= COMPONENT ======= */
     return (
-        <Fade in={!loading} timeout={500}>
-            <Container
-                maxWidth="lg"
-                sx={combinedStyles}
-            >
-                <Card sx={{ width: '100%', maxWidth: 500, p: 4 }}>
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: 2
-                        }}
+        <Container
+            maxWidth="lg"
+            sx={combinedStyles}
+        >
+            <Card sx={{ width: '100%', maxWidth: 500, p: 4 }}>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 2
+                    }}
+                >
+                    <Typography variant="h4">{action}</Typography>
+                    <Divider sx={{ mb: 4 }} />
+                    <Button
+                        variant='outlined'
+                        fullWidth
+                        loading={loadingButton.google}
+                        onClick={handleGoogleSignUp}
+                        startIcon={<FaGoogle color={palette.text.primary} />}
+                        sx={providerButton}
                     >
-                        <Typography variant="h4">{action}</Typography>
-                        <Divider sx={{ mb: 4 }} />
+                        {action} with Google
+                    </Button>
+                    {/** Disabled for now because it hasn't been configured for this project yet */}
+                    {!hidden && (
                         <Button
                             variant='outlined'
-                            fullWidth
-                            loading={loadingButton.google}
-                            onClick={handleGoogleSignUp}
-                            startIcon={<FaGoogle color={palette.text.primary} />}
+                            onClick={handleGitHubSignUp}
+                            startIcon={<FaGithub color={palette.text.primary} />}
+                            loading={loadingButton.github}
                             sx={providerButton}
                         >
-                            {action} with Google
+                            {action} with GitHub
                         </Button>
-                        {/** Disabled for now because it hasn't been configured for this project yet */}
-                        {!hidden && (
-                            <Button
-                                variant='outlined'
-                                onClick={handleGitHubSignUp}
-                                startIcon={<FaGithub color={palette.text.primary} />}
-                                loading={loadingButton.github}
-                                sx={providerButton}
-                            >
-                                {action} with GitHub
-                            </Button>
-                        )}
-                        {/** Disabled for now because it hasn't been configured for this project yet */}
-                        {!hidden && (
-                            <Button
-                                variant='outlined'
-                                onClick={handleFacebookSignUp}
-                                startIcon={<FaFacebook color={palette.text.primary} />}
-                                loading={loadingButton.facebook}
-                                sx={providerButton}
-                            >
-                                {action} with Facebook
-                            </Button>
-                        )}
+                    )}
+                    {/** Disabled for now because it hasn't been configured for this project yet */}
+                    {!hidden && (
+                        <Button
+                            variant='outlined'
+                            onClick={handleFacebookSignUp}
+                            startIcon={<FaFacebook color={palette.text.primary} />}
+                            loading={loadingButton.facebook}
+                            sx={providerButton}
+                        >
+                            {action} with Facebook
+                        </Button>
+                    )}
 
-                    </Box>
-                </Card>
-            </Container>
-        </Fade>
+                </Box>
+            </Card>
+        </Container>
     );
 };
 

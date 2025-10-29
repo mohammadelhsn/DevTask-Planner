@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import Fade from '@mui/material/Fade';
 
 /** ======= MUI ICONS ======= */
 import { AddIcon, LazyIcon } from '../components/LazyIcons';
@@ -21,61 +20,50 @@ import NoProjectsMessage from '../components/NoProjects';
 import LayoutContainer from '../components/LayoutContainer';
 import PageTitle from '../components/PageTitle';
 import LoadingPage from './LoadingPage';
-import { useEffect, useState } from 'react';
 
 
 const Dashboard = () => {
     /** ======= NAVIGATE HOOK ======= */
     const navigate = useNavigate();
     /** ======= AUTH CONTEXT ======= */
-    const [loaded, setLoaded] = useState(false);
     const { loading, userData, user } = useAuth();
-    useEffect(() => {
-        if (!loading) {
-            setLoaded(true);
-        }
-    }, [loading]);
     /** ======= HANDLE LOADING ======= */
     if (loading) return <LoadingPage />;
     if (!user || !userData) return <LoadingPage />;
     return (
-        <Fade in={loaded} timeout={500}>
-            <div>
-                <LayoutContainer>
-                    <PageTitle title={`Welcome, ${userData?.name}!`} divider />
-                    <Paper sx={{ p: 2 }}>
-                        {userData.projects.length == 0 && (<NoProjectsMessage />)}
-                        <Grid container spacing={3}>
-                            {userData.projects.map((proj, index) => ((<ProjectCard key={`${index}-${proj.id}`} proj={proj} />)))}
-                        </Grid>
-                    </Paper>
-                    <Box sx={{
-                        position: 'fixed',
-                        bottom: 120,
-                        right: 24,
-                        zIndex: 1000,
-                    }}>
-                        <Fab color="primary" aria-label="add" onClick={() => navigate(NEW_PROJECT)}
-                            sx={{
-                                '&:hover .spin-icon': {
-                                    transform: 'rotate(180deg) scale(1.2)',
-                                    transition: 'transform 0.3s ease',
-                                },
-                                transition: '0.3s ease',
-                                '&:hover': {
-                                    transform: 'scale(1.2)'
-                                }
-                            }}
-                        >
-                            <LazyIcon icon={AddIcon} className="spin-icon" sx={{
-                                transition: 'transform 0.8s ease',
-                                transformOrigin: 'center',
-                            }} />
-                        </Fab>
-                    </Box>
-                </LayoutContainer>
-            </div>
-        </Fade>
+        <LayoutContainer>
+            <PageTitle title={`Welcome, ${userData?.name}!`} divider />
+            <Paper sx={{ p: 2 }}>
+                {userData.projects.length == 0 && (<NoProjectsMessage />)}
+                <Grid container spacing={3}>
+                    {userData.projects.map((proj, index) => ((<ProjectCard key={`${index}-${proj.id}`} proj={proj} />)))}
+                </Grid>
+            </Paper>
+            <Box sx={{
+                position: 'fixed',
+                bottom: 120,
+                right: 24,
+                zIndex: 1000,
+            }}>
+                <Fab color="primary" aria-label="add" onClick={() => navigate(NEW_PROJECT)}
+                    sx={{
+                        '&:hover .spin-icon': {
+                            transform: 'rotate(180deg) scale(1.2)',
+                            transition: 'transform 0.3s ease',
+                        },
+                        transition: '0.3s ease',
+                        '&:hover': {
+                            transform: 'scale(1.2)'
+                        }
+                    }}
+                >
+                    <LazyIcon icon={AddIcon} className="spin-icon" sx={{
+                        transition: 'transform 0.8s ease',
+                        transformOrigin: 'center',
+                    }} />
+                </Fab>
+            </Box>
+        </LayoutContainer>
     );
 };
 

@@ -24,7 +24,6 @@ import StepLabel from '@mui/material/StepLabel';
 import Stepper from '@mui/material/Stepper';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import Fade from '@mui/material/Fade';
 
 /** ======= Custom Components ======= */
 import LayoutContainer from '../components/LayoutContainer';
@@ -43,8 +42,11 @@ import { priorities, lifecycles, types, typeIcons, lifecycleIcons, priorityIcons
 const steps = ['New Task', 'Settings & Config'];
 
 const NewTask = () => {
-    const [activeStep, setActiveStep] = useState(0);
     const { id } = useParams();
+    const { setFeedback } = useFeedback();
+    const navigate = useNavigate();
+    const { user, userData } = useAuth();
+    const [activeStep, setActiveStep] = useState(0);
     const [project, setProject] = useState<ProjectWrapper | null>(null);
     const [title, setTitle] = useState('');
     const [desc, setDesc] = useState('');
@@ -53,9 +55,6 @@ const NewTask = () => {
     const [type, setType] = useState('');
     const [priority, setPriority] = useState('');
     //const [assignees, setAssignees] = useState<string[]>([]);
-    const { setFeedback } = useFeedback();
-    const { user, userData, loading } = useAuth();
-    const navigate = useNavigate();
     useEffect(() => {
         if (!user || !userData || !id) return;
 
@@ -99,153 +98,148 @@ const NewTask = () => {
         }
     };
     return (
-        <Fade in={!loading} timeout={500}>
-            <div>
-                <LayoutContainer backIcon to={VIEW_PROJECT(id)}>
-                    <Box mt={4} sx={{ width: '100%', maxWidth: 600, mx: 'auto' }}>
-                        <Stepper activeStep={activeStep} alternativeLabel>
-                            {steps.map((label) => (
-                                <Step key={label}>
-                                    <StepLabel>{label}</StepLabel>
-                                </Step>
-                            ))}
-                        </Stepper>
-                        <Box sx={{ mt: 4 }}>
-                            {activeStep === 0 && (
-                                <>
-                                    <TextField
-                                        label="Title"
-                                        fullWidth
-                                        margin="normal"
-                                        required
-                                        value={title}
-                                        onChange={(e) => setTitle(e.target.value)}
-                                    />
-                                    <TextField
-                                        label="Description"
-                                        multiline
-                                        fullWidth
-                                        margin="normal"
-                                        required
-                                        value={desc}
-                                        onChange={(e) => setDesc(e.target.value)}
-                                    />
-                                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-                                        <Button variant="contained" onClick={handleNext} disabled={!title || !desc}>
-                                            Next
-                                        </Button>
-                                    </Box>
-                                </>
-                            )}
+        <LayoutContainer backIcon to={VIEW_PROJECT(id)}>
+            <Box mt={4} sx={{ width: '100%', maxWidth: 600, mx: 'auto' }}>
+                <Stepper activeStep={activeStep} alternativeLabel>
+                    {steps.map((label) => (
+                        <Step key={label}>
+                            <StepLabel>{label}</StepLabel>
+                        </Step>
+                    ))}
+                </Stepper>
+                <Box sx={{ mt: 4 }}>
+                    {activeStep === 0 && (
+                        <>
+                            <TextField
+                                label="Title"
+                                fullWidth
+                                margin="normal"
+                                required
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                            />
+                            <TextField
+                                label="Description"
+                                multiline
+                                fullWidth
+                                margin="normal"
+                                required
+                                value={desc}
+                                onChange={(e) => setDesc(e.target.value)}
+                            />
+                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+                                <Button variant="contained" onClick={handleNext} disabled={!title || !desc}>
+                                    Next
+                                </Button>
+                            </Box>
+                        </>
+                    )}
 
-                            {activeStep === 1 && (
-                                <Card sx={{ p: 2 }}>
-                                    <Card elevation={3}>
-                                        <CardHeader title={
-                                            <>
-                                                <Typography variant='inherit'>Config</Typography>
-                                                <Divider sx={{ mt: 2 }} />
-                                            </>
-                                        } />
-                                        <CardContent>
-                                            <FormControl fullWidth margin="normal">
-                                                <InputLabel>Column</InputLabel>
-                                                <Select value={column} label="Column" required onChange={(e) => setColumn(e.target.value)}
-                                                    renderValue={(selected) => (
-                                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                                            <LazyIcon
-                                                                icon={categoryIcons[(selected as Exclude<ColumnType, null>)]}
-                                                                color={'primary'}
-                                                                sx={{ mr: 1 }}
-                                                            />
-                                                            {capitalize(selected)}
-                                                        </Box>
-                                                    )}>
-                                                    {project.config.map((option, index) => (
-                                                        option.enabled && (
-                                                            <MenuItem key={`${option.id}-${index}-newTask`} value={option.id} sx={{ display: 'flex', alignItems: 'center' }}>
-                                                                <LazyIcon icon={categoryIcons[option.id]} color={'primary'} sx={{ mr: 1 }} />{capitalize(option.label)}
-                                                            </MenuItem>
-                                                        )
-                                                    ))}
-                                                </Select>
-                                            </FormControl>
+                    {activeStep === 1 && (
+                        <Card sx={{ p: 2 }}>
+                            <Card elevation={3}>
+                                <CardHeader title={
+                                    <>
+                                        <Typography variant='inherit'>Config</Typography>
+                                        <Divider sx={{ mt: 2 }} />
+                                    </>
+                                } />
+                                <CardContent>
+                                    <FormControl fullWidth margin="normal">
+                                        <InputLabel>Column</InputLabel>
+                                        <Select value={column} label="Column" required onChange={(e) => setColumn(e.target.value)}
+                                            renderValue={(selected) => (
+                                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                    <LazyIcon
+                                                        icon={categoryIcons[(selected as Exclude<ColumnType, null>)]}
+                                                        color={'primary'}
+                                                        sx={{ mr: 1 }}
+                                                    />
+                                                    {capitalize(selected)}
+                                                </Box>
+                                            )}>
+                                            {project.config.map((option, index) => (
+                                                option.enabled && (
+                                                    <MenuItem key={`${option.id}-${index}-newTask`} value={option.id} sx={{ display: 'flex', alignItems: 'center' }}>
+                                                        <LazyIcon icon={categoryIcons[option.id]} color={'primary'} sx={{ mr: 1 }} />{capitalize(option.label)}
+                                                    </MenuItem>
+                                                )
+                                            ))}
+                                        </Select>
+                                    </FormControl>
 
-                                            <FormControl fullWidth margin="normal">
-                                                <InputLabel>Lifecycle</InputLabel>
-                                                <Select value={lifecycle} label="Lifecycle" onChange={(e) => setLifecycle(e.target.value)}
-                                                    renderValue={(selected) => (
-                                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                                            <LazyIcon
-                                                                icon={lifecycleIcons[(selected as Exclude<LifecycleType, null>)]}
-                                                                color={getLifecycleColor((selected as Exclude<LifecycleType, null>))}
-                                                                sx={{ mr: 1 }}
-                                                            />
-                                                            {capitalize(selected)}
-                                                        </Box>
-                                                    )}>
-                                                    {lifecycles.map(option => (
-                                                        <MenuItem key={option} value={option} sx={{ display: 'flex', alignItems: 'center' }}><LazyIcon icon={lifecycleIcons[option]} color={getLifecycleColor(option)} sx={{ mr: 1 }} />{capitalize(option)}</MenuItem>
-                                                    ))}
-                                                </Select>
-                                            </FormControl>
+                                    <FormControl fullWidth margin="normal">
+                                        <InputLabel>Lifecycle</InputLabel>
+                                        <Select value={lifecycle} label="Lifecycle" onChange={(e) => setLifecycle(e.target.value)}
+                                            renderValue={(selected) => (
+                                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                    <LazyIcon
+                                                        icon={lifecycleIcons[(selected as Exclude<LifecycleType, null>)]}
+                                                        color={getLifecycleColor((selected as Exclude<LifecycleType, null>))}
+                                                        sx={{ mr: 1 }}
+                                                    />
+                                                    {capitalize(selected)}
+                                                </Box>
+                                            )}>
+                                            {lifecycles.map(option => (
+                                                <MenuItem key={option} value={option} sx={{ display: 'flex', alignItems: 'center' }}><LazyIcon icon={lifecycleIcons[option]} color={getLifecycleColor(option)} sx={{ mr: 1 }} />{capitalize(option)}</MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
 
-                                            <FormControl fullWidth margin="normal">
-                                                <InputLabel>Type</InputLabel>
-                                                <Select value={type} label="Type" onChange={(e) => setType(e.target.value)} renderValue={(selected) => (
-                                                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                                        <LazyIcon
-                                                            icon={typeIcons[(selected as Exclude<TaskType, null>)]}
-                                                            color={getChipColor((selected as Exclude<TaskType, null>))}
-                                                            sx={{ mr: 1 }}
-                                                        />
-                                                        {capitalize(selected)}
-                                                    </Box>
-                                                )}>
-                                                    {types.map(option => (
-                                                        <MenuItem key={option} value={option} sx={{ display: 'flex', alignItems: 'center' }}><LazyIcon icon={typeIcons[option]} color={getChipColor(option)} sx={{ mr: 1 }} />{capitalize(option)}</MenuItem>
-                                                    ))}
-                                                </Select>
-                                            </FormControl>
+                                    <FormControl fullWidth margin="normal">
+                                        <InputLabel>Type</InputLabel>
+                                        <Select value={type} label="Type" onChange={(e) => setType(e.target.value)} renderValue={(selected) => (
+                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                <LazyIcon
+                                                    icon={typeIcons[(selected as Exclude<TaskType, null>)]}
+                                                    color={getChipColor((selected as Exclude<TaskType, null>))}
+                                                    sx={{ mr: 1 }}
+                                                />
+                                                {capitalize(selected)}
+                                            </Box>
+                                        )}>
+                                            {types.map(option => (
+                                                <MenuItem key={option} value={option} sx={{ display: 'flex', alignItems: 'center' }}><LazyIcon icon={typeIcons[option]} color={getChipColor(option)} sx={{ mr: 1 }} />{capitalize(option)}</MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
 
-                                            <FormControl fullWidth margin="normal">
-                                                <InputLabel>Priority</InputLabel>
-                                                <Select value={priority} label="Priority" onChange={(e) => setPriority(e.target.value)} renderValue={(selected) => (
-                                                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                                        <LazyIcon
-                                                            icon={priorityIcons[(selected as Exclude<TaskPriority, null>)]}
-                                                            color={getPriorityColor((selected as Exclude<TaskPriority, null>))}
-                                                            sx={{ mr: 1 }}
-                                                        />
-                                                        {capitalize(selected)}
-                                                    </Box>
-                                                )}>
-                                                    {priorities.map(option => (
-                                                        <MenuItem key={option} value={option} sx={{ display: 'flex', alignItems: 'center' }}><LazyIcon icon={priorityIcons[option]} color={getPriorityColor(option)} sx={{ mr: 1 }} />{capitalize(option)}</MenuItem>
-                                                    ))}
-                                                </Select>
-                                            </FormControl>
+                                    <FormControl fullWidth margin="normal">
+                                        <InputLabel>Priority</InputLabel>
+                                        <Select value={priority} label="Priority" onChange={(e) => setPriority(e.target.value)} renderValue={(selected) => (
+                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                <LazyIcon
+                                                    icon={priorityIcons[(selected as Exclude<TaskPriority, null>)]}
+                                                    color={getPriorityColor((selected as Exclude<TaskPriority, null>))}
+                                                    sx={{ mr: 1 }}
+                                                />
+                                                {capitalize(selected)}
+                                            </Box>
+                                        )}>
+                                            {priorities.map(option => (
+                                                <MenuItem key={option} value={option} sx={{ display: 'flex', alignItems: 'center' }}><LazyIcon icon={priorityIcons[option]} color={getPriorityColor(option)} sx={{ mr: 1 }} />{capitalize(option)}</MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
 
-                                            {/* Assignees would typically be a multi-select with user emails/names */}
-                                        </CardContent>
-                                    </Card>
-                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
-                                        <Button variant="outlined" onClick={handleBack}>Back</Button>
-                                        <Button
-                                            variant="contained"
-                                            onClick={handleSubmit}
-                                        >
-                                            Submit
-                                        </Button>
-                                    </Box>
-                                </Card>
-                            )}
-                        </Box>
-                    </Box>
-                </LayoutContainer>
-            </div>
-        </Fade>
-
+                                    {/* Assignees would typically be a multi-select with user emails/names */}
+                                </CardContent>
+                            </Card>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
+                                <Button variant="outlined" onClick={handleBack}>Back</Button>
+                                <Button
+                                    variant="contained"
+                                    onClick={handleSubmit}
+                                >
+                                    Submit
+                                </Button>
+                            </Box>
+                        </Card>
+                    )}
+                </Box>
+            </Box>
+        </LayoutContainer>
     );
 };
 

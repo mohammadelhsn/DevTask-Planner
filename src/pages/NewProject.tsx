@@ -26,7 +26,6 @@ import StepLabel from '@mui/material/StepLabel';
 import Stepper from '@mui/material/Stepper';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import Fade from '@mui/material/Fade';
 import type { ColumnConfig } from '../data/Types';
 import LayoutContainer from '../components/LayoutContainer';
 
@@ -52,7 +51,7 @@ const NewJournalPage = () => {
     const [desc, setDesc] = useState('');
     const { setFeedback } = useFeedback();
     const [defaultConfig, setDefaultConfig] = useState<ColumnConfig[]>(dConfig);
-    const { user, loading } = useAuth();
+    const { user } = useAuth();
     /** NAVIGATION HOOK */
     const navigate = useNavigate();
     const handleNext = () => setActiveStep((prev) => Math.min(prev + 1, steps.length - 1));
@@ -85,115 +84,111 @@ const NewJournalPage = () => {
         }
     };
     return (
-        <Fade in={!loading} timeout={500}>
-            <div>
-                <LayoutContainer backIcon to={DASHBOARD}>
-                    <Box sx={{ width: '100%', maxWidth: 600, mx: 'auto', mt: 4 }}>
-                        <Stepper activeStep={activeStep} alternativeLabel>
-                            {steps.map((label) => (
-                                <Step key={label}>
-                                    <StepLabel>{label}</StepLabel>
-                                </Step>
-                            ))}
-                        </Stepper>
-                        <Box sx={{ mt: 4 }}>
-                            {activeStep === 0 && (
-                                <>
-                                    <TextField
-                                        label="Title"
-                                        fullWidth
-                                        margin="normal"
-                                        required
-                                        value={title}
-                                        onChange={(e) => setTitle(e.target.value)}
-                                    />
-                                    <TextField
-                                        label="Description"
-                                        fullWidth
-                                        margin="normal"
-                                        required
-                                        value={desc}
-                                        onChange={(e) => setDesc(e.target.value)}
-                                    />
-                                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-                                        <Button variant="contained" onClick={handleNext} disabled={!title || !desc}>
-                                            Next
-                                        </Button>
-                                    </Box>
-                                </>
-                            )}
+        <LayoutContainer backIcon to={DASHBOARD}>
+            <Box sx={{ width: '100%', maxWidth: 600, mx: 'auto', mt: 4 }}>
+                <Stepper activeStep={activeStep} alternativeLabel>
+                    {steps.map((label) => (
+                        <Step key={label}>
+                            <StepLabel>{label}</StepLabel>
+                        </Step>
+                    ))}
+                </Stepper>
+                <Box sx={{ mt: 4 }}>
+                    {activeStep === 0 && (
+                        <>
+                            <TextField
+                                label="Title"
+                                fullWidth
+                                margin="normal"
+                                required
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                            />
+                            <TextField
+                                label="Description"
+                                fullWidth
+                                margin="normal"
+                                required
+                                value={desc}
+                                onChange={(e) => setDesc(e.target.value)}
+                            />
+                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+                                <Button variant="contained" onClick={handleNext} disabled={!title || !desc}>
+                                    Next
+                                </Button>
+                            </Box>
+                        </>
+                    )}
 
-                            {activeStep === 1 && (
-                                <Card sx={{ p: 2 }}>
-                                    <Card elevation={3}>
-                                        <CardHeader title={
-                                            <>
-                                                <Typography variant='inherit'>Config</Typography>
-                                                <Divider sx={{ mt: 2 }} />
-                                            </>
-                                        } />
-                                        <CardContent>
-                                            <Stack spacing={2}>
-                                                {defaultConfig.map((config, index) => {
-                                                    const isUncategorized = config.id === 'Uncategorized';
-                                                    return (
-                                                        <Box key={`${config.id}-${index}`}>
-                                                            <FormControlLabel
-                                                                name={config.id}
-                                                                control={
-                                                                    <Checkbox
-                                                                        checked={config.enabled}
-                                                                        onChange={() =>
-                                                                            !isUncategorized && setDefaultConfig((prev) =>
-                                                                                prev.map((c) =>
-                                                                                    c.id === config.id ? { ...c, enabled: !c.enabled } : c
-                                                                                )
-                                                                            )
-                                                                        }
-                                                                        disabled={isUncategorized}
-                                                                    />
-                                                                }
-                                                                label={`Enable ${config.id}`}
-                                                            />
-                                                            <Collapse in={config.enabled} timeout={{ enter: 350, exit: 350 }}>
-                                                                <TextField
-                                                                    label={config.id}
-                                                                    fullWidth
-                                                                    required
-                                                                    value={config.label}
-                                                                    onChange={(e) =>
-                                                                        setDefaultConfig((prev) =>
-                                                                            prev.map((c) =>
-                                                                                c.id === config.id ? { ...c, label: e.target.value } : c
-                                                                            )
+                    {activeStep === 1 && (
+                        <Card sx={{ p: 2 }}>
+                            <Card elevation={3}>
+                                <CardHeader title={
+                                    <>
+                                        <Typography variant='inherit'>Config</Typography>
+                                        <Divider sx={{ mt: 2 }} />
+                                    </>
+                                } />
+                                <CardContent>
+                                    <Stack spacing={2}>
+                                        {defaultConfig.map((config, index) => {
+                                            const isUncategorized = config.id === 'Uncategorized';
+                                            return (
+                                                <Box key={`${config.id}-${index}`}>
+                                                    <FormControlLabel
+                                                        name={config.id}
+                                                        control={
+                                                            <Checkbox
+                                                                checked={config.enabled}
+                                                                onChange={() =>
+                                                                    !isUncategorized && setDefaultConfig((prev) =>
+                                                                        prev.map((c) =>
+                                                                            c.id === config.id ? { ...c, enabled: !c.enabled } : c
                                                                         )
-                                                                    }
-                                                                    sx={{ mt: 2 }}
-                                                                    disabled={isUncategorized}
-                                                                />
-                                                            </Collapse>
-                                                        </Box>
-                                                    );
-                                                })}
-                                            </Stack>
-                                        </CardContent>
-                                    </Card>
-                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
-                                        <Button variant="outlined" onClick={handleBack}>Back</Button>
-                                        <Button
-                                            variant="contained"
-                                            onClick={handleSubmit}
-                                        >
-                                            Submit
-                                        </Button>
-                                    </Box>
-                                </Card>
-                            )}
-                        </Box>
-                    </Box>
-                </LayoutContainer>
-            </div>
-        </Fade>
+                                                                    )
+                                                                }
+                                                                disabled={isUncategorized}
+                                                            />
+                                                        }
+                                                        label={`Enable ${config.id}`}
+                                                    />
+                                                    <Collapse in={config.enabled} timeout={{ enter: 350, exit: 350 }}>
+                                                        <TextField
+                                                            label={config.id}
+                                                            fullWidth
+                                                            required
+                                                            value={config.label}
+                                                            onChange={(e) =>
+                                                                setDefaultConfig((prev) =>
+                                                                    prev.map((c) =>
+                                                                        c.id === config.id ? { ...c, label: e.target.value } : c
+                                                                    )
+                                                                )
+                                                            }
+                                                            sx={{ mt: 2 }}
+                                                            disabled={isUncategorized}
+                                                        />
+                                                    </Collapse>
+                                                </Box>
+                                            );
+                                        })}
+                                    </Stack>
+                                </CardContent>
+                            </Card>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
+                                <Button variant="outlined" onClick={handleBack}>Back</Button>
+                                <Button
+                                    variant="contained"
+                                    onClick={handleSubmit}
+                                >
+                                    Submit
+                                </Button>
+                            </Box>
+                        </Card>
+                    )}
+                </Box>
+            </Box>
+        </LayoutContainer>
     );
 };
 

@@ -5,7 +5,7 @@ import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import { Fade, useTheme } from '@mui/material';
+import { useTheme } from '@mui/material';
 
 /** ======= REACT ======= */
 import { useEffect, useState } from 'react';
@@ -49,7 +49,6 @@ const LogIn = () => {
         github: false,
         facebook: false,
     });
-    const [show, setShow] = useState(false);
     const setProviderLoading = (provider: ProviderName, value: boolean) => {
         setLoadingButton((prev) => ({ ...prev, [provider]: value }));
     };
@@ -58,8 +57,6 @@ const LogIn = () => {
     /** =========== HANDLE LOADING =========== */
     useEffect(() => {
         if (!loading && user && userData) navigate(DASHBOARD);
-        const t = setTimeout(() => setShow(true), 50);
-        return () => clearTimeout(t);
     }, [loading, user, userData, navigate]);
     /** =========== PROVIDER HANDLERS =========== */
     if (loading) return <LoadingPage />;
@@ -73,60 +70,58 @@ const LogIn = () => {
     const handleGitHubSignIn = () => handleProviderSignInWrapper(githubProvider, 'github');
     const handleFacebookSignIn = () => handleProviderSignInWrapper(facebookProvider, 'facebook');
     return (
-        <Fade in={show} timeout={500}>
-            <Container
-                maxWidth="lg"
-                sx={combinedStyles}
-            >
-                <Paper sx={{ width: '100%', maxWidth: 500, p: 4 }}>
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: 2
-                        }}
+        <Container
+            maxWidth="lg"
+            sx={combinedStyles}
+        >
+            <Paper sx={{ width: '100%', maxWidth: 500, p: 4 }}>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 2
+                    }}
+                >
+                    <Typography variant="h4">Log In</Typography>
+                    <Divider sx={{ mb: 4 }} />
+                    <Button
+                        variant='outlined'
+                        onClick={handleGoogleSignIn}
+                        startIcon={<FaGoogle color={palette.text.primary} />}
+                        loading={loadingButton.google}
+                        sx={providerButton}
                     >
-                        <Typography variant="h4">Log In</Typography>
-                        <Divider sx={{ mb: 4 }} />
+                        {action} with Google
+                    </Button>
+                    {/** Disabled for now because it hasn't been configured for this project yet */}
+                    {!hidden && (
                         <Button
                             variant='outlined'
-                            onClick={handleGoogleSignIn}
-                            startIcon={<FaGoogle color={palette.text.primary} />}
-                            loading={loadingButton.google}
+                            onClick={handleGitHubSignIn}
+                            startIcon={<FaGithub color={palette.text.primary} />}
+                            loading={loadingButton.github}
                             sx={providerButton}
                         >
-                            {action} with Google
+                            {action} with GitHub
                         </Button>
-                        {/** Disabled for now because it hasn't been configured for this project yet */}
-                        {!hidden && (
-                            <Button
-                                variant='outlined'
-                                onClick={handleGitHubSignIn}
-                                startIcon={<FaGithub color={palette.text.primary} />}
-                                loading={loadingButton.github}
-                                sx={providerButton}
-                            >
-                                {action} with GitHub
-                            </Button>
-                        )}
-                        {/** Disabled for now because it hasn't been configured for this project yet */}
-                        {!hidden && (
-                            <Button
-                                variant='outlined'
-                                onClick={handleFacebookSignIn}
-                                startIcon={<FaFacebook color={palette.text.primary} />}
-                                loading={loadingButton.facebook}
-                                sx={providerButton}
-                                disabled={true}
+                    )}
+                    {/** Disabled for now because it hasn't been configured for this project yet */}
+                    {!hidden && (
+                        <Button
+                            variant='outlined'
+                            onClick={handleFacebookSignIn}
+                            startIcon={<FaFacebook color={palette.text.primary} />}
+                            loading={loadingButton.facebook}
+                            sx={providerButton}
+                            disabled={true}
 
-                            >
-                                {action} with Facebook
-                            </Button>
-                        )}
-                    </Box>
-                </Paper>
-            </Container>
-        </Fade>
+                        >
+                            {action} with Facebook
+                        </Button>
+                    )}
+                </Box>
+            </Paper>
+        </Container>
     );
 };
 
